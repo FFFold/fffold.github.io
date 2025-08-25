@@ -1,7 +1,8 @@
 # About
+
 本博客网站基于[Fuwari](https://github.com/saicaca/fuwari)构建
 
-::github{repo="FFFold/fuwari"}
+::github{repo="FFFold/fffold.github.io"}
 
 > ### Sources of images used in this site
 > - [Unsplash](https://unsplash.com/)
