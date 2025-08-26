@@ -21,3 +21,7 @@ category: Examples
 draft: false
 ---
 ```
+
+这是一个普通的句子，其中<span class="text-red-500">这个词是红色</span>，而<span class="text-blue-500 font-bold">这个词是蓝色加粗</span>。
+
+你可以在 [Tailwind 官方颜色表](https://tailwindcss.com/docs/customizing-colors) 中查找更多颜色。
