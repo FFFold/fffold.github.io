@@ -1,6 +1,6 @@
 ---
 title: Draft Example
-published: 2022-07-01
+published: 2050-01-01
 tags: [Markdown, Blogging, Demo]
 category: Examples
 draft: true
@@ -20,3 +20,16 @@ tags: [Markdown, Blogging, Demo]
 category: Examples
 draft: false
 ---
+```
+
+# 图片并排显示解决方案
+
+注意要相对根文件夹写路径，斜杠正反都可以
+
+<figure style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+  <img src="\src\content\posts\250826\TAR1.assets\cover2.jpg" alt="图一" style="width:45%; min-width:240px;">
+  <img src="/src/content/posts/250826/TAR1.assets/cover3.jpg" alt="图二" style="width:45%; min-width:240px;"> 
+  <figcaption style="width:100%; text-align:center; margin-top:0.5rem;">
+    这里写居中的文字
+  </figcaption>
+</figure>

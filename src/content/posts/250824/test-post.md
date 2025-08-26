@@ -1,14 +1,14 @@
 ---
-title: 测试
+title: 起点
 published: 2025-08-24
-description: '这是一则测试博客'
+description: '这里是博客的起点'
 image: './test-image.jpg'
-tags: [Markdown, Blogging, Test]
-category: 'Test Blog'
+tags: []
+category: '请勿折叠'
 draft: false 
 lang: 'zh-CN'
 ---
 
-# 测试
+# 起点
 
-起点
+这里是博客的起点

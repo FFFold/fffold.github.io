@@ -50,7 +50,7 @@ lang: 'zh-CN'
 
 哔哩哔哩 up 主 [**长门有C**](https://space.bilibili.com/30160/) 制作的新番表内容详实，他会统计每季度番剧正版情况，读者可进入查看：
 
-:::note
+:::tip[外部链接]
 [長門番堂 - YuC's AnimeList](https://yuc.wiki/)
 :::
 
@@ -97,7 +97,7 @@ BT 网站下载后本地播放是最推荐的的观看方法。其具有以下�
 
 由于本文为入门级教程，在此仅介绍一款免费、开源、友好的 BT下载软件：[**Motrix**](https://motrix.app/zh-CN/)
 
-:::note
+:::tip[外部链接]
 [Motrix下载管理器 - A full-featured download manager](https://motrix.app/zh-CN/)
 :::
 
@@ -142,7 +142,7 @@ play 等软件进行管理，该软件将在 2.4.4 节进行介绍
 
 BT 网站下载的番剧绝大多数为`.MP4`或`.MKV`格式，它们可以在大多数播放器（包括系统内置播放器）中直接播放。对于希望进一步设置播放器以获得更好的视听体验的，可参阅：
 
-:::note
+:::tip[外部链接]
 [我们爱科普 | VCB-Studio](https://vcb-s.com/archives/category/kb)
 :::
 
@@ -150,7 +150,7 @@ BT 网站下载的番剧绝大多数为`.MP4`或`.MKV`格式，它们可以在�
 
 **弹弹 play** 作为一款*全功能“本地视频 + 弹幕”播放器*，功能多样、丰富，涵盖了从资源搜集、资源下载到本地播放、弹幕互动的全过程，堪称动画追番一站式解决方案。
 
-:::note
+:::tip[外部链接]
 [弹弹play - 全功能“本地视频+弹幕”播放器](https://www.dandanplay.com/)
 :::
 
@@ -172,7 +172,7 @@ BT 网站下载的番剧绝大多数为`.MP4`或`.MKV`格式，它们可以在�
 
 本文中的网址列表需要长期更新，欢迎读者将自己发掘的网站按照本文表格中的信息格式发送到评论区或填入下方收集表格，谢谢！
 
-:::note
+:::tip[外部链接]
 [点击进入飞书收集表格](https://kzvqchvcrl.feishu.cn/sheets/PjkWsJCGQhrI8btass8chxZknyb?from=from_copylink)
 :::
 
