@@ -26,13 +26,9 @@ lang: 'zh-CN'
 
 整部书主要描写了女主同时被两姐妹爱上和争夺的三角百合故事，但作者的行文过于关注三个主角的互动，三本书几乎所有的自然段全在描写三个人的行动和心理，**严重缺失**了对**社会（学校）背景活动**的叙述以及**两个重要配角的活动**叙述，导致读下来感觉整个系列像是空中楼阁，人物的动机十分不可信——即使是《周次》这种几乎所有文字都围绕对话和心理活动展开的小说，也没有做得这么差，也至少描写了学校的重要活动和主角团以外的人际关系。而在这部书里，这些描写是极其干瘪甚至完全缺失的：主角团读的学校是升学校还是专门学校？女主放学后除了跟两姐妹纠缠还有没有打工？有没有社团？班上有没有集体活动？父母看到两姐妹胡闹作何反应？——这些都是没有任何着墨的空白信息。
 
-<figure style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-  <img src="\src\content\posts\250826\TAR1.assets\cover2.jpg" alt="图一" style="width:45%; min-width:240px;">
-  <img src="/src/content/posts/250826/TAR1.assets/cover3.jpg" alt="图二" style="width:45%; min-width:240px;">
-  <figcaption style="width:100%; text-align:center; margin-top:0.5rem;">
-    小说二、三卷封面
-  </figcaption>
-</figure>
-
 这部书的行文是人际关系驱动的，创作当然需要主次分明，但是任何人际关系的变化都需要建立在情节上，这部书做得实在不算好。全文最后略显唐突的三人行结局也不太令人信服，铺垫三卷两姐妹矛盾被轻轻带过（我阅读时甚至一度以为她们之间的矛盾是不可调和的），以一个略显潦草的结局为整个系列收了尾。
+
+![cover3](./TAR1.assets/cover3.jpg)
+
+
 
