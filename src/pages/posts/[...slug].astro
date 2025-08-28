@@ -1,5 +1,6 @@
 ---
 import path from "node:path";
+import Giscus from "@components/Giscus.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";
@@ -43,6 +44,22 @@ const jsonLd = {
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
 	// TODO include cover image here
+};
+
+const giscusConfig = {
+	repo: "FFFold/giscus-discussions",
+	repoId: "R_kgDOPl1mQw",
+	category: "Announcements",
+	categoryId: "DIC_kwDOPl1mQ84Cus9M",
+	mapping: "pathname",
+	strict: "0",
+	reactionsEnabled: "1",
+	emitMetadata: "0",
+	inputPosition: "top",
+	theme: "preferred_color_scheme",
+	lang: "zh-CN",
+	loading: "lazy",
+	crossorigin: "anonymous",
 };
 ---
 <MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
@@ -108,6 +125,13 @@ const jsonLd = {
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
+        </div>
+    </div>
+
+    <!-- Giscus Comments -->
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+        <div class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
+            <Giscus data={giscusConfig} />
         </div>
     </div>
 
