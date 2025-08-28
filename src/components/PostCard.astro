@@ -53,8 +53,8 @@ const { remarkPluginFrontmatter } = await entry.render();
         before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
         before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
         ">
+            {pinned && <span class="pinned-badge"><Icon class="inline text-base" name="material-symbols:push-pin" /> 置顶</span>}
             {title}
-            {pinned && <Icon class="inline text-[2rem] text-[var(--primary)] ml-2" name="material-symbols:push-pin" />}
             <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" ></Icon>
             <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded"></Icon>
         </a>
@@ -110,4 +110,18 @@ const { remarkPluginFrontmatter } = await entry.render();
 <div class="transition border-t-[1px] border-dashed mx-6 border-black/10 dark:border-white/[0.15] last:border-t-0 md:hidden"></div>
 
 <style define:vars={{coverWidth}}>
+    .pinned-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0rem 0.5rem; /* Reduced top/bottom padding */
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--primary);
+        background-color: var(--card-bg);
+        border: 1px solid var(--primary);
+        border-radius: 0.375rem; /* 6px rounded corners */
+        margin-right: 0.5rem;
+        vertical-align: middle;
+    }
 </style>
