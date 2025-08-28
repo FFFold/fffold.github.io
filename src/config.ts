@@ -67,7 +67,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "QQ",
 			icon: "fa6-brands:qq",
-			url: "./haruhikage/",
+			url: "https://fffold.github.io/haruhikage/",
 		},
 		{
 			name: "GitHub",
