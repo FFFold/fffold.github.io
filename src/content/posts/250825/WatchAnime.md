@@ -6,6 +6,7 @@ image: './Shirobako_10th.webp'
 tags: [动画, BT, 方法论]
 category: '二次元'
 draft: false 
+pinned: true
 lang: 'zh-CN'
 ---
 
