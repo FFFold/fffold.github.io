@@ -6,7 +6,7 @@
 
 ::github{repo="FFFold/fffold.github.io"}
 
-联系邮箱：<a href="mailto:yu_daa@163.com?subject=From_Blog: ">yu_daa@163.com</a>
+联系邮箱：[yu_daa@163.com](mailto:yu_daa@163.com?subject=From_Blog: )
 
 > ### Sources of images used in this site
 > - [Unsplash](https://unsplash.com/)
