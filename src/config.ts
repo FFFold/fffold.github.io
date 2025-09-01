@@ -66,9 +66,9 @@ export const profileConfig: ProfileConfig = {
 			url: "https://space.bilibili.com/441865165",
 		},
 		{
-			name: "QQ",
-			icon: "fa6-brands:qq",
-			url: "https://fffold.github.io/haruhikage/",
+			name: "email",
+			icon: "fa6-solid:envelope",
+			url: "mailto:yu_daa@163.com?subject=From_Blog:%20",
 		},
 		{
 			name: "GitHub",
