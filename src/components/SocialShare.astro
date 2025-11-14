@@ -1,0 +1,103 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  url: string;
+  description?: string;
+  tags?: string[];
+  image?: string;
+}
+
+const { title, url, description = '', tags = [], image = '' } = Astro.props;
+
+// 创建分享链接
+const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&hashtags=${encodeURIComponent(tags.join(','))}`;
+const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ''}&summary=${encodeURIComponent(tags.join(','))}`;
+const qzoneShareUrl = `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ''}&summary=${encodeURIComponent(tags.join(','))}&site=请勿折叠`;
+const weiboShareUrl = `https://service.weibo.com/share/share.php?title=${encodeURIComponent(`${title} - ${description}`)}&url=${encodeURIComponent(url)}&pic=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ''}`;
+const copyUrl = () => {
+  navigator.clipboard.writeText(url);
+};
+---
+
+<div class="social-share-container w-full mb-6">
+  <div class="flex items-center gap-2 mb-2">
+    <span class="text-sm text-gray-600 dark:text-gray-400">分享到：</span>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a 
+      href={twitterShareUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#1DA1F2] hover:bg-[#0d8bd9] text-white transition-colors"
+      aria-label="分享到 Twitter"
+    >
+      <Icon name="fa6-brands:x-twitter" class="w-4 h-4" />
+    </a>
+    
+    <a 
+      href={qqShareUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#12B7F5] hover:bg-[#0e9dce] text-white transition-colors"
+      aria-label="分享到 QQ"
+    >
+      <Icon name="fa6-brands:qq" class="w-4 h-4" />
+    </a>
+    
+    <a 
+      href={qzoneShareUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#FECE00] hover:bg-[#e6b800] text-white transition-colors"
+      aria-label="分享到 QQ 空间"
+    >
+      <Icon name="simple-icons:qzone" class="w-4 h-4" />
+    </a>
+    
+    <a 
+      href={weiboShareUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#E6162D] hover:bg-[#c11225] text-white transition-colors"
+      aria-label="分享到 微博"
+    >
+      <Icon name="fa6-brands:weibo" class="w-4 h-4" />
+    </a>
+    
+    <button
+      id="copy-link-btn"
+      onclick={`navigator.clipboard.writeText('${url}').then(() => {
+        const btn = document.getElementById('copy-link-btn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span class="text-xs">已复制</span>';
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, 2000);
+      })`}
+      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#6c757d] hover:bg-[#5a6268] text-white transition-colors"
+      aria-label="复制链接"
+    >
+      <Icon name="material-symbols:link" class="w-4 h-4" />
+    </button>
+  </div>
+  
+  <style is:global>
+    .social-share-container {
+      padding: 1rem 0;
+      border-top: 1px dashed var(--line-divider);
+      border-bottom: 1px dashed var(--line-divider);
+      margin: 1.5rem 0;
+    }
+    
+    .share-btn {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</div>

@@ -1,104 +1,108 @@
-# Project Overview
+# 项目概述
 
-This is a static blog built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com), based on the Fuwari template. The blog features a modern design with light/dark mode, responsive layout, and various content presentation features.
+这是一个使用 [Astro](https://astro.build) 和 [Tailwind CSS](https://tailwindcss.com) 构建的静态博客，基于 Fuwari 模板。该博客具有现代化的设计，支持浅色/深色模式、响应式布局和多种内容展示功能。
 
-## Key Technologies
+## 核心技术
 
-- **Astro 5.15.3**: Static site generator for fast, optimized websites
-- **Tailwind CSS**: Utility-first CSS framework for styling
-- **Svelte**: Used for interactive UI components
-- **TypeScript**: For type-safe development
-- **Pagefind**: For search functionality
-- **Expressive Code**: Enhanced code block rendering
-- **KaTeX**: Mathematical notation rendering
-- **Swup**: Page transition animations
-- **Biome**: Code formatting and linting
+- **Astro 5.15.3**: 用于构建快速、优化网站的静态站点生成器
+- **Tailwind CSS**: 用于样式的实用优先 CSS 框架
+- **Svelte**: 用于交互式 UI 组件
+- **TypeScript**: 用于类型安全的开发
+- **Pagefind**: 用于搜索功能
+- **Expressive Code**: 增强的代码块渲染
+- **KaTeX**: 数学符号渲染
+- **Swup**: 页面过渡动画
+- **Biome**: 代码格式化和 linting
+- **Stylus**: CSS 预处理器用于样式
+- **Photoswipe**: 图像库功能
+- **Overlayscrollbars**: 自定义滚动条
+- **Sharp**: 图像优化
 
-## Project Structure
+## 项目结构
 
 ```
 src/
-├── assets/           # Static assets (images)
-├── components/       # Reusable UI components
-├── config.ts         # Site configuration
-├── constants/        # Application constants
-├── content/          # Blog posts and special pages
-│   ├── posts/        # Markdown blog posts
-│   └── spec/         # Special pages (about, friends)
-├── i18n/             # Internationalization files
-├── layouts/          # Page layouts
-├── pages/            # Page routes
-├── plugins/          # Custom remark/rehype plugins
-├── styles/           # CSS stylesheets
-├── types/            # TypeScript type definitions
-└── utils/            # Utility functions
+├── assets/           # 静态资源 (图像)
+├── components/       # 可重用的 UI 组件
+├── config.ts         # 站点配置
+├── constants/        # 应用程序常量
+├── content/          # 博客文章和特殊页面
+│   ├── posts/        # Markdown 博客文章
+│   └── spec/         # 特殊页面 (关于, 朋友)
+├── i18n/             # 国际化文件
+├── layouts/          # 页面布局
+├── pages/            # 页面路由
+├── plugins/          # 自定义 remark/rehype 插件
+├── styles/           # CSS 样式表
+├── types/            # TypeScript 类型定义
+└── utils/            # 工具函数
 ```
 
-## Configuration Files
+## 配置文件
 
-- `astro.config.mjs`: Main Astro configuration with integrations
-- `package.json`: Dependencies and scripts
-- `tsconfig.json`: TypeScript configuration
-- `tailwind.config.cjs`: Tailwind CSS configuration
-- `biome.json`: Code formatting and linting rules
-- `pagefind.yml`: Search configuration
+- `astro.config.mjs`: 主 Astro 配置文件，包含集成
+- `package.json`: 依赖项和脚本
+- `tsconfig.json`: TypeScript 配置
+- `tailwind.config.cjs`: Tailwind CSS 配置
+- `biome.json`: 代码格式化和 linting 规则
+- `pagefind.yml`: 搜索配置
 
-# Building and Running
+# 构建和运行
 
-## Prerequisites
+## 先决条件
 
 - Node.js >= 20
 - pnpm >= 9
 
-## Development Commands
+## 开发命令
 
-All commands are run from the root of the project:
+所有命令都从项目根目录运行：
 
 ```bash
-# Install dependencies
+# 安装依赖
 pnpm install
 
-# Start development server at http://localhost:4321
+# 启动开发服务器，地址为 http://localhost:4321
 pnpm dev
 
-# Build production site to ./dist/
+# 构建生产站点到 ./dist/
 pnpm build
 
-# Preview production build locally
+# 在本地预览生产构建
 pnpm preview
 
-# Create a new blog post
+# 创建新博客文章
 pnpm new-post <filename>
 
-# Check for TypeScript errors
+# 检查 TypeScript 错误
 pnpm check
 
-# Format code with Biome
+# 使用 Biome 格式化代码
 pnpm format
 
-# Lint code with Biome
+# 使用 Biome lint 代码
 pnpm lint
 ```
 
-## Deployment
+## 部署
 
-The site can be deployed to Vercel, Netlify, GitHub Pages, or other static hosting providers. The build command generates static files in the `dist/` directory.
+该站点可以部署到 Vercel、Netlify、GitHub Pages 或其他静态托管提供商。构建命令会在 `dist/` 目录中生成静态文件。
 
-Before deployment, update the `site` property in `astro.config.mjs` with your domain.
+在部署之前，请在 `astro.config.mjs` 中更新 `site` 属性以匹配您的域名。
 
-# Content Management
+# 内容管理
 
-## Creating Posts
+## 创建文章
 
-Use the script to create a new post:
+使用脚本创建新文章：
 
 ```bash
 pnpm new-post <filename>
 ```
 
-This creates a new Markdown file in `src/content/posts/` with frontmatter.
+这将在 `src/content/posts/` 中创建一个新的 Markdown 文件，并带有 frontmatter。
 
-## Post Frontmatter
+## 文章 Frontmatter
 
 ```yaml
 ---
@@ -109,76 +113,83 @@ image: ./cover.jpg
 tags: [Foo, Bar]
 category: Front-end
 draft: false
-lang: jp      # Set only if the post's language differs from the site's language
+lang: jp      # 仅当文章的语言与站点语言不同时设置
 ---
 ```
 
-## Extended Markdown Features
+## 扩展的 Markdown 功能
 
-The blog supports several extended Markdown features:
+博客支持几种扩展的 Markdown 功能：
 
-- **Admonitions**: Note, tip, important, caution, warning blocks
-- **GitHub repository cards**: Display repository information
-- **Enhanced code blocks**: With syntax highlighting, line numbers, collapsible sections
-- **Mathematical notation**: Using KaTeX
-- **Automatic table of contents**: Generated from headings
+- **Admonitions**: Note, tip, important, caution, warning 块
+- **GitHub 仓库卡片**: 显示仓库信息
+- **增强的代码块**: 带有语法高亮、行号、可折叠部分、语言徽章和自定义复制按钮
+- **数学符号**: 使用 KaTeX
+- **自动生成的目录**: 从标题生成
+- **阅读时间估算**: 自动计算
+- **文章摘要**: 第一段自动用作摘要
+- **图像库**: 与 Photoswipe 集成
 
-# Development Conventions
+# 开发约定
 
-## Code Style
+## 代码风格
 
-- Uses Biome for code formatting with tabs for indentation
-- Double quotes for strings in JavaScript/TypeScript
-- Strict TypeScript with null checks enabled
-- Organize imports automatically
+- 使用 Biome 进行代码格式化，使用制表符进行缩进
+- JavaScript/TypeScript 中的字符串使用双引号
+- 启用严格 TypeScript 并启用 null 检查
+- 自动组织导入
 
-## Component Structure
+## 组件结构
 
-- Components are primarily in Astro and Svelte
-- Use Tailwind classes for styling
-- Follow the existing component patterns in `src/components/`
+- 组件主要使用 Astro 和 Svelte 编写
+- 使用 Tailwind 类进行样式设计
+- 遵循 `src/components/` 中的现有组件模式
 
-## Styling
+## 样式
 
-- Tailwind CSS for utility classes
-- Custom CSS variables for theming
-- Dark mode support with `dark:` variants
-- Responsive design with mobile-first approach
+- Tailwind CSS 用于实用类
+- 自定义 CSS 变量用于主题
+- 使用 `dark:` 变体支持深色模式
+- 响应式设计采用移动优先方法
+- Stylus 用于扩展 CSS 功能
+- 使用 OverlayScrollbars 自定义滚动条
 
-## Internationalization
+## 国际化
 
-- Supports multiple languages through `src/i18n/`
-- Default language configured in `src/config.ts`
-- Language switching available in UI
+- 通过 `src/i18n/` 支持多种语言
+- 在 `src/config.ts` 中配置默认语言
+- UI 中提供语言切换
 
-## Configuration
+## 配置
 
-- Site configuration in `src/config.ts`
-- Navigation, profile, and license settings customizable
-- Theme color and banner settings configurable
-- Expressive Code theme settings available
+- 站点配置在 `src/config.ts` 中
+- 导航、个人资料和许可证设置可自定义
+- 主题颜色和横幅设置可配置
+- Expressive Code 主题设置可用
 
-## Customization Points
+## 自定义点
 
-1. **Site Identity**: Modify `siteConfig`, `navBarConfig`, and `profileConfig` in `src/config.ts`
-2. **Theme Colors**: Adjust the `hue` value in `siteConfig.themeColor`
-3. **Banner Image**: Update `siteConfig.banner.src` with your image path
-4. **Navigation Links**: Modify `navBarConfig.links` array
-5. **Social Links**: Update `profileConfig.links` array
-6. **License**: Change `licenseConfig` settings
+1. **站点标识**: 修改 `src/config.ts` 中的 `siteConfig`、`navBarConfig` 和 `profileConfig`
+2. **主题颜色**: 调整 `siteConfig.themeColor` 中的 `hue` 值
+3. **横幅图像**: 使用您的图像路径更新 `siteConfig.banner.src`
+4. **导航链接**: 修改 `navBarConfig.links` 数组
+5. **社交链接**: 更新 `profileConfig.links` 数组
+6. **许可证**: 更改 `licenseConfig` 设置
 
-## Content Organization
+## 内容组织
 
-- Posts are stored in `src/content/posts/` as Markdown files
-- Special pages (About, Friends) in `src/content/spec/`
-- Images can be placed alongside posts or in the assets folder
-- Tags and categories are automatically generated from frontmatter
+- 文章存储在 `src/content/posts/` 中，格式为 Markdown 文件
+- 特殊页面 (关于, 朋友) 在 `src/content/spec/` 中
+- 图像可以与文章一起放置，也可以放在 assets 文件夹中
+- 标签和类别会从 frontmatter 自动生成
 
-## Performance Features
+## 性能特性
 
-- Static site generation for fast loading
-- Image optimization with Sharp
-- Code splitting for JavaScript bundles
-- Page transition animations with Swup
-- Custom scrollbars with OverlayScrollbars
-- Search indexing with Pagefind
+- 静态站点生成以实现快速加载
+- 使用 Sharp 进行图像优化
+- JavaScript 包的代码分割
+- 使用 Swup 的页面过渡动画
+- 使用 OverlayScrollbars 的自定义滚动条
+- 使用 Pagefind 的搜索索引
+- 文章的阅读时间估算
+- 用于更好 SEO 的文章摘要
