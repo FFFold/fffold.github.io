@@ -354,13 +354,16 @@ function initCustomScrollbar() {
 function showBanner() {
 	if (!siteConfig.banner.enable) return;
 
-	const banner = document.getElementById('banner');
-	if (!banner) {
+	// Handle both desktop and mobile banners
+	const banners = document.querySelectorAll('[id^="banner"]');
+	if (banners.length === 0) {
 		console.error('Banner element not found');
 		return;
 	}
 
-	banner.classList.remove('opacity-0', 'scale-105');
+	banners.forEach(banner => {
+		banner.classList.remove('opacity-0', 'scale-105');
+	});
 }
 
 function init() {
