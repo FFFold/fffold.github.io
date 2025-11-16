@@ -20,15 +20,54 @@ export type SiteConfig = {
 		hue: number;
 		fixed: boolean;
 	};
+
+	// 壁纸模式配置
+	wallpaperMode: {
+		defaultMode: "banner" | "fullscreen" | "none"; // 默认壁纸模式：banner=顶部横幅，fullscreen=全屏壁纸，none=无壁纸
+		showModeSwitchOnMobile?: "off" | "mobile" | "desktop" | "both"; // 整体布局方案切换按钮显示设置：off=隐藏，mobile=仅移动端，desktop=仅桌面端，both=全部显示
+	};
+
 	banner: {
 		enable: boolean;
-		src: string;
-		mobileSrc?: string;
+		src:
+			| string
+			| string[]
+			| {
+					desktop?: string | string[];
+					mobile?: string | string[];
+			  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
 		position?: "top" | "center" | "bottom";
+		carousel?: {
+			enable: boolean; // 是否启用轮播
+			interval: number; // 轮播间隔时间（秒）
+		};
+		waves?: {
+			enable: boolean; // 是否启用水波纹效果
+			performanceMode?: boolean; // 性能模式：减少动画复杂度
+			mobileDisable?: boolean; // 移动端禁用
+		};
+		imageApi?: {
+			enable: boolean; // 是否启用图片API
+			url: string; // API地址，返回每行一个图片链接的文本
+		};
+		homeText?: {
+			enable: boolean; // 是否在首页显示自定义文字
+			title?: string; // 主标题
+			subtitle?: string | string[]; // 副标题，支持单个字符串或字符串数组
+			typewriter?: {
+				enable: boolean; // 是否启用打字机效果
+				speed: number; // 打字速度（毫秒）
+				deleteSpeed: number; // 删除速度（毫秒）
+				pauseTime: number; // 完整显示后的暂停时间（毫秒）
+			};
+		};
 		credit: {
 			enable: boolean;
 			text: string;
 			url?: string;
+		};
+		navbar?: {
+			transparentMode?: "semi" | "full" | "semifull"; // 导航栏透明模式
 		};
 	};
 	toc: {
