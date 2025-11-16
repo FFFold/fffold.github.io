@@ -6,17 +6,17 @@
 
 - **Astro 5.15.3**: 用于构建快速、优化网站的静态站点生成器
 - **Tailwind CSS**: 用于样式的实用优先 CSS 框架
-- **Svelte**: 用于交互式 UI 组件
-- **TypeScript**: 用于类型安全的开发
-- **Pagefind**: 用于搜索功能
-- **Expressive Code**: 增强的代码块渲染
-- **KaTeX**: 数学符号渲染
+- **Svelte 5.43.2**: 用于交互式 UI 组件
+- **TypeScript 5.9.3**: 用于类型安全的开发
+- **Pagefind 1.4.0**: 用于搜索功能
+- **Expressive Code 0.41.3**: 增强的代码块渲染
+- **KaTeX 0.16.25**: 数学符号渲染
 - **Swup**: 页面过渡动画
-- **Biome**: 代码格式化和 linting
-- **Stylus**: CSS 预处理器用于样式
-- **Photoswipe**: 图像库功能
-- **Overlayscrollbars**: 自定义滚动条
-- **Sharp**: 图像优化
+- **Biome 2.3.2**: 代码格式化和 linting
+- **Stylus 0.64.0**: CSS 预处理器用于样式
+- **Photoswipe 5.4.4**: 图像库功能
+- **Overlayscrollbars 2.12.0**: 自定义滚动条
+- **Sharp 0.34.4**: 图像优化
 
 ## 项目结构
 
@@ -24,18 +24,24 @@
 src/
 ├── assets/           # 静态资源 (图像)
 ├── components/       # 可重用的 UI 组件
+│   ├── control/      # 控制组件 (按钮、分页等)
+│   ├── misc/         # 杂项组件
+│   └── widget/       # 小部件 (侧边栏组件)
 ├── config.ts         # 站点配置
 ├── constants/        # 应用程序常量
 ├── content/          # 博客文章和特殊页面
-│   ├── posts/        # Markdown 博客文章
+│   ├── posts/        # Markdown 博客文章 (支持子目录)
 │   └── spec/         # 特殊页面 (关于, 朋友)
 ├── i18n/             # 国际化文件
 ├── layouts/          # 页面布局
 ├── pages/            # 页面路由
 ├── plugins/          # 自定义 remark/rehype 插件
+│   └── expressive-code/  # Expressive Code 自定义插件
 ├── styles/           # CSS 样式表
 ├── types/            # TypeScript 类型定义
 └── utils/            # 工具函数
+scripts/              # 构建脚本
+public/               # 静态资源
 ```
 
 ## 配置文件
@@ -46,6 +52,7 @@ src/
 - `tailwind.config.cjs`: Tailwind CSS 配置
 - `biome.json`: 代码格式化和 linting 规则
 - `pagefind.yml`: 搜索配置
+- `vercel.json`: Vercel 部署配置
 
 # 构建和运行
 
@@ -73,9 +80,13 @@ pnpm preview
 
 # 创建新博客文章
 pnpm new-post <filename>
+# 支持子目录，例如: pnpm new-post 2024/my-new-post
 
 # 检查 TypeScript 错误
 pnpm check
+
+# TypeScript 类型检查 (不生成文件)
+pnpm type-check
 
 # 使用 Biome 格式化代码
 pnpm format
@@ -100,6 +111,12 @@ pnpm lint
 pnpm new-post <filename>
 ```
 
+支持在子目录中创建文章：
+
+```bash
+pnpm new-post 2024/my-new-post
+```
+
 这将在 `src/content/posts/` 中创建一个新的 Markdown 文件，并带有 frontmatter。
 
 ## 文章 Frontmatter
@@ -119,7 +136,7 @@ lang: jp      # 仅当文章的语言与站点语言不同时设置
 
 ## 扩展的 Markdown 功能
 
-博客支持几种扩展的 Markdown 功能：
+博客支持多种扩展的 Markdown 功能：
 
 - **Admonitions**: Note, tip, important, caution, warning 块
 - **GitHub 仓库卡片**: 显示仓库信息
@@ -138,6 +155,7 @@ lang: jp      # 仅当文章的语言与站点语言不同时设置
 - JavaScript/TypeScript 中的字符串使用双引号
 - 启用严格 TypeScript 并启用 null 检查
 - 自动组织导入
+- 对 Svelte/Astro/Vue 文件的特殊规则 (见 biome.json)
 
 ## 组件结构
 
@@ -171,7 +189,9 @@ lang: jp      # 仅当文章的语言与站点语言不同时设置
 
 1. **站点标识**: 修改 `src/config.ts` 中的 `siteConfig`、`navBarConfig` 和 `profileConfig`
 2. **主题颜色**: 调整 `siteConfig.themeColor` 中的 `hue` 值
-3. **横幅图像**: 使用您的图像路径更新 `siteConfig.banner.src`
+3. **横幅图像**: 
+   - 桌面版: `siteConfig.banner.src`
+   - 移动端: `siteConfig.banner.mobileSrc` (新增功能)
 4. **导航链接**: 修改 `navBarConfig.links` 数组
 5. **社交链接**: 更新 `profileConfig.links` 数组
 6. **许可证**: 更改 `licenseConfig` 设置
@@ -179,6 +199,7 @@ lang: jp      # 仅当文章的语言与站点语言不同时设置
 ## 内容组织
 
 - 文章存储在 `src/content/posts/` 中，格式为 Markdown 文件
+- 支持子目录组织 (如 `posts/2024/my-post.md`)
 - 特殊页面 (关于, 朋友) 在 `src/content/spec/` 中
 - 图像可以与文章一起放置，也可以放在 assets 文件夹中
 - 标签和类别会从 frontmatter 自动生成
@@ -193,3 +214,47 @@ lang: jp      # 仅当文章的语言与站点语言不同时设置
 - 使用 Pagefind 的搜索索引
 - 文章的阅读时间估算
 - 用于更好 SEO 的文章摘要
+
+## 新增功能
+
+### 移动端独立 Banner
+
+支持为移动端和桌面端设置不同的 banner 图片：
+
+```typescript
+banner: {
+    enable: true,
+    src: "assets/images/banner.jpg",        // 桌面版
+    mobileSrc: "assets/images/banner-mobile.jpg",  // 移动端
+    position: "center",
+    credit: { ... }
+}
+```
+
+### 文章子目录支持
+
+文章现在可以组织在子目录中：
+
+```
+src/content/posts/
+├── 2024/
+│   ├── post1.md
+│   └── post2.md
+├── 2025/
+│   └── post3.md
+└── post4.md  # 也可以直接在 posts/ 目录下
+```
+
+### 增强的 Expressive Code
+
+添加了自定义插件：
+- 语言徽章显示
+- 自定义复制按钮
+- 可折叠代码块
+- 行号支持
+
+### 额外的 Remark/Rehype 插件
+
+- `remark-sectionize`: 自动为标题添加章节包装
+- `remark-github-admonitions-to-directives`: 转换 GitHub 警告为指令
+- `rehype-components`: 自定义组件渲染
