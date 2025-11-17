@@ -39,11 +39,11 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner = siteConfig.banner.src;
+	banner = typeof siteConfig.banner.src === 'string' ? siteConfig.banner.src : '';
 }
 
 // TODO don't use post cover as banner for now
-banner = siteConfig.banner.src;
+banner = typeof siteConfig.banner.src === 'string' ? siteConfig.banner.src : '';
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -235,6 +235,11 @@ const bannerOffset =
 		.absolute.w-full.z-30 {
 			transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
 			will-change: top;
+			/* 硬件加速优化 - 减少卡顿 */
+			transform: translateZ(0);
+			-webkit-transform: translateZ(0);
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
 		}
 		
 		/* 当banner被隐藏时，主内容区域移到顶部 */
@@ -464,11 +469,11 @@ function initCarousel() {
 	if (validItems.length > 1 && siteConfig.banner.carousel?.enable) {
 		let currentIndex = 0;
 		const interval = siteConfig.banner.carousel?.interval || 6;
-		let carouselInterval;
+		let carouselInterval: number | undefined;
 		let isPaused = false;
 
 		// 切换图片的函数 - 基于有效项目
-		function switchToSlide(index) {
+		function switchToSlide(index: number) {
 			// 隐藏当前图片
 			const currentItem = validItems[currentIndex];
 			currentItem.classList.remove('opacity-100', 'scale-100');
@@ -498,7 +503,7 @@ function initCarousel() {
 		// 自动轮播
 		function startCarousel() {
 			if (carouselInterval) clearInterval(carouselInterval);
-			carouselInterval = setInterval(() => {
+			carouselInterval = window.setInterval(() => {
 				if (!isPaused) {
 					const nextIndex = (currentIndex + 1) % validItems.length;
 					switchToSlide(nextIndex);
