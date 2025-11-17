@@ -24,6 +24,70 @@ interface Props {
 	headings?: MarkdownHeading[];
 }
 
+// 类型守卫函数
+const isBannerSrcObject = (
+	src:
+		| string
+		| string[]
+		| { desktop?: string | string[]; mobile?: string | string[] },
+): src is { desktop?: string | string[]; mobile?: string | string[] } => {
+	return (
+		typeof src === "object" &&
+		src !== null &&
+		!Array.isArray(src) &&
+		("desktop" in src || "mobile" in src)
+	);
+};
+
+// 获取banner图片的辅助函数
+interface BannerImages {
+	desktop: string | string[];
+	mobile: string | string[];
+}
+
+const getBannerImages = async (): Promise<BannerImages> => {
+	let bannerSrc = siteConfig.banner.src;
+
+	// 如果启用了图片API，获取API图片
+	if (siteConfig.banner.imageApi?.enable && siteConfig.banner.imageApi?.url) {
+		try {
+			const response = await fetch(siteConfig.banner.imageApi.url);
+			const text = await response.text();
+			const apiImages = text.split("\n").filter((line) => line.trim());
+
+			if (apiImages.length > 0) {
+				bannerSrc = apiImages;
+			}
+		} catch (error) {
+			console.warn("Failed to fetch images from API:", error);
+		}
+	}
+
+	if (
+		typeof bannerSrc === "object" &&
+		bannerSrc !== null &&
+		!Array.isArray(bannerSrc) &&
+		("desktop" in bannerSrc || "mobile" in bannerSrc)
+	) {
+		const srcObj = bannerSrc as {
+			desktop?: string | string[];
+			mobile?: string | string[];
+		};
+		return {
+			desktop: srcObj.desktop || srcObj.mobile || [],
+			mobile: srcObj.mobile || srcObj.desktop || [],
+		};
+	}
+	// 如果是字符串或字符串数组，同时用于桌面端和移动端
+	const finalSrc = bannerSrc as string | string[];
+	return {
+		desktop: finalSrc,
+		mobile: finalSrc,
+	};
+};
+
+const bannerImages = await getBannerImages();
+
 const {
 	title,
 	banner,
@@ -32,10 +96,15 @@ const {
 	setOGTypeArticle,
 	headings = [],
 } = Astro.props;
-const hasBannerCredit =
-	siteConfig.banner.enable && siteConfig.banner.credit.enable;
+const hasBannerCredit = siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 
+// 检查是否为首页
+const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
+// 手机端非首页不显示banner的CSS类
+const mobileNonHomeBannerClass = !isHomePage ? "mobile-hide-banner" : "";
+
+// 计算主内容区域位置
 const mainPanelTop = siteConfig.banner.enable
 	? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
 	: "5.5rem";
@@ -52,26 +121,113 @@ const mainPanelTop = siteConfig.banner.enable
 </div>
 
 <!-- Banner -->
-{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
-    <!-- Desktop banner - hidden on mobile, visible on md and above -->
-    <ImageWrapper id="banner-desktop" alt="Banner image of the blog" class:list={["hidden md:block object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                  src={siteConfig.banner.src} position={siteConfig.banner.position}
-    >
-    </ImageWrapper>
-    <!-- Mobile banner - visible on mobile, hidden on md and above -->
-    {siteConfig.banner.mobileSrc && 
-        <ImageWrapper id="banner-mobile" alt="Banner image of the blog (mobile)" class:list={["md:hidden object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                      src={siteConfig.banner.mobileSrc} position={siteConfig.banner.position}
-        >
-        </ImageWrapper>
-    }
-    {!siteConfig.banner.mobileSrc && 
-        <ImageWrapper id="banner-mobile-fallback" alt="Banner image of the blog" class:list={["md:hidden object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                      src={siteConfig.banner.src} position={siteConfig.banner.position}
-        >
-        </ImageWrapper>
-    }
-</div>}
+{siteConfig.banner.enable && (
+	<div
+		id="banner-wrapper"
+		class={`absolute z-10 w-full transition duration-700 overflow-hidden ${mobileNonHomeBannerClass}`}
+		style={`top: -${BANNER_HEIGHT_EXTEND}vh`}
+	>
+		{(Array.isArray(bannerImages.desktop) && bannerImages.desktop.length > 1) ||
+		(Array.isArray(bannerImages.mobile) && bannerImages.mobile.length > 1) ? (
+			// 轮播模式 - 多张图片
+			<div id="banner-carousel" class="relative w-full h-full">
+				{Array.from({
+					length: Math.max(
+						Array.isArray(bannerImages.desktop) ? bannerImages.desktop.length : 0,
+						Array.isArray(bannerImages.mobile) ? bannerImages.mobile.length : 0,
+					),
+				}).map((_, index) => {
+					const hasDesktopImage =
+						Array.isArray(bannerImages.desktop) && bannerImages.desktop[index];
+					const hasMobileImage =
+						Array.isArray(bannerImages.mobile) && bannerImages.mobile[index];
+
+					return (
+						<div
+							data-carousel-index={index}
+							class:list={[
+								"absolute inset-0 w-full h-full transition-opacity duration-1000",
+								{ "opacity-0": index !== 0, "opacity-100": index === 0 },
+							]}
+						>
+							{hasDesktopImage && (
+								<ImageWrapper
+									id={`banner-desktop-${index}`}
+									alt={`Desktop banner image ${index + 1}`}
+									class:list={[
+										"hidden md:block object-cover h-full transition duration-700 opacity-0 scale-105",
+									]}
+									src={bannerImages.desktop[index]}
+									position={siteConfig.banner.position}
+								/>
+							)}
+							{hasMobileImage && (
+								<ImageWrapper
+									id={`banner-mobile-${index}`}
+									alt={`Mobile banner image ${index + 1}`}
+									class:list={[
+										"md:hidden object-cover h-full transition duration-700 opacity-0 scale-105",
+									]}
+									src={bannerImages.mobile[index]}
+									position={siteConfig.banner.position}
+								/>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		) : (
+			// 单张图片模式
+			<>
+				{/* Desktop banner - hidden on mobile, visible on md and above */}
+				{(Array.isArray(bannerImages.desktop) ? (
+					<ImageWrapper
+						id="banner-desktop-0"
+						alt="Desktop banner image of the blog"
+						class:list={[
+							"hidden md:block object-cover h-full transition duration-700 opacity-0 scale-105",
+						]}
+						src={bannerImages.desktop[0] || ""}
+						position={siteConfig.banner.position}
+					/>
+				) : (
+					<ImageWrapper
+						id="banner-desktop"
+						alt="Desktop banner image of the blog"
+						class:list={[
+							"hidden md:block object-cover h-full transition duration-700 opacity-0 scale-105",
+						]}
+						src={bannerImages.desktop}
+						position={siteConfig.banner.position}
+					/>
+				))}
+
+				{/* Mobile banner - visible on mobile, hidden on md and above */}
+				{(Array.isArray(bannerImages.mobile) ? (
+					<ImageWrapper
+						id="banner-mobile-0"
+						alt="Mobile banner image of the blog"
+						class:list={[
+							"md:hidden object-cover h-full transition duration-700 opacity-0 scale-105",
+						]}
+						src={bannerImages.mobile[0] || ""}
+						position={siteConfig.banner.position}
+					/>
+				) : (
+					<ImageWrapper
+						id="banner-mobile"
+						alt="Mobile banner image of the blog"
+						class:list={[
+							"md:hidden object-cover h-full transition duration-700 opacity-0 scale-105",
+						]}
+						src={bannerImages.mobile}
+						position={siteConfig.banner.position}
+					/>
+				))}
+			</>
+		)}
+	</div>
+)}
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>

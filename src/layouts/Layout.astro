@@ -39,11 +39,12 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner = siteConfig.banner.src;
+	banner =
+		typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
 }
 
 // TODO don't use post cover as banner for now
-banner = siteConfig.banner.src;
+banner = typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -190,6 +191,65 @@ const bannerOffset =
 	}
 	.navbar-hidden {
 		@apply opacity-0 -translate-y-16
+	}
+
+	/* 移动端横幅优化 - 小屏手机 (320px - 480px) */
+	@media (max-width: 480px) {
+		/* Banner wrapper 高度优化 - 优先保持banner显示 */
+		#banner-wrapper {
+			height: 70vh !important; /* 保持较大高度优先显示banner */
+			min-height: 450px;
+			max-height: none; /* 移除最大高度限制 */
+			top: 0 !important; /* 移动端从顶部开始，避免被导航栏覆盖 */
+		}
+		
+		/* 主内容区域位置调整 - 确保在banner下面 */
+		.absolute.w-full.z-30 {
+			top: 70vh !important; /* 与banner高度对应 */
+			min-height: calc(100vh - 70vh) !important;
+		}
+	}
+
+	/* 当移动端banner被隐藏时，调整主内容区域位置 */
+	@media (max-width: 767px) {
+		/* Banner过渡动画 - 改进的分阶段动画 */
+		#banner-wrapper {
+			transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
+			transform-origin: top center;
+			/* 硬件加速优化 */
+			will-change: transform, opacity;
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+			transform: translateZ(0);
+			-webkit-transform: translateZ(0);
+		}
+		
+		.mobile-hide-banner {
+			transform: translateY(-100%) translateZ(0) !important;
+			opacity: 0 !important;
+			pointer-events: none !important;
+			/* 快速消失 */
+			transition: transform 0.3s ease-in, opacity 0.2s ease-in !important;
+		}
+		
+		/* 主内容区域过渡动画 - 硬件加速优化 */
+		.absolute.w-full.z-30 {
+			transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+			will-change: top;
+			/* 硬件加速优化 - 减少卡顿 */
+			transform: translateZ(0);
+			-webkit-transform: translateZ(0);
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+		}
+		
+		/* 当banner被隐藏时，主内容区域移到顶部 */
+		.mobile-hide-banner + .absolute.w-full.z-30 {
+			top: 5.5rem !important;
+			min-height: calc(100vh - 5.5rem) !important;
+			/* 内容区域快速上移 - 更快的过渡 */
+			transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s !important;
+		}
 	}
 }
 </style>
@@ -352,18 +412,129 @@ function initCustomScrollbar() {
 }
 
 function showBanner() {
-	if (!siteConfig.banner.enable) return;
+	// 使用requestAnimationFrame优化DOM操作
+	requestAnimationFrame(() => {
+		// Handle desktop banner
+		const desktopBanner = document.getElementById('banner-desktop');
+		if (desktopBanner) {
+			desktopBanner.classList.remove('opacity-0', 'scale-105');
+		}
 
-	// Handle both desktop and mobile banners
-	const banners = document.querySelectorAll('[id^="banner"]');
-	if (banners.length === 0) {
-		console.error('Banner element not found');
+		// Handle mobile banner
+		const mobileBanner = document.getElementById('banner-mobile');
+		if (mobileBanner && !document.getElementById('banner-carousel')) {
+			mobileBanner.classList.remove('opacity-0', 'scale-105');
+		}
+
+		// Handle carousel banner - 立即初始化，移除延迟
+		const carousel = document.getElementById('banner-carousel');
+		if (carousel) {
+			// 立即初始化轮播，移除延迟以改善流畅性
+			initCarousel();
+		}
+	});
+}
+
+function initCarousel() {
+	const carouselItems = document.querySelectorAll('[data-carousel-index]');
+
+	// 根据屏幕尺寸过滤有效的轮播项
+	const isMobile = window.innerWidth < 768; // md breakpoint
+	const validItems = Array.from(carouselItems).filter(item => {
+		if (isMobile) {
+			// 移动端：只显示有mobile图片的项目
+			return item.querySelector('.md\\:hidden');
+		} else {
+			// 桌面端：只显示有desktop图片的项目
+			return item.querySelector('.hidden.md\\:block');
+		}
+	});
+
+	// Check if carousel is disabled but we have multiple images - show random image
+	if (validItems.length > 1 && !siteConfig.banner.carousel?.enable) {
+		// Hide all images first
+		carouselItems.forEach((item) => {
+			item.classList.add('opacity-0', 'scale-110');
+			item.classList.remove('opacity-100', 'scale-100');
+		});
+
+		// Show random valid image
+		const randomIndex = Math.floor(Math.random() * validItems.length);
+		const randomItem = validItems[randomIndex];
+
+		randomItem.classList.add('opacity-100', 'scale-100');
+		randomItem.classList.remove('opacity-0', 'scale-110');
 		return;
 	}
 
-	banners.forEach(banner => {
-		banner.classList.remove('opacity-0', 'scale-105');
-	});
+	if (validItems.length > 1 && siteConfig.banner.carousel?.enable) {
+		let currentIndex = 0;
+		const interval = siteConfig.banner.carousel?.interval || 6;
+		let carouselInterval: number | undefined;
+		let isPaused = false;
+
+		// 切换图片的函数 - 基于有效项目
+		function switchToSlide(index: number) {
+			// 隐藏当前图片
+			const currentItem = validItems[currentIndex];
+			currentItem.classList.remove('opacity-100', 'scale-100');
+			currentItem.classList.add('opacity-0', 'scale-110');
+
+			// 更新索引
+			currentIndex = index;
+
+			// 显示新图片
+			const nextItem = validItems[currentIndex];
+			nextItem.classList.add('opacity-100', 'scale-100');
+			nextItem.classList.remove('opacity-0', 'scale-110');
+		}
+
+		// 初始化：隐藏所有图片，只显示第一张有效图片
+		carouselItems.forEach((item) => {
+			item.classList.add('opacity-0', 'scale-110');
+			item.classList.remove('opacity-100', 'scale-100');
+		});
+
+		// 显示第一张有效图片
+		if (validItems.length > 0) {
+			validItems[0].classList.add('opacity-100', 'scale-100');
+			validItems[0].classList.remove('opacity-0', 'scale-110');
+		}
+
+		// 自动轮播
+		function startCarousel() {
+			if (carouselInterval) clearInterval(carouselInterval);
+			carouselInterval = window.setInterval(() => {
+				if (!isPaused) {
+					const nextIndex = (currentIndex + 1) % validItems.length;
+					switchToSlide(nextIndex);
+				}
+			}, interval * 1000);
+		}
+
+		// 启动轮播
+		startCarousel();
+
+		// 鼠标悬停暂停
+		const bannerWrapper = document.getElementById('banner-wrapper');
+		if (bannerWrapper) {
+			bannerWrapper.addEventListener('mouseenter', () => {
+				isPaused = true;
+			});
+			bannerWrapper.addEventListener('mouseleave', () => {
+				isPaused = false;
+			});
+		}
+
+		// 页面可见性变化时暂停/恢复
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) {
+				isPaused = true;
+			} else {
+				isPaused = false;
+			}
+		});
+	}
 }
 
 function init() {
@@ -430,6 +601,23 @@ const setup = () => {
 		}
 	});
 	window.swup.hooks.on('page:view', () => {
+		// Control mobile banner visibility based on page with improved staging animation
+		const bannerWrapper = document.getElementById('banner-wrapper')
+		const mainContentWrapper = document.querySelector('.absolute.w-full.z-30.pointer-events-none')
+		const isHomePage = window.location.pathname === '/' || window.location.pathname === ''
+
+		if (bannerWrapper && mainContentWrapper) {
+			if (isHomePage) {
+				// 首页：延迟移除隐藏类，让banner和内容优雅地出现
+				setTimeout(() => {
+					bannerWrapper.classList.remove('mobile-hide-banner')
+				}, 100)
+			} else {
+				// 非首页：隐藏banner
+				bannerWrapper.classList.add('mobile-hide-banner')
+			}
+		}
+
 		// hide the temp high element when the transition is done
 		const heightExtend = document.getElementById('page-height-extend')
 		if (heightExtend) {
