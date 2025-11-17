@@ -15,7 +15,9 @@ import { url } from "../../utils/url-utils";
 
 const { id, alt, position = "center", basePath = "/" } = Astro.props;
 const className = Astro.props.class;
-const src = Array.isArray(Astro.props.src) ? Astro.props.src[0] || "" : Astro.props.src;
+const src = Array.isArray(Astro.props.src)
+	? Astro.props.src[0] || ""
+	: Astro.props.src;
 
 const isLocal = !(
 	src.startsWith("/") ||
