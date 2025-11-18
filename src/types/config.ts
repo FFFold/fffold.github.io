@@ -141,3 +141,17 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type AnnouncementConfig = {
+	title?: string;
+	content: string;
+	icon?: string;
+	type?: "info" | "warning" | "success" | "error";
+	closable?: boolean;
+	link?: {
+		enable: boolean;
+		text: string;
+		url: string;
+		external?: boolean;
+	};
+};
