@@ -124,3 +124,17 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
 };
+
+import type { AnnouncementConfig } from "./types/config";
+
+export const announcementConfig: AnnouncementConfig = {
+	title: "公告", // 公告标题
+	content: "欢迎来到折叠的个人博客！", // 公告内容
+	closable: true, // 允许用户关闭公告
+	link: {
+		enable: true, // 启用链接
+		text: "联系博主", // 链接文本
+		url: "/about/", // 链接 URL
+		external: false, // 是否外部链接
+	},
+};
