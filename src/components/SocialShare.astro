@@ -16,38 +16,48 @@ const { title, url, description = "", tags = [], image = "" } = Astro.props;
 const pageUrl = new URL(url, Astro.site).href;
 const pageImage = image ? new URL(image, Astro.site).href : "";
 
+// 分享平台配置
 const sharePlatforms = [
 	{
 		key: "twitter",
 		name: "Twitter/X",
 		icon: "fa6-brands:x-twitter",
 		color: "bg-[#1DA1F2] hover:bg-[#0d8bd9]",
-		getUrl: () =>
-			`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&hashtags=${encodeURIComponent(tags.join(","))}`,
+		webUrl: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&hashtags=${encodeURIComponent(tags.join(","))}`,
+		mobileUrl: `twitter://post?message=${encodeURIComponent(`${title} ${pageUrl}`)}`,
 	},
 	{
 		key: "weibo",
 		name: "微博",
 		icon: "fa6-brands:weibo",
 		color: "bg-[#E6162D] hover:bg-[#c11225]",
-		getUrl: () =>
-			`https://service.weibo.com/share/share.php?title=${encodeURIComponent(`${title} - ${description}`)}&url=${encodeURIComponent(pageUrl)}&pic=${pageImage ? encodeURIComponent(pageImage) : ""}`,
+		webUrl: `https://service.weibo.com/share/share.php?title=${encodeURIComponent(`${title} - ${description}`)}&url=${encodeURIComponent(pageUrl)}&pic=${pageImage ? encodeURIComponent(pageImage) : ""}`,
+		mobileUrl: `sinaweibo://share?title=${encodeURIComponent(title)}&content=${encodeURIComponent(`${description}\n${pageUrl}`)}`,
 	},
 	{
 		key: "qq",
 		name: "QQ",
 		icon: "fa6-brands:qq",
 		color: "bg-[#12B7F5] hover:bg-[#0e9dce]",
-		getUrl: () =>
-			`https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}`,
+		webUrl: `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}`,
+		mobileUrl: `mqq://share/to_fri?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&image_url=${pageImage ? encodeURIComponent(pageImage) : ""}&share_id=1101685683`,
+	},
+	{
+		key: "wechat",
+		name: "微信",
+		icon: "fa6-brands:weixin",
+		color: "bg-[#07C160] hover:bg-[#06a854]",
+		webUrl: null, // 微信没有网页版分享
+		mobileUrl: `weixin://`, // 只是尝试唤起微信
+		isWechat: true, // 特殊处理
 	},
 	{
 		key: "qzone",
 		name: "QQ空间",
 		icon: "simple-icons:qzone",
 		color: "bg-[#FECE00] hover:bg-[#e6b800]",
-		getUrl: () =>
-			`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}&site=${encodeURIComponent(Astro.site?.hostname || "")}`,
+		webUrl: `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}&site=${encodeURIComponent(Astro.site?.hostname || "")}`,
+		mobileUrl: `mqqzone://arise/share?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&image_url=${pageImage ? encodeURIComponent(pageImage) : ""}`,
 	},
 	{
 		key: "copy",
@@ -85,9 +95,21 @@ const sharePlatforms = [
 								{i18n(I18nKey.copied)}
 							</span>
 						</button>
+					) : platform.isWechat ? (
+						<button
+							data-wechat-btn
+							class={`share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white ${platform.color} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0`}
+							aria-label={platform.name}
+							title={platform.name}
+						>
+							<Icon name={platform.icon} class="w-4 h-4 flex-shrink-0" />
+							<span class="text-sm font-medium hidden sm:inline">{platform.name}</span>
+						</button>
 					) : (
 						<a
-							href={platform.getUrl()}
+							href={platform.webUrl}
+							data-share-url={platform.webUrl}
+							data-mobile-url={platform.mobileUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 							class={`share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white ${platform.color} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0`}
@@ -107,50 +129,145 @@ const sharePlatforms = [
 <script>
 	const initShareButtons = () => {
 		const copyBtn = document.querySelector("[data-copy-btn]") as HTMLButtonElement | null;
+		const wechatBtn = document.querySelector("[data-wechat-btn]") as HTMLButtonElement | null;
 		const shareContainer = document.querySelector("[data-share-url]") as HTMLElement | null;
 		const shareButtonsContainer = document.getElementById("share-buttons-container");
 
-		if (!copyBtn || !shareContainer || !shareButtonsContainer) return;
+		if (!shareContainer || !shareButtonsContainer) return;
 
 		const url = shareContainer.dataset.shareUrl || window.location.href;
+		const title = shareContainer.dataset.shareTitle || document.title;
+		const text = shareContainer.dataset.shareText || "";
+
+		// 检测设备类型
+		const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+		const isAndroid = /Android/i.test(navigator.userAgent);
 
 		// 复制链接功能
-		copyBtn.addEventListener("click", async () => {
-			try {
-				await navigator.clipboard.writeText(url);
+		if (copyBtn) {
+			copyBtn.addEventListener("click", async () => {
+				try {
+					await navigator.clipboard.writeText(url);
 
-				const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
-				if (feedback) {
-					feedback.style.opacity = "1";
+					const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
+					if (feedback) {
+						feedback.style.opacity = "1";
+						setTimeout(() => {
+							feedback.style.opacity = "0";
+						}, 2000);
+					}
+
+					copyBtn.classList.add("ring-2", "ring-green-400");
 					setTimeout(() => {
-						feedback.style.opacity = "0";
-					}, 2000);
+						copyBtn.classList.remove("ring-2", "ring-green-400");
+					}, 1000);
+				} catch (err) {
+					console.error("复制失败:", err);
+
+					const textArea = document.createElement("textarea");
+					textArea.value = url;
+					document.body.appendChild(textArea);
+					textArea.select();
+					document.execCommand("copy");
+					document.body.removeChild(textArea);
+
+					const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
+					if (feedback) {
+						feedback.textContent = "复制失败";
+						feedback.style.opacity = "1";
+						setTimeout(() => {
+							feedback.style.opacity = "0";
+							if (feedback) feedback.textContent = "已复制";
+						}, 2000);
+					}
 				}
+			});
+		}
 
-				copyBtn.classList.add("ring-2", "ring-green-400");
-				setTimeout(() => {
-					copyBtn.classList.remove("ring-2", "ring-green-400");
-				}, 1000);
-			} catch (err) {
-				console.error("复制失败:", err);
+		// 微信分享（特殊处理，因为没有URL Scheme）
+		if (wechatBtn) {
+			wechatBtn.addEventListener("click", async () => {
+				try {
+					await navigator.clipboard.writeText(`${title}\n${url}`);
 
-				const textArea = document.createElement("textarea");
-				textArea.value = url;
-				document.body.appendChild(textArea);
-				textArea.select();
-				document.execCommand("copy");
-				document.body.removeChild(textArea);
+					// 创建引导弹窗
+					const modal = document.createElement("div");
+					modal.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4";
+					modal.innerHTML = `
+						<div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4">
+							<div class="flex items-center justify-between mb-4">
+								<h3 class="text-lg font-semibold text-gray-800 dark:text-white">分享到微信</h3>
+								<button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+									</svg>
+								</button>
+							</div>
+							<div class="space-y-3">
+								<p class="text-gray-600 dark:text-gray-300 text-sm">链接已复制！请按以下步骤分享：</p>
+								<ol class="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-300 text-sm">
+									<li>打开微信</li>
+									<li>选择聊天或朋友圈</li>
+									<li>粘贴并发送</li>
+								</ol>
+								<div class="mt-4 p-3 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-400">
+									提示：${title.substring(0, 30)}...
+								</div>
+							</div>
+							<div class="mt-6 flex justify-end">
+								<button class="close-modal px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded text-sm font-medium">
+									知道了
+								</button>
+							</div>
+						</div>
+					`;
 
-				const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
-				if (feedback) {
-					feedback.textContent = "复制失败";
-					feedback.style.opacity = "1";
+					document.body.appendChild(modal);
+
+					// 关闭弹窗
+					const closeButtons = modal.querySelectorAll(".close-modal");
+					closeButtons.forEach(btn => {
+						btn.addEventListener("click", () => {
+							document.body.removeChild(modal);
+						});
+					});
+
+					// 点击背景关闭
+					modal.addEventListener("click", (e) => {
+						if (e.target === modal) {
+							document.body.removeChild(modal);
+						}
+					});
+				} catch (err) {
+					console.error("微信分享失败:", err);
+					alert("复制失败，请手动复制链接分享");
+				}
+			});
+		}
+
+		// 为其他分享按钮添加智能链接处理
+		const shareLinks = shareButtonsContainer.querySelectorAll("a[data-share-url]");
+		shareLinks.forEach(link => {
+			link.addEventListener("click", (e) => {
+				const webUrl = link.getAttribute("data-share-url");
+				const mobileUrl = link.getAttribute("data-mobile-url");
+
+				if (isMobile && mobileUrl) {
+					e.preventDefault();
+
+					// 尝试打开原生应用
+					window.location.href = mobileUrl;
+
+					// 设置超时，如果原生应用没有唤起，则打开网页版
 					setTimeout(() => {
-						feedback.style.opacity = "0";
-						if (feedback) feedback.textContent = "已复制";
-					}, 2000);
+						if (webUrl) {
+							window.open(webUrl, "_blank", "noopener,noreferrer");
+						}
+					}, 1500);
 				}
-			}
+				// 如果不是移动端，或者没有mobileUrl，则使用默认行为（打开webUrl）
+			});
 		});
 
 		// Web Share API 支持
@@ -162,14 +279,11 @@ const sharePlatforms = [
 				<svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
 					<path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
 				</svg>
-				<span class="text-sm font-medium hidden sm:inline">系统分享</span>
+				<span class="text-sm font-medium hidden sm:inline">${isMobile ? "更多分享" : "系统分享"}</span>
 			`;
 
 			nativeShareBtn.addEventListener("click", async () => {
 				try {
-					const title = shareContainer.dataset.shareTitle || document.title;
-					const text = shareContainer.dataset.shareText || "";
-
 					await (navigator as any).share({
 						title,
 						text,
