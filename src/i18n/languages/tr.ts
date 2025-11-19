@@ -39,4 +39,8 @@ export const tr: Translation = {
 
 	[Key.announcement]: "Duyuru",
 	[Key.announcementClose]: "Kapat",
+
+	[Key.share]: "Paylaş",
+	[Key.copyLink]: "Bağlantıyı Kopyala",
+	[Key.copied]: "Kopyalandı",
 };

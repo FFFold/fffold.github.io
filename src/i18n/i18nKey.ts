@@ -36,6 +36,10 @@ enum I18nKey {
 
 	announcement = "announcement",
 	announcementClose = "announcementClose",
+
+	share = "share",
+	copyLink = "copyLink",
+	copied = "copied",
 }
 
 export default I18nKey;

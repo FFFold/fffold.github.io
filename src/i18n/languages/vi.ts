@@ -39,4 +39,8 @@ export const vi: Translation = {
 
 	[Key.announcement]: "Thông báo",
 	[Key.announcementClose]: "Đóng",
+
+	[Key.share]: "Chia sẻ",
+	[Key.copyLink]: "Sao chép liên kết",
+	[Key.copied]: "Đã sao chép",
 };

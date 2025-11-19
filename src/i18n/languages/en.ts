@@ -39,4 +39,8 @@ export const en: Translation = {
 
 	[Key.announcement]: "Announcement",
 	[Key.announcementClose]: "Close",
+
+	[Key.share]: "Share to",
+	[Key.copyLink]: "Copy Link",
+	[Key.copied]: "Copied",
 };

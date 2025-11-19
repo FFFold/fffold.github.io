@@ -39,4 +39,8 @@ export const id: Translation = {
 
 	[Key.announcement]: "Pengumuman",
 	[Key.announcementClose]: "Tutup",
+
+	[Key.share]: "Bagikan ke",
+	[Key.copyLink]: "Salin Tautan",
+	[Key.copied]: "Tersalin",
 };

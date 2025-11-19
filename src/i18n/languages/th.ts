@@ -39,4 +39,8 @@ export const th: Translation = {
 
 	[Key.announcement]: "ประกาศ",
 	[Key.announcementClose]: "ปิด",
+
+	[Key.share]: "แชร์ไปยัง",
+	[Key.copyLink]: "คัดลอกลิงก์",
+	[Key.copied]: "คัดลอกแล้ว",
 };
