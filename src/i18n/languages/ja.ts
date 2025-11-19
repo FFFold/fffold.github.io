@@ -39,4 +39,8 @@ export const ja: Translation = {
 
 	[Key.announcement]: "お知らせ",
 	[Key.announcementClose]: "閉じる",
+
+	[Key.share]: "共有",
+	[Key.copyLink]: "リンクをコピー",
+	[Key.copied]: "コピーしました",
 };

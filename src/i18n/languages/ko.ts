@@ -37,6 +37,10 @@ export const ko: Translation = {
 	[Key.publishedAt]: "게시일",
 	[Key.license]: "라이선스",
 
-	[Key.announcement]: "공지사항",
+	[Key.announcement]: "공지",
 	[Key.announcementClose]: "닫기",
+
+	[Key.share]: "공유하기",
+	[Key.copyLink]: "링크 복사",
+	[Key.copied]: "복사됨",
 };

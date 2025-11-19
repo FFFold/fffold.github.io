@@ -48,7 +48,7 @@ const sharePlatforms = [
 		icon: "fa6-brands:weixin",
 		color: "bg-[#07C160] hover:bg-[#06a854]",
 		webUrl: null, // 微信没有网页版分享
-		mobileUrl: `weixin://`, // 只是尝试唤起微信
+		mobileUrl: "weixin://", // 只是尝试唤起微信
 		isWechat: true, // 特殊处理
 	},
 	{
@@ -63,7 +63,8 @@ const sharePlatforms = [
 		key: "copy",
 		name: i18n(I18nKey.copyLink),
 		icon: "material-symbols:link",
-		color: "bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700",
+		color:
+			"bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700",
 		isCopy: true,
 	},
 ];
@@ -141,8 +142,6 @@ const sharePlatforms = [
 
 		// 检测设备类型
 		const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-		const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-		const isAndroid = /Android/i.test(navigator.userAgent);
 
 		// 复制链接功能
 		if (copyBtn) {
@@ -169,6 +168,7 @@ const sharePlatforms = [
 					textArea.value = url;
 					document.body.appendChild(textArea);
 					textArea.select();
+					// biome-ignore lint/nursery/noDocumentCookie: 降级方案
 					document.execCommand("copy");
 					document.body.removeChild(textArea);
 
