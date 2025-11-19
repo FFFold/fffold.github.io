@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
 
 interface Props {
 	title: string;
@@ -11,98 +13,223 @@ interface Props {
 
 const { title, url, description = "", tags = [], image = "" } = Astro.props;
 
-// 创建分享链接
+const pageUrl = new URL(url, Astro.site).href;
+const pageImage = image ? new URL(image, Astro.site).href : "";
 
-const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&hashtags=${encodeURIComponent(tags.join(","))}`;
-
-const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ""}&summary=${encodeURIComponent(tags.join(","))}`;
-
-const qzoneShareUrl = `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ""}&summary=${encodeURIComponent(tags.join(","))}&site=请勿折叠`;
-
-const weiboShareUrl = `https://service.weibo.com/share/share.php?title=${encodeURIComponent(`${title} - ${description}`)}&url=${encodeURIComponent(url)}&pic=${image ? encodeURIComponent(new URL(image, Astro.site).href) : ""}`;
-
-const copyUrl = () => {
-	navigator.clipboard.writeText(url);
-};
+const sharePlatforms = [
+	{
+		key: "twitter",
+		name: "Twitter/X",
+		icon: "fa6-brands:x-twitter",
+		color: "bg-[#1DA1F2] hover:bg-[#0d8bd9]",
+		getUrl: () =>
+			`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&hashtags=${encodeURIComponent(tags.join(","))}`,
+	},
+	{
+		key: "weibo",
+		name: "微博",
+		icon: "fa6-brands:weibo",
+		color: "bg-[#E6162D] hover:bg-[#c11225]",
+		getUrl: () =>
+			`https://service.weibo.com/share/share.php?title=${encodeURIComponent(`${title} - ${description}`)}&url=${encodeURIComponent(pageUrl)}&pic=${pageImage ? encodeURIComponent(pageImage) : ""}`,
+	},
+	{
+		key: "qq",
+		name: "QQ",
+		icon: "fa6-brands:qq",
+		color: "bg-[#12B7F5] hover:bg-[#0e9dce]",
+		getUrl: () =>
+			`https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}`,
+	},
+	{
+		key: "qzone",
+		name: "QQ空间",
+		icon: "simple-icons:qzone",
+		color: "bg-[#FECE00] hover:bg-[#e6b800]",
+		getUrl: () =>
+			`https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${encodeURIComponent(pageUrl)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}&pics=${pageImage ? encodeURIComponent(pageImage) : ""}&summary=${encodeURIComponent(tags.join(","))}&site=${encodeURIComponent(Astro.site?.hostname || "")}`,
+	},
+	{
+		key: "copy",
+		name: i18n(I18nKey.copyLink),
+		icon: "material-symbols:link",
+		color: "bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700",
+		isCopy: true,
+	},
+];
 ---
 
-<div class="social-share-container w-full mb-6">
-  <div class="flex items-center gap-2 mb-2">
-    <span class="text-sm text-gray-600 dark:text-gray-400">分享到：</span>
-  </div>
-  <div class="flex flex-wrap gap-2">
-    <a 
-      href={twitterShareUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#1DA1F2] hover:bg-[#0d8bd9] text-white transition-colors"
-      aria-label="分享到 Twitter"
-    >
-      <Icon name="fa6-brands:x-twitter" class="w-4 h-4" />
-    </a>
-    
-    <a 
-      href={qqShareUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#12B7F5] hover:bg-[#0e9dce] text-white transition-colors"
-      aria-label="分享到 QQ"
-    >
-      <Icon name="fa6-brands:qq" class="w-4 h-4" />
-    </a>
-    
-    <a 
-      href={qzoneShareUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#FECE00] hover:bg-[#e6b800] text-white transition-colors"
-      aria-label="分享到 QQ 空间"
-    >
-      <Icon name="simple-icons:qzone" class="w-4 h-4" />
-    </a>
-    
-    <a 
-      href={weiboShareUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#E6162D] hover:bg-[#c11225] text-white transition-colors"
-      aria-label="分享到 微博"
-    >
-      <Icon name="fa6-brands:weibo" class="w-4 h-4" />
-    </a>
-    
-    <button
-      id="copy-link-btn"
-      onclick={`navigator.clipboard.writeText('${url}').then(() => {
-        const btn = document.getElementById('copy-link-btn');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<span class="text-xs">已复制</span>';
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-        }, 2000);
-      })`}
-      class="share-btn flex items-center justify-center w-10 h-10 rounded-full bg-[#6c757d] hover:bg-[#5a6268] text-white transition-colors"
-      aria-label="复制链接"
-    >
-      <Icon name="material-symbols:link" class="w-4 h-4" />
-    </button>
-  </div>
-  
-  <style is:global>
-    .social-share-container {
-      padding: 1rem 0;
-      border-top: 1px dashed var(--line-divider);
-      border-bottom: 1px dashed var(--line-divider);
-      margin: 1.5rem 0;
-    }
-    
-    .share-btn {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .share-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+<div class="social-share-container w-full my-8" data-share-url={pageUrl} data-share-title={title} data-share-text={description}>
+	<div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+		<span class="text-base font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+			<Icon name="material-symbols:share" class="w-5 h-5" />
+			{i18n(I18nKey.share)}
+		</span>
+		<div class="h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent dark:from-gray-700"></div>
+	</div>
+
+	<div class="flex flex-wrap gap-3" id="share-buttons-container">
+		{
+			sharePlatforms.map((platform) => (
+				<>
+					{platform.isCopy ? (
+						<button
+							data-copy-btn
+							class={`share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white ${platform.color} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 relative`}
+							aria-label={platform.name}
+							title={platform.name}
+						>
+							<Icon name={platform.icon} class="w-4 h-4 flex-shrink-0" />
+							<span class="text-sm font-medium hidden sm:inline">{platform.name}</span>
+							<span class="copy-feedback absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-200 whitespace-nowrap">
+								{i18n(I18nKey.copied)}
+							</span>
+						</button>
+					) : (
+						<a
+							href={platform.getUrl()}
+							target="_blank"
+							rel="noopener noreferrer"
+							class={`share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white ${platform.color} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0`}
+							aria-label={platform.name}
+							title={platform.name}
+						>
+							<Icon name={platform.icon} class="w-4 h-4 flex-shrink-0" />
+							<span class="text-sm font-medium hidden sm:inline">{platform.name}</span>
+						</a>
+					)}
+				</>
+			))
+		}
+	</div>
 </div>
+
+<script>
+	const initShareButtons = () => {
+		const copyBtn = document.querySelector("[data-copy-btn]") as HTMLButtonElement | null;
+		const shareContainer = document.querySelector("[data-share-url]") as HTMLElement | null;
+		const shareButtonsContainer = document.getElementById("share-buttons-container");
+
+		if (!copyBtn || !shareContainer || !shareButtonsContainer) return;
+
+		const url = shareContainer.dataset.shareUrl || window.location.href;
+
+		// 复制链接功能
+		copyBtn.addEventListener("click", async () => {
+			try {
+				await navigator.clipboard.writeText(url);
+
+				const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
+				if (feedback) {
+					feedback.style.opacity = "1";
+					setTimeout(() => {
+						feedback.style.opacity = "0";
+					}, 2000);
+				}
+
+				copyBtn.classList.add("ring-2", "ring-green-400");
+				setTimeout(() => {
+					copyBtn.classList.remove("ring-2", "ring-green-400");
+				}, 1000);
+			} catch (err) {
+				console.error("复制失败:", err);
+
+				const textArea = document.createElement("textarea");
+				textArea.value = url;
+				document.body.appendChild(textArea);
+				textArea.select();
+				document.execCommand("copy");
+				document.body.removeChild(textArea);
+
+				const feedback = copyBtn.querySelector(".copy-feedback") as HTMLElement | null;
+				if (feedback) {
+					feedback.textContent = "复制失败";
+					feedback.style.opacity = "1";
+					setTimeout(() => {
+						feedback.style.opacity = "0";
+						if (feedback) feedback.textContent = "已复制";
+					}, 2000);
+				}
+			}
+		});
+
+		// Web Share API 支持
+		if ("share" in navigator) {
+			const nativeShareBtn = document.createElement("button");
+			nativeShareBtn.className =
+				"share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0";
+			nativeShareBtn.innerHTML = `
+				<svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+					<path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+				</svg>
+				<span class="text-sm font-medium hidden sm:inline">系统分享</span>
+			`;
+
+			nativeShareBtn.addEventListener("click", async () => {
+				try {
+					const title = shareContainer.dataset.shareTitle || document.title;
+					const text = shareContainer.dataset.shareText || "";
+
+					await (navigator as any).share({
+						title,
+						text,
+						url,
+					});
+				} catch (err) {
+					if ((err as any).name !== "AbortError") {
+						console.error("分享失败:", err);
+					}
+				}
+			});
+
+			shareButtonsContainer.insertBefore(nativeShareBtn, shareButtonsContainer.firstChild);
+		}
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initShareButtons);
+	} else {
+		initShareButtons();
+	}
+</script>
+
+<style is:global>
+	.social-share-container {
+		padding: 1.5rem 0;
+		border-top: 1px solid var(--line-divider);
+		border-bottom: 1px solid var(--line-divider);
+		margin: 2rem 0;
+	}
+
+	.share-btn {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.share-btn::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+		transition: left 0.5s;
+	}
+
+	.share-btn:hover::before {
+		left: 100%;
+	}
+
+	@media (max-width: 640px) {
+		.share-btn {
+			@apply px-3 py-2;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.social-share-container {
+			@apply my-6;
+		}
+	}
+</style>

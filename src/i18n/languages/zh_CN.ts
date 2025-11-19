@@ -39,4 +39,8 @@ export const zh_CN: Translation = {
 
 	[Key.announcement]: "公告",
 	[Key.announcementClose]: "关闭",
+
+	[Key.share]: "分享到",
+	[Key.copyLink]: "复制链接",
+	[Key.copied]: "已复制",
 };
