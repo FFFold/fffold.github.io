@@ -12,14 +12,13 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Blog",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
-		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+		hue: 50, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
 	},
 
 	// 壁纸模式配置
 	wallpaperMode: {
 		defaultMode: "banner", // 默认壁纸模式：banner=顶部横幅，fullscreen=全屏壁纸，none=无壁纸
-		showModeSwitchOnMobile: "desktop", // 整体布局方案切换按钮显示设置（默认：desktop）
 	},
 
 	banner: {
@@ -34,25 +33,9 @@ export const siteConfig: SiteConfig = {
 			enable: false, // 是否启用轮播
 			interval: 5, // 轮播间隔时间（秒）
 		},
-		waves: {
-			enable: false, // 是否启用水波纹效果
-			performanceMode: false, // 性能模式：减少动画复杂度
-			mobileDisable: true, // 移动端禁用
-		},
 		imageApi: {
 			enable: false, // 是否启用图片API
 			url: "", // API地址，返回每行一个图片链接的文本
-		},
-		homeText: {
-			enable: false, // 是否在首页显示自定义文字
-			title: "", // 主标题
-			subtitle: "", // 副标题，支持单个字符串或字符串数组
-			typewriter: {
-				enable: false, // 是否启用打字机效果
-				speed: 100, // 打字速度（毫秒）
-				deleteSpeed: 50, // 删除速度（毫秒）
-				pauseTime: 2000, // 完整显示后的暂停时间（毫秒）
-			},
 		},
 		credit: {
 			enable: true, // Display the credit text of the banner image
