@@ -19,6 +19,7 @@ export type SiteConfig = {
 	themeColor: {
 		hue: number;
 		fixed: boolean;
+		version?: number;
 	};
 
 	// 壁纸模式配置

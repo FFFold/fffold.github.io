@@ -14,6 +14,7 @@ export const siteConfig: SiteConfig = {
 	themeColor: {
 		hue: 50, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
+		version: 3, // Theme version for cache invalidation, increment when changing default hue
 	},
 
 	// 壁纸模式配置
