@@ -18,7 +18,6 @@ import {
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
 import { pathsEqual, url } from "../utils/url-utils";
-import "katex/dist/katex.css";
 
 interface Props {
 	title?: string;
@@ -630,6 +629,9 @@ const setup = () => {
 		if (heightExtend) {
 			heightExtend.classList.remove('hidden')
 		}
+
+		// Load KaTeX CSS if the page contains math elements
+		loadKatexCssIfNeeded()
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
@@ -651,6 +653,18 @@ if (window?.swup?.hooks) {
 } else {
 	document.addEventListener('swup:enable', setup)
 }
+
+// Load KaTeX CSS dynamically if page contains math elements
+function loadKatexCssIfNeeded() {
+	if (!window.__katexCssLoaded && document.querySelector('.katex, .katex-display')) {
+		window.__katexCssLoaded = true
+		const link = document.createElement('link')
+		link.rel = 'stylesheet'
+		link.href = url('/katex.min.css')
+		document.head.appendChild(link)
+	}
+}
+loadKatexCssIfNeeded()
 
 let backToTopBtn = document.getElementById('back-to-top-btn');
 let toc = document.getElementById('toc-wrapper');
@@ -691,7 +705,16 @@ function scrollFunction() {
 		}
 	}
 }
-window.onscroll = scrollFunction
+let scrollTicking = false;
+window.addEventListener('scroll', () => {
+	if (!scrollTicking) {
+		requestAnimationFrame(() => {
+			scrollFunction();
+			scrollTicking = false;
+		});
+		scrollTicking = true;
+	}
+}, { passive: true });
 
 window.onresize = () => {
 	// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
