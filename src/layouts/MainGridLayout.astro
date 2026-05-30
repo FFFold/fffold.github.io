@@ -159,6 +159,11 @@ const mainPanelTop = siteConfig.banner.enable
 									]}
 									src={bannerImages.desktop[index]}
 									position={siteConfig.banner.position}
+									loading={index === 0 ? "eager" : "lazy"}
+									fetchpriority={index === 0 ? "high" : "low"}
+									decoding="async"
+									widths={[768, 1280, 1920]}
+									sizes="100vw"
 								/>
 							)}
 							{hasMobileImage && (
@@ -170,6 +175,11 @@ const mainPanelTop = siteConfig.banner.enable
 									]}
 									src={bannerImages.mobile[index]}
 									position={siteConfig.banner.position}
+									loading={index === 0 ? "eager" : "lazy"}
+									fetchpriority={index === 0 ? "high" : "low"}
+									decoding="async"
+									widths={[480, 768]}
+									sizes="100vw"
 								/>
 							)}
 						</div>
@@ -189,6 +199,11 @@ const mainPanelTop = siteConfig.banner.enable
 						]}
 						src={bannerImages.desktop[0] || ""}
 						position={siteConfig.banner.position}
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						widths={[768, 1280, 1920]}
+						sizes="100vw"
 					/>
 				) : (
 					<ImageWrapper
@@ -199,6 +214,11 @@ const mainPanelTop = siteConfig.banner.enable
 						]}
 						src={bannerImages.desktop}
 						position={siteConfig.banner.position}
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						widths={[768, 1280, 1920]}
+						sizes="100vw"
 					/>
 				))}
 
@@ -212,6 +232,11 @@ const mainPanelTop = siteConfig.banner.enable
 						]}
 						src={bannerImages.mobile[0] || ""}
 						position={siteConfig.banner.position}
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						widths={[480, 768]}
+						sizes="100vw"
 					/>
 				) : (
 					<ImageWrapper
@@ -222,6 +247,11 @@ const mainPanelTop = siteConfig.banner.enable
 						]}
 						src={bannerImages.mobile}
 						position={siteConfig.banner.position}
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						widths={[480, 768]}
+						sizes="100vw"
 					/>
 				))}
 			</>
