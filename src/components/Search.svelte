@@ -93,15 +93,15 @@ const loadPagefindOnDemand = (): Promise<void> => {
 	pagefindLoadStarted = true;
 
 	pagefindLoadPromise = (async () => {
+		let timeout: ReturnType<typeof setTimeout> | undefined;
 		try {
 			const scriptUrl = url("/pagefind/pagefind.js");
 			const controller = new AbortController();
-			const timeout = setTimeout(() => controller.abort(), 5000);
+			timeout = setTimeout(() => controller.abort(), 5000);
 			const response = await fetch(scriptUrl, {
 				method: "HEAD",
 				signal: controller.signal,
 			});
-			clearTimeout(timeout);
 			if (!response.ok) {
 				throw new Error(`Pagefind script not found: ${response.status}`);
 			}
@@ -121,7 +121,11 @@ const loadPagefindOnDemand = (): Promise<void> => {
 				search: () => Promise.resolve({ results: [] }),
 				options: () => Promise.resolve(),
 			};
+			pagefindLoadStarted = false;
+			pagefindLoadPromise = null;
 			document.dispatchEvent(new CustomEvent("pagefindloaderror"));
+		} finally {
+			if (timeout) clearTimeout(timeout);
 		}
 	})();
 

@@ -660,8 +660,7 @@ function loadKatexCssIfNeeded() {
 		window.__katexCssLoaded = true
 		const link = document.createElement('link')
 		link.rel = 'stylesheet'
-		link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css'
-		link.crossOrigin = 'anonymous'
+		link.href = url('/katex.min.css')
 		document.head.appendChild(link)
 	}
 }

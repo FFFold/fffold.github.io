@@ -63,7 +63,7 @@ const shuffledItems = shuffleArray(items);
                 {shuffledItems.map((item) => (
                     <div class="flex flex-nowrap items-stretch h-28 gap-4 rounded-[var(--radius-large)]">
                         <div class="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-200 dark:bg-zinc-900">
-                            <img src={item.imgurl} alt="站点头像" class="w-full h-full object-cover" loading="lazy" decoding="async" width="112" height="112">
+                            <img src={item.imgurl} alt={item.title} class="w-full h-full object-cover" loading="lazy" decoding="async" width="112" height="112">
                         </div>
                         <div class="grow w-full">
                             <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 mb-1">{item.title}</div>
