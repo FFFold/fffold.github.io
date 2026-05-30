@@ -12,6 +12,8 @@ let result: SearchResult[] = [];
 let isSearching = false;
 let pagefindLoaded = false;
 let initialized = false;
+let pagefindLoadStarted = false;
+let pagefindLoadPromise: Promise<void> | null = null;
 
 const fakeResult: SearchResult[] = [
 	{
@@ -86,6 +88,52 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	}
 };
 
+const loadPagefindOnDemand = (): Promise<void> => {
+	if (pagefindLoadPromise) return pagefindLoadPromise;
+	pagefindLoadStarted = true;
+
+	pagefindLoadPromise = (async () => {
+		try {
+			const scriptUrl = url("/pagefind/pagefind.js");
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 5000);
+			const response = await fetch(scriptUrl, {
+				method: "HEAD",
+				signal: controller.signal,
+			});
+			clearTimeout(timeout);
+			if (!response.ok) {
+				throw new Error(`Pagefind script not found: ${response.status}`);
+			}
+
+			const pagefind = await import(/* @vite-ignore */ scriptUrl);
+
+			await pagefind.options({
+				excerptLength: 20,
+			});
+
+			window.pagefind = pagefind;
+			pagefindLoaded = true;
+			document.dispatchEvent(new CustomEvent("pagefindready"));
+		} catch (error) {
+			console.error("Failed to load Pagefind:", error);
+			window.pagefind = {
+				search: () => Promise.resolve({ results: [] }),
+				options: () => Promise.resolve(),
+			};
+			document.dispatchEvent(new CustomEvent("pagefindloaderror"));
+		}
+	})();
+
+	return pagefindLoadPromise;
+};
+
+const onSearchFocus = async (): Promise<void> => {
+	if (!pagefindLoadStarted && import.meta.env.PROD) {
+		await loadPagefindOnDemand();
+	}
+};
+
 onMount(() => {
 	const initializeSearch = () => {
 		initialized = true;
@@ -93,7 +141,6 @@ onMount(() => {
 			typeof window !== "undefined" &&
 			!!window.pagefind &&
 			typeof window.pagefind.search === "function";
-		console.log("Pagefind status on init:", pagefindLoaded);
 		if (keywordDesktop) search(keywordDesktop, true);
 		if (keywordMobile) search(keywordMobile, false);
 	};
@@ -105,23 +152,11 @@ onMount(() => {
 		initializeSearch();
 	} else {
 		document.addEventListener("pagefindready", () => {
-			console.log("Pagefind ready event received.");
 			initializeSearch();
 		});
 		document.addEventListener("pagefindloaderror", () => {
-			console.warn(
-				"Pagefind load error event received. Search functionality will be limited.",
-			);
-			initializeSearch(); // Initialize with pagefindLoaded as false
+			initializeSearch();
 		});
-
-		// Fallback in case events are not caught or pagefind is already loaded by the time this script runs
-		setTimeout(() => {
-			if (!initialized) {
-				console.log("Fallback: Initializing search after timeout.");
-				initializeSearch();
-			}
-		}, 2000); // Adjust timeout as needed
 	}
 });
 
@@ -144,7 +179,7 @@ $: if (initialized && keywordMobile) {
       dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
 ">
     <Icon icon="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
-    <input placeholder="{i18n(I18nKey.search)}" bind:value={keywordDesktop} on:focus={() => search(keywordDesktop, true)}
+    <input placeholder="{i18n(I18nKey.search)}" bind:value={keywordDesktop} on:focus={async () => { await onSearchFocus(); search(keywordDesktop, true); }}
            class="transition-all pl-10 text-sm bg-transparent outline-0
          h-full w-40 active:w-60 focus:w-60 text-black/50 dark:text-white/50"
     >
@@ -166,7 +201,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
       dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
   ">
         <Icon icon="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
-        <input placeholder="Search" bind:value={keywordMobile}
+        <input placeholder="Search" bind:value={keywordMobile} on:focus={async () => { await onSearchFocus(); search(keywordMobile, false); }}
                class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
                focus:w-60 text-black/50 dark:text-white/50"
         >
