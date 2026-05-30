@@ -93,20 +93,26 @@ const loadPagefindOnDemand = (): Promise<void> => {
 	pagefindLoadStarted = true;
 
 	pagefindLoadPromise = (async () => {
-		let timeout: ReturnType<typeof setTimeout> | undefined;
 		try {
 			const scriptUrl = url("/pagefind/pagefind.js");
-			const controller = new AbortController();
-			timeout = setTimeout(() => controller.abort(), 5000);
-			const response = await fetch(scriptUrl, {
-				method: "HEAD",
-				signal: controller.signal,
-			});
-			if (!response.ok) {
-				throw new Error(`Pagefind script not found: ${response.status}`);
-			}
-
-			const pagefind = await import(/* @vite-ignore */ scriptUrl);
+			const pagefind = await new Promise<typeof import("pagefind")>(
+				(resolve, reject) => {
+					const timer = setTimeout(
+						() => reject(new Error("Pagefind load timeout")),
+						5000,
+					);
+					import(/* @vite-ignore */ scriptUrl).then(
+						(mod) => {
+							clearTimeout(timer);
+							resolve(mod);
+						},
+						(err) => {
+							clearTimeout(timer);
+							reject(err);
+						},
+					);
+				},
+			);
 
 			await pagefind.options({
 				excerptLength: 20,
@@ -124,8 +130,6 @@ const loadPagefindOnDemand = (): Promise<void> => {
 			pagefindLoadStarted = false;
 			pagefindLoadPromise = null;
 			document.dispatchEvent(new CustomEvent("pagefindloaderror"));
-		} finally {
-			if (timeout) clearTimeout(timeout);
 		}
 	})();
 
