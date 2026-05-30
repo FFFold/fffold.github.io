@@ -2,7 +2,7 @@
 
 生物医药相关专业在读学生
 
-本博客网站基于[Fuwari](https://github.com/saicaca/fuwari)构建，使用[iFLOW CLI](https://github.com/iflow-ai/iflow-cli)协助开发
+本博客网站基于[Fuwari](https://github.com/saicaca/fuwari)构建，使用[Opencode](https://github.com/anomalyco/opencode)协助开发
 
 ::github{repo="FFFold/fffold.github.io"}
 
