@@ -42,7 +42,7 @@
     "markdown-it": "^14.1.1",
     "mdast-util-to-string": "^4.0.0",
     "overlayscrollbars": "^2.13.0",
-    "pagefind": "^1.4.0",
+    "pagefind": "^1.5.0",
     "photoswipe": "^5.4.4",
     "reading-time": "^1.5.0",
     "rehype-autolink-headings": "^7.1.0",
