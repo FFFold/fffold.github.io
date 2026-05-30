@@ -32,6 +32,7 @@ yarn.lock
 
 #reference
 .reference/
-.iFLOW/
 github-actions-key
 github-actions-key.pub
+
+AGENTS.md
