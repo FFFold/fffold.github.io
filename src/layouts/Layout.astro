@@ -217,15 +217,15 @@ const bannerOffset =
 /* 移动端横幅优化 - 小屏手机 (320px - 480px) */
 @media (max-width: 480px) {
 	.enable-banner #banner-wrapper {
-		height: 70vh;
+		height: 70vh !important;
 		min-height: 450px;
 		max-height: none;
-		top: 0;
+		top: 0 !important;
 	}
 	
 	.enable-banner .absolute.w-full.z-30 {
-		top: 70vh;
-		min-height: calc(100vh - 70vh);
+		top: 70vh !important;
+		min-height: calc(100vh - 70vh) !important;
 	}
 }
 
@@ -242,10 +242,10 @@ const bannerOffset =
 	}
 	
 	.mobile-hide-banner {
-		transform: translateY(-100%) translateZ(0);
-		opacity: 0;
-		pointer-events: none;
-		transition: transform 0.3s ease-in, opacity 0.2s ease-in;
+		transform: translateY(-100%) translateZ(0) !important;
+		opacity: 0 !important;
+		pointer-events: none !important;
+		transition: transform 0.3s ease-in, opacity 0.2s ease-in !important;
 	}
 	
 	.enable-banner .absolute.w-full.z-30 {
@@ -258,9 +258,9 @@ const bannerOffset =
 	}
 	
 	.enable-banner .mobile-hide-banner + .absolute.w-full.z-30 {
-		top: 5.5rem;
-		min-height: calc(100vh - 5.5rem);
-		transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+		top: 5.5rem !important;
+		min-height: calc(100vh - 5.5rem) !important;
+		transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s !important;
 	}
 }
 </style>
