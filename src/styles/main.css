@@ -1,3 +1,5 @@
+@reference "./tailwind.css";
+
 @layer components {
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
@@ -9,14 +11,27 @@
         @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
     }
     .expand-animation {
-        @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
-        before:absolute before:rounded-[inherit] before:inset-0 before:scale-[0.85] hover:before:scale-100 before:-z-10
+        @apply relative z-0;
+        &::before {
+            @apply absolute rounded-[inherit] inset-0 scale-[0.85] -z-10 ease-out transition;
+        }
+        &:hover::before {
+            @apply scale-100 bg-[var(--btn-plain-bg-hover)];
+        }
+        &:active {
+            @apply bg-none;
+        }
+        &:active::before {
+            @apply bg-[var(--btn-plain-bg-active)];
+        }
     }
     .link {
-        @apply transition rounded-md p-1 -m-1 expand-animation;
+        @apply transition rounded-md p-1 -m-1;
+        @extend .expand-animation;
     }
     .link-lg {
-        @apply transition rounded-md p-1.5 -m-1.5 expand-animation;
+        @apply transition rounded-md p-1.5 -m-1.5;
+        @extend .expand-animation;
     }
     .float-panel {
         @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition shadow-xl dark:shadow-none
@@ -42,9 +57,12 @@
             @apply hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]
         }
         &.scale-animation {
-            @apply expand-animation;
+            @extend .expand-animation;
             &.current-theme-btn {
-                @apply before:scale-100 before:opacity-100 before:bg-[var(--btn-plain-bg-hover)] text-[var(--primary)]
+                &::before {
+                    @apply scale-100 opacity-100 bg-[var(--btn-plain-bg-hover)];
+                }
+                @apply text-[var(--primary)];
             }
         }
     }

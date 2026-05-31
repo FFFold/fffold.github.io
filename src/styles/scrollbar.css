@@ -1,3 +1,5 @@
+@reference "./tailwind.css";
+
 .scrollbar-base.os-scrollbar {
     @apply transition-all;
     pointer-events: unset;
