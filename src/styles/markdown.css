@@ -92,9 +92,6 @@
         opacity: 0;
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
         position: absolute;
-        &:active {
-            scale: 0.9;
-        }
         height: 2rem;
         width: 2rem;
         top: 0.75rem;
@@ -110,6 +107,7 @@
             background-color: oklch(0.50 0.01 var(--hue));
         }
         &:active {
+            scale: 0.9;
             background-color: oklch(0.55 0.01 var(--hue));
         }
     }
