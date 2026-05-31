@@ -231,36 +231,13 @@ const bannerOffset =
 
 /* 当移动端banner被隐藏时，调整主内容区域位置 */
 @media (max-width: 767px) {
-	.enable-banner #banner-wrapper {
-		transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
-		transform-origin: top center;
-		will-change: transform, opacity;
-		backface-visibility: hidden;
-		-webkit-backface-visibility: hidden;
-		transform: translateZ(0);
-		-webkit-transform: translateZ(0);
-	}
-	
 	.mobile-hide-banner {
-		transform: translateY(-100%) translateZ(0) !important;
-		opacity: 0 !important;
-		pointer-events: none !important;
-		transition: transform 0.3s ease-in, opacity 0.2s ease-in !important;
-	}
-	
-	.enable-banner .absolute.w-full.z-30 {
-		transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-		will-change: top;
-		transform: translateZ(0);
-		-webkit-transform: translateZ(0);
-		backface-visibility: hidden;
-		-webkit-backface-visibility: hidden;
+		display: none !important;
 	}
 	
 	.enable-banner .mobile-hide-banner + .absolute.w-full.z-30 {
 		top: 5.5rem !important;
 		min-height: calc(100vh - 5.5rem) !important;
-		transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s !important;
 	}
 }
 </style>
