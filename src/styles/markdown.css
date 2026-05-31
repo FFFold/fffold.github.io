@@ -38,7 +38,7 @@
         text-decoration-color: var(--link-underline);
         text-decoration-thickness: 1px;
         text-decoration-style: dashed;
-        text-underline-offset: 1rem;
+        text-underline-offset: 0.25rem;
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
         display: inline-block;

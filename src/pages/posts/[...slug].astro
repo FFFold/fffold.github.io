@@ -12,7 +12,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 
 import { getSortedPosts } from "@utils/content-utils";
 
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import { getDir, getPostUrlById } from "@utils/url-utils";
 
 import { Icon } from "astro-icon/components";
 
@@ -138,7 +138,7 @@ const giscusConfig = {
 
   title={entry.data.title}
 
-  url={new URL(getPostUrlBySlug(entry.id), Astro.site).href}
+  url={new URL(getPostUrlById(entry.id), Astro.site).href}
 
   description={entry.data.description}
 
@@ -163,7 +163,7 @@ const giscusConfig = {
     </div>
 
     <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
-        <a href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : "#"}
+        <a href={entry.data.nextSlug ? getPostUrlById(entry.data.nextSlug) : "#"}
            class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.nextSlug}]}>
             {entry.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
                 <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
@@ -173,7 +173,7 @@ const giscusConfig = {
             </div>}
         </a>
 
-        <a href={entry.data.prevSlug ? getPostUrlBySlug(entry.data.prevSlug) : "#"}
+        <a href={entry.data.prevSlug ? getPostUrlById(entry.data.prevSlug) : "#"}
            class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.prevSlug}]}>
             {entry.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
                 <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
