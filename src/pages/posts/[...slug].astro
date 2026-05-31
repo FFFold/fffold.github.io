@@ -16,6 +16,8 @@ import { i18n } from "@i18n/translation";
 
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 
+import { render } from "astro:content";
+
 import { getSortedPosts } from "@utils/content-utils";
 
 import { getDir, getPostUrlBySlug } from "@utils/url-utils";
@@ -35,15 +37,13 @@ import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
 	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
+		params: { slug: entry.id },
 		props: { entry },
 	}));
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
-
-const { remarkPluginFrontmatter } = await entry.render();
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -146,7 +146,7 @@ const giscusConfig = {
 
   title={entry.data.title}
 
-  url={new URL(getPostUrlBySlug(entry.slug), Astro.site).href}
+  url={new URL(getPostUrlBySlug(entry.id), Astro.site).href}
 
   description={entry.data.description}
 
@@ -158,7 +158,7 @@ const giscusConfig = {
 
 
 
-{licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
+{licenseConfig.enable && <License title={entry.data.title} slug={entry.id} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
         </div>
     </div>
