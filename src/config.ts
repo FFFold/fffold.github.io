@@ -12,9 +12,9 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Blog",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
-		hue: 50, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
-		version: 3, // Theme version for cache invalidation, increment when changing default hue
+		version: 2, // Theme version for cache invalidation, increment when changing default hue
 	},
 
 	// 壁纸模式配置
@@ -26,8 +26,8 @@ export const siteConfig: SiteConfig = {
 		enable: true,
 		// 支持多种格式：字符串、数组、或对象分别设置桌面端和移动端
 		src: {
-			desktop: "assets/images/banner.jpg",
-			mobile: "assets/images/banner-mobile.jpg",
+			desktop: "assets/images/banner-natsu.jpg",
+			mobile: "assets/images/banner-mobile-natsu.jpg",
 		},
 		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		carousel: {
