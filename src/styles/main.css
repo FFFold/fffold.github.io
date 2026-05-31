@@ -1,5 +1,3 @@
-@tailwind components;
-
 @layer components {
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
