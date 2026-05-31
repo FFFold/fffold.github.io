@@ -36,7 +36,7 @@ export async function getSortedPosts() {
 	return sorted;
 }
 export type PostForList = {
-	slug: string;
+	id: string;
 	data: CollectionEntry<"posts">["data"];
 };
 export async function getSortedPostsList(): Promise<PostForList[]> {
@@ -44,7 +44,7 @@ export async function getSortedPostsList(): Promise<PostForList[]> {
 
 	// delete post.body
 	const sortedPostsList = sortedFullPosts.map((post) => ({
-		slug: post.id,
+		id: post.id,
 		data: post.data,
 	}));
 
