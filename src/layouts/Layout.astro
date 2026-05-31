@@ -2,6 +2,16 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "../styles/tailwind.css";
+import "../styles/main.css";
+import "../styles/markdown.css";
+import "../styles/transition.css";
+import "../styles/scrollbar.css";
+import "../styles/photoswipe.css";
+import "photoswipe/style.css";
+import "../styles/expressive-code.css";
+import "../styles/variables.styl";
+import "../styles/markdown-extend.styl";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
@@ -171,91 +181,89 @@ const bannerOffset =
 	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
-@tailwind components;
-@layer components {
-	.enable-banner.is-home #banner-wrapper {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
-	}
+
+.enable-banner.lg\:is-home #banner-wrapper {
+	height: var(--banner-height-home);
+	transform: translateY(var(--banner-height-extend));
+}
+.enable-banner #banner-wrapper {
+	height: var(--banner-height-home);
+}
+
+.enable-banner.lg\:is-home #banner {
+	height: var(--banner-height-home);
+	transform: translateY(0);
+}
+.enable-banner #banner {
+	height: var(--banner-height-home);
+	transform: translateY(var(--bannerOffset));
+}
+.enable-banner.lg\:is-home #main-grid {
+	transform: translateY(var(--banner-height-extend));
+}
+.enable-banner #top-row {
+	height: calc(var(--banner-height-home) - 4.5rem);
+	transition-property: all;
+	transition-duration: 300ms;
+}
+.enable-banner.lg\:is-home #sidebar-sticky {
+	top: calc(1rem - var(--banner-height-extend));
+}
+.navbar-hidden {
+	opacity: 0;
+	transform: translateY(-4rem);
+}
+
+/* 移动端banner动画 - 统一使用transition实现平滑过渡 */
+@media (max-width: 767px) {
+	/* banner wrapper 基础过渡 */
 	.enable-banner #banner-wrapper {
-		@apply h-[var(--banner-height-home)]
+		transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+					opacity 300ms ease-out;
+		transform-origin: top center;
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
 	}
 
-	.enable-banner.is-home #banner {
-		@apply h-[var(--banner-height-home)] translate-y-0
-	}
-	.enable-banner #banner {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--bannerOffset)]
-	}
-	.enable-banner.is-home #main-grid {
-		@apply translate-y-[var(--banner-height-extend)];
-	}
-	.enable-banner #top-row {
-		@apply h-[calc(var(--banner-height-home)_-_4.5rem)] transition-all duration-300
-	}
-	.enable-banner.is-home #sidebar-sticky {
-		@apply top-[calc(1rem_-_var(--banner-height-extend))]
-	}
-	.navbar-hidden {
-		@apply opacity-0 -translate-y-16
+	/* 非首页：banner向上滑出隐藏 */
+	.enable-banner:not(.lg\:is-home) #banner-wrapper {
+		transform: translateY(-100%);
+		opacity: 0;
+		pointer-events: none;
 	}
 
-	/* 移动端横幅优化 - 小屏手机 (320px - 480px) */
-	@media (max-width: 480px) {
-		/* Banner wrapper 高度优化 - 优先保持banner显示 */
-		#banner-wrapper {
-			height: 70vh !important; /* 保持较大高度优先显示banner */
-			min-height: 450px;
-			max-height: none; /* 移除最大高度限制 */
-			top: 0 !important; /* 移动端从顶部开始，避免被导航栏覆盖 */
-		}
-		
-		/* 主内容区域位置调整 - 确保在banner下面 */
-		.absolute.w-full.z-30 {
-			top: 70vh !important; /* 与banner高度对应 */
-			min-height: calc(100vh - 70vh) !important;
-		}
+	/* 主内容区域位置过渡 */
+	.enable-banner .absolute.w-full.z-30 {
+		transition: top 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
 
-	/* 当移动端banner被隐藏时，调整主内容区域位置 */
-	@media (max-width: 767px) {
-		/* Banner过渡动画 - 改进的分阶段动画 */
-		#banner-wrapper {
-			transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
-			transform-origin: top center;
-			/* 硬件加速优化 */
-			will-change: transform, opacity;
-			backface-visibility: hidden;
-			-webkit-backface-visibility: hidden;
-			transform: translateZ(0);
-			-webkit-transform: translateZ(0);
-		}
-		
-		.mobile-hide-banner {
-			transform: translateY(-100%) translateZ(0) !important;
-			opacity: 0 !important;
-			pointer-events: none !important;
-			/* 快速消失 */
-			transition: transform 0.3s ease-in, opacity 0.2s ease-in !important;
-		}
-		
-		/* 主内容区域过渡动画 - 硬件加速优化 */
-		.absolute.w-full.z-30 {
-			transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-			will-change: top;
-			/* 硬件加速优化 - 减少卡顿 */
-			transform: translateZ(0);
-			-webkit-transform: translateZ(0);
-			backface-visibility: hidden;
-			-webkit-backface-visibility: hidden;
-		}
-		
-		/* 当banner被隐藏时，主内容区域移到顶部 */
-		.mobile-hide-banner + .absolute.w-full.z-30 {
-			top: 5.5rem !important;
-			min-height: calc(100vh - 5.5rem) !important;
-			/* 内容区域快速上移 - 更快的过渡 */
-			transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s !important;
-		}
+	/* 非首页：主内容区域上移 */
+	.enable-banner:not(.lg\:is-home) .absolute.w-full.z-30 {
+		top: 5.5rem !important;
+		min-height: calc(100vh - 5.5rem) !important;
+	}
+
+	/* Swup动画期间：禁用过渡，避免冲突 */
+	html.is-animating #banner-wrapper {
+		transition: none !important;
+	}
+}
+
+/* 小屏手机 (320px - 480px) - 首页banner更高 */
+@media (max-width: 480px) {
+	.enable-banner.lg\:is-home #banner-wrapper {
+		height: 70vh !important;
+		min-height: 450px;
+		max-height: none;
+	}
+
+	.enable-banner.lg\:is-home .absolute.w-full.z-30 {
+		top: calc(70vh - 3.5rem) !important;
+	}
+
+	/* 移除#main-grid的transform，避免额外下移 */
+	.enable-banner.lg\:is-home #main-grid {
+		transform: none !important;
 	}
 }
 </style>
@@ -360,9 +368,9 @@ function initCustomScrollbar() {
 		// but just leave it here for now
 		{
 			target: bodyElement,
-			cancel: {
-				nativeScrollbarsOverlaid: true,    // don't initialize the overlay scrollbar if there is a native one
-			}
+		cancel: {
+			nativeScrollbarsOverlaid: false,    // don't initialize the overlay scrollbar if there is a native one
+		}
 		}, {
 		scrollbars: {
 			theme: 'scrollbar-base scrollbar-auto py-1',
@@ -607,27 +615,13 @@ const setup = () => {
 		}
 	});
 	window.swup.hooks.on('page:view', () => {
-		// Control mobile banner visibility based on page with improved staging animation
-		const bannerWrapper = document.getElementById('banner-wrapper')
-		const mainContentWrapper = document.querySelector('.absolute.w-full.z-30.pointer-events-none')
-		const isHomePage = window.location.pathname === '/' || window.location.pathname === ''
-
-		if (bannerWrapper && mainContentWrapper) {
-			if (isHomePage) {
-				// 首页：延迟移除隐藏类，让banner和内容优雅地出现
-				setTimeout(() => {
-					bannerWrapper.classList.remove('mobile-hide-banner')
-				}, 100)
-			} else {
-				// 非首页：隐藏banner
-				bannerWrapper.classList.add('mobile-hide-banner')
-			}
-		}
+		// Banner visibility is now controlled by lg:is-home class via CSS
+		// No additional JS needed for mobile banner animation
 
 		// hide the temp high element when the transition is done
 		const heightExtend = document.getElementById('page-height-extend')
 		if (heightExtend) {
-			heightExtend.classList.remove('hidden')
+			heightExtend.classList.add('hidden')
 		}
 
 		// Load KaTeX CSS if the page contains math elements
@@ -727,7 +721,6 @@ window.onresize = () => {
 
 <script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
-import "photoswipe/style.css"
 
 let lightbox: PhotoSwipeLightbox
 let pswp = import("photoswipe")

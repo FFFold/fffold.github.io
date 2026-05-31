@@ -1,68 +1,254 @@
-@tailwind components;
-
 @layer components {
     .card-base {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+        border-radius: var(--radius-large);
+        overflow: hidden;
+        background-color: var(--card-bg);
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
     }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
-        @apply transition;
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
     }
     .card-shadow {
-        @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.005));
     }
     .expand-animation {
-        @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
-        before:absolute before:rounded-[inherit] before:inset-0 before:scale-[0.85] hover:before:scale-100 before:-z-10
+        position: relative;
+        z-index: 0;
+        &::before {
+            content: "";
+            position: absolute;
+            border-radius: inherit;
+            inset: 0;
+            scale: 0.85;
+            z-index: -10;
+            transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+            transition-duration: var(--tw-duration, 0.15s);
+        }
+        &:hover::before {
+            scale: 1;
+            background-color: var(--btn-plain-bg-hover);
+        }
+        &:active {
+            background: none;
+        }
+        &:active::before {
+            background-color: var(--btn-plain-bg-active);
+        }
     }
     .link {
-        @apply transition rounded-md p-1 -m-1 expand-animation;
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        border-radius: 0.375rem;
+        padding: 0.25rem;
+        margin: -0.25rem;
+        position: relative;
+        z-index: 0;
+        &::before {
+            content: "";
+            position: absolute;
+            border-radius: inherit;
+            inset: 0;
+            scale: 0.85;
+            z-index: -10;
+            transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+            transition-duration: var(--tw-duration, 0.15s);
+        }
+        &:hover::before {
+            scale: 1;
+            background-color: var(--btn-plain-bg-hover);
+        }
+        &:active {
+            background: none;
+        }
+        &:active::before {
+            background-color: var(--btn-plain-bg-active);
+        }
     }
     .link-lg {
-        @apply transition rounded-md p-1.5 -m-1.5 expand-animation;
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        border-radius: 0.375rem;
+        padding: 0.375rem;
+        margin: -0.375rem;
+        position: relative;
+        z-index: 0;
+        &::before {
+            content: "";
+            position: absolute;
+            border-radius: inherit;
+            inset: 0;
+            scale: 0.85;
+            z-index: -10;
+            transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+            transition-duration: var(--tw-duration, 0.15s);
+        }
+        &:hover::before {
+            scale: 1;
+            background-color: var(--btn-plain-bg-hover);
+        }
+        &:active {
+            background: none;
+        }
+        &:active::before {
+            background-color: var(--btn-plain-bg-active);
+        }
     }
     .float-panel {
-        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition shadow-xl dark:shadow-none
+        top: 5.25rem;
+        border-radius: var(--radius-large);
+        overflow: hidden;
+        background-color: var(--float-panel-bg);
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+    :is(.dark .float-panel) {
+        box-shadow: none;
     }
     .float-panel-closed {
-        @apply -translate-y-1 opacity-0 pointer-events-none
+        translate: 0 -0.25rem;
+        opacity: 0;
+        pointer-events: none;
     }
     .search-panel mark {
-        @apply bg-transparent text-[var(--primary)]
+        background-color: transparent;
+        color: var(--primary);
     }
 
     .btn-card {
-        @apply transition flex items-center justify-center bg-[var(--card-bg)] hover:bg-[var(--btn-card-bg-hover)]
-        active:bg-[var(--btn-card-bg-active)]
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--card-bg);
+        &:hover {
+            background-color: var(--btn-card-bg-hover);
+        }
+        &:active {
+            background-color: var(--btn-card-bg-active);
+        }
     }
     .btn-card.disabled {
-        @apply pointer-events-none text-black/10 dark:text-white/10
+        pointer-events: none;
+        color: rgb(0 0 0 / 0.1);
+    }
+    :is(.dark .btn-card.disabled) {
+        color: rgb(255 255 255 / 0.1);
     }
     .btn-plain {
-        @apply transition relative flex items-center justify-center bg-none
-        text-black/75 hover:text-[var(--primary)] dark:text-white/75 dark:hover:text-[var(--primary)];
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        color: rgb(0 0 0 / 0.75);
+        &:hover {
+            color: var(--primary);
+        }
+        :is(.dark &) {
+            color: rgb(255 255 255 / 0.75);
+        }
+        :is(.dark &:hover) {
+            color: var(--primary);
+        }
         &:not(.scale-animation) {
-            @apply hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]
+            &:hover {
+                background-color: var(--btn-plain-bg-hover);
+            }
+            &:active {
+                background-color: var(--btn-plain-bg-active);
+            }
         }
         &.scale-animation {
-            @apply expand-animation;
+            position: relative;
+            z-index: 0;
+            &::before {
+                content: "";
+                position: absolute;
+                border-radius: inherit;
+                inset: 0;
+                scale: 0.85;
+                z-index: -10;
+                transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+                transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+                transition-duration: var(--tw-duration, 0.15s);
+            }
+            &:hover::before {
+                scale: 1;
+                background-color: var(--btn-plain-bg-hover);
+            }
+            &:active {
+                background: none;
+            }
+            &:active::before {
+                background-color: var(--btn-plain-bg-active);
+            }
             &.current-theme-btn {
-                @apply before:scale-100 before:opacity-100 before:bg-[var(--btn-plain-bg-hover)] text-[var(--primary)]
+                &::before {
+                    scale: 1;
+                    opacity: 1;
+                    background-color: var(--btn-plain-bg-hover);
+                }
+                color: var(--primary);
             }
         }
     }
     .btn-regular {
-        @apply transition flex items-center justify-center bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)]
-        text-[var(--btn-content)] dark:text-white/75
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--btn-regular-bg);
+        color: var(--btn-content);
+        &:hover {
+            background-color: var(--btn-regular-bg-hover);
+        }
+        &:active {
+            background-color: var(--btn-regular-bg-active);
+        }
+    }
+    :is(.dark .btn-regular) {
+        color: rgb(255 255 255 / 0.75);
     }
 
     .link-underline {
-        @apply transition underline decoration-2 decoration-dashed decoration-[var(--link-underline)]
-        hover:decoration-[var(--link-hover)] active:decoration-[var(--link-active)] underline-offset-[0.25rem]
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-decoration-style: dashed;
+        text-decoration-color: var(--link-underline);
+        text-underline-offset: 0.25rem;
+        &:hover {
+            text-decoration-color: var(--link-hover);
+        }
+        &:active {
+            text-decoration-color: var(--link-active);
+        }
     }
 
     .toc-hide,
     .toc-not-ready {
-        @apply opacity-0 pointer-events-none
+        opacity: 0;
+        pointer-events: none;
     }
 
     #toc-inner-wrapper {
@@ -78,42 +264,98 @@
     }
 
     .text-90 {
-        @apply text-black/90 dark:text-white/90
+        color: rgb(0 0 0 / 0.9);
+    }
+    :is(.dark .text-90) {
+        color: rgb(255 255 255 / 0.9);
     }
     .text-75 {
-        @apply text-black/75 dark:text-white/75
+        color: rgb(0 0 0 / 0.75);
+    }
+    :is(.dark .text-75) {
+        color: rgb(255 255 255 / 0.75);
     }
     .text-50 {
-        @apply text-black/50 dark:text-white/50
+        color: rgb(0 0 0 / 0.5);
+    }
+    :is(.dark .text-50) {
+        color: rgb(255 255 255 / 0.5);
     }
     .text-30 {
-        @apply text-black/30 dark:text-white/30
+        color: rgb(0 0 0 / 0.3);
+    }
+    :is(.dark .text-30) {
+        color: rgb(255 255 255 / 0.3);
     }
     .text-25 {
-        @apply text-black/25 dark:text-white/25
+        color: rgb(0 0 0 / 0.25);
+    }
+    :is(.dark .text-25) {
+        color: rgb(255 255 255 / 0.25);
     }
 
     .meta-icon {
-        @apply w-8 h-8 transition rounded-md flex items-center justify-center bg-[var(--btn-regular-bg)]
-        text-[var(--btn-content)] mr-2
+        width: 2rem;
+        height: 2rem;
+        transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+        transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+        transition-duration: var(--tw-duration, 0.15s);
+        border-radius: 0.375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--btn-regular-bg);
+        color: var(--btn-content);
+        margin-right: 0.5rem;
     }
     .with-divider {
-        @apply before:content-['/'] before:ml-1.5 before:mr-1.5 before:text-[var(--meta-divider)] before:text-sm
-        before:font-medium before:first-of-type:hidden before:transition
+        &::before {
+            content: "/";
+            margin-left: 0.375rem;
+            margin-right: 0.375rem;
+            color: var(--meta-divider);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
+            transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
+            transition-duration: var(--tw-duration, 0.15s);
+        }
+        &:first-of-type::before {
+            display: none;
+        }
     }
 
     .btn-regular-dark {
-        @apply flex items-center justify-center
-        bg-[oklch(0.45_0.01_var(--hue))] hover:bg-[oklch(0.50_0.01_var(--hue))] active:bg-[oklch(0.55_0.01_var(--hue))]
-        dark:bg-[oklch(0.30_0.02_var(--hue))] dark:hover:bg-[oklch(0.35_0.03_var(--hue))] dark:active:bg-[oklch(0.40_0.03_var(--hue))]
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: oklch(0.45 0.01 var(--hue));
+        &:hover {
+            background-color: oklch(0.50 0.01 var(--hue));
+        }
+        &:active {
+            background-color: oklch(0.55 0.01 var(--hue));
+        }
+    }
+    :is(.dark .btn-regular-dark) {
+        background-color: oklch(0.30 0.02 var(--hue));
+    }
+    :is(.dark .btn-regular-dark:hover) {
+        background-color: oklch(0.35 0.03 var(--hue));
+    }
+    :is(.dark .btn-regular-dark:active) {
+        background-color: oklch(0.40 0.03 var(--hue));
     }
     .btn-regular-dark.success {
-        @apply bg-[oklch(0.75_0.14_var(--hue))] dark:bg-[oklch(0.75_0.14_var(--hue))]
+        background-color: oklch(0.75 0.14 var(--hue));
+    }
+    :is(.dark .btn-regular-dark.success) {
+        background-color: oklch(0.75 0.14 var(--hue));
     }
 }
 
 .custom-md img, #post-cover img {
-    @apply cursor-zoom-in
+    cursor: zoom-in;
 }
 
 ::selection {
@@ -141,12 +383,19 @@
 }
 
 .custom-md spoiler {
-  @apply bg-[var(--codeblock-bg)] hover:bg-transparent px-1 py-0.5 overflow-hidden rounded-md transition-all duration-150;
-
-  &:not(:hover) {
-    color: var(--codeblock-bg);
-    * {
-        color: var(--codeblock-bg);
+    background-color: var(--codeblock-bg);
+    padding: 0.125rem 0.25rem;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    transition-property: all;
+    transition-duration: 150ms;
+    &:hover {
+        background-color: transparent;
     }
-  }
+    &:not(:hover) {
+        color: var(--codeblock-bg);
+        * {
+            color: var(--codeblock-bg);
+        }
+    }
 }

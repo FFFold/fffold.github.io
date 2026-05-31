@@ -24,19 +24,25 @@ async function getRawSortedPosts() {
 export async function getSortedPosts() {
 	const sorted = await getRawSortedPosts();
 
-	for (let i = 1; i < sorted.length; i++) {
-		sorted[i].data.nextSlug = sorted[i - 1].slug;
-		sorted[i].data.nextTitle = sorted[i - 1].data.title;
+	// Clone entries to avoid mutating frozen objects in Astro v6 Content Layer API
+	const cloned = sorted.map((entry) => ({
+		...entry,
+		data: { ...entry.data },
+	}));
+
+	for (let i = 1; i < cloned.length; i++) {
+		cloned[i].data.nextSlug = cloned[i - 1].id;
+		cloned[i].data.nextTitle = cloned[i - 1].data.title;
 	}
-	for (let i = 0; i < sorted.length - 1; i++) {
-		sorted[i].data.prevSlug = sorted[i + 1].slug;
-		sorted[i].data.prevTitle = sorted[i + 1].data.title;
+	for (let i = 0; i < cloned.length - 1; i++) {
+		cloned[i].data.prevSlug = cloned[i + 1].id;
+		cloned[i].data.prevTitle = cloned[i + 1].data.title;
 	}
 
-	return sorted;
+	return cloned;
 }
 export type PostForList = {
-	slug: string;
+	id: string;
 	data: CollectionEntry<"posts">["data"];
 };
 export async function getSortedPostsList(): Promise<PostForList[]> {
@@ -44,7 +50,7 @@ export async function getSortedPostsList(): Promise<PostForList[]> {
 
 	// delete post.body
 	const sortedPostsList = sortedFullPosts.map((post) => ({
-		slug: post.slug,
+		id: post.id,
 		data: post.data,
 	}));
 

@@ -1,6 +1,6 @@
 .expressive-code {
     .frame {
-        @apply !shadow-none;
+        box-shadow: none !important;
     }
 
     .title {

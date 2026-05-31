@@ -3,22 +3,26 @@
     pointer-events: unset;
 
     &.os-scrollbar-horizontal {
-        @apply py-1 px-2 h-4;
+        padding: 0.25rem 0.5rem;
+        height: 1rem;
         .os-scrollbar-track .os-scrollbar-handle {
-            @apply rounded-full h-1;
+            border-radius: 9999px;
+            height: 0.25rem;
         }
         &:hover .os-scrollbar-track .os-scrollbar-handle {
-            @apply h-2;
+            height: 0.5rem;
         }
     }
 
     &.os-scrollbar-vertical {
-        @apply px-1 py-1 w-4;
+        padding: 0.25rem;
+        width: 1rem;
         .os-scrollbar-track .os-scrollbar-handle {
-            @apply rounded-full w-1;
+            border-radius: 9999px;
+            width: 0.25rem;
         }
         &:hover .os-scrollbar-track .os-scrollbar-handle {
-            @apply w-2;
+            width: 0.5rem;
         }
     }
 }
