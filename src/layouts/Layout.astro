@@ -214,16 +214,16 @@ const bannerOffset =
 	transform: translateY(-4rem);
 }
 
-/* 移动端横幅优化 - 小屏手机 (320px - 480px) */
+/* 移动端横幅优化 - 小屏手机 (320px - 480px) - 仅帖子页面 */
 @media (max-width: 480px) {
-	.enable-banner #banner-wrapper {
+	.enable-banner:not(.lg\:is-home) #banner-wrapper {
 		height: 70vh !important;
 		min-height: 450px;
 		max-height: none;
 		top: 0 !important;
 	}
 	
-	.enable-banner .absolute.w-full.z-30 {
+	.enable-banner:not(.lg\:is-home) .absolute.w-full.z-30 {
 		top: 70vh !important;
 		min-height: calc(100vh - 70vh) !important;
 	}
