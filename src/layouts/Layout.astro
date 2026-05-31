@@ -368,9 +368,9 @@ function initCustomScrollbar() {
 		// but just leave it here for now
 		{
 			target: bodyElement,
-			cancel: {
-				nativeScrollbarsOverlaid: true,    // don't initialize the overlay scrollbar if there is a native one
-			}
+		cancel: {
+			nativeScrollbarsOverlaid: false,    // don't initialize the overlay scrollbar if there is a native one
+		}
 		}, {
 		scrollbars: {
 			theme: 'scrollbar-base scrollbar-auto py-1',

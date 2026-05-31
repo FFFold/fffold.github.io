@@ -1,16 +1,5 @@
-/* Hide native scrollbar - using OverlayScrollbars instead */
-html {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-html::-webkit-scrollbar {
-    display: none;
-}
-
 .scrollbar-base.os-scrollbar {
-    transition-property: all;
-    transition-timing-function: var(--tw-ease, cubic-bezier(0.4, 0, 0.2, 1));
-    transition-duration: var(--tw-duration, 0.15s);
+    @apply transition-all;
     pointer-events: unset;
 
     &.os-scrollbar-horizontal {
