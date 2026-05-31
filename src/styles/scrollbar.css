@@ -1,6 +1,10 @@
-/* Prevent layout shift on page transitions */
+/* Hide native scrollbar - using OverlayScrollbars instead */
 html {
-    scrollbar-gutter: stable;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+    display: none;
 }
 
 .scrollbar-base.os-scrollbar {
