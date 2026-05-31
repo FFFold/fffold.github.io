@@ -184,88 +184,92 @@ const bannerOffset =
 
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
+		height: var(--banner-height-home);
+		transform: translateY(var(--banner-height-extend));
 	}
 	.enable-banner #banner-wrapper {
-		@apply h-[var(--banner-height-home)]
+		height: var(--banner-height-home);
 	}
 
 	.enable-banner.is-home #banner {
-		@apply h-[var(--banner-height-home)] translate-y-0
+		height: var(--banner-height-home);
+		transform: translateY(0);
 	}
 	.enable-banner #banner {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--bannerOffset)]
+		height: var(--banner-height-home);
+		transform: translateY(var(--bannerOffset));
 	}
 	.enable-banner.is-home #main-grid {
-		@apply translate-y-[var(--banner-height-extend)];
+		transform: translateY(var(--banner-height-extend));
 	}
 	.enable-banner #top-row {
-		@apply h-[calc(var(--banner-height-home)_-_4.5rem)] transition-all duration-300
+		height: calc(var(--banner-height-home) - 4.5rem);
+		@apply transition-all duration-300;
 	}
 	.enable-banner.is-home #sidebar-sticky {
-		@apply top-[calc(1rem_-_var(--banner-height-extend))]
+		top: calc(1rem - var(--banner-height-extend));
 	}
 	.navbar-hidden {
-		@apply opacity-0 -translate-y-16
+		@apply opacity-0 -translate-y-16;
 	}
+}
 
-	/* 移动端横幅优化 - 小屏手机 (320px - 480px) */
-	@media (max-width: 480px) {
-		/* Banner wrapper 高度优化 - 优先保持banner显示 */
-		#banner-wrapper {
-			height: 70vh !important; /* 保持较大高度优先显示banner */
-			min-height: 450px;
-			max-height: none; /* 移除最大高度限制 */
-			top: 0 !important; /* 移动端从顶部开始，避免被导航栏覆盖 */
-		}
-		
-		/* 主内容区域位置调整 - 确保在banner下面 */
-		.absolute.w-full.z-30 {
-			top: 70vh !important; /* 与banner高度对应 */
-			min-height: calc(100vh - 70vh) !important;
-		}
+/* 移动端横幅优化 - 小屏手机 (320px - 480px) */
+@media (max-width: 480px) {
+	/* Banner wrapper 高度优化 - 优先保持banner显示 */
+	.enable-banner #banner-wrapper {
+		height: 70vh;
+		min-height: 450px;
+		max-height: none;
+		top: 0;
 	}
+	
+	/* 主内容区域位置调整 - 确保在banner下面 */
+	.enable-banner .absolute.w-full.z-30 {
+		top: 70vh;
+		min-height: calc(100vh - 70vh);
+	}
+}
 
-	/* 当移动端banner被隐藏时，调整主内容区域位置 */
-	@media (max-width: 767px) {
-		/* Banner过渡动画 - 改进的分阶段动画 */
-		#banner-wrapper {
-			transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
-			transform-origin: top center;
-			/* 硬件加速优化 */
-			will-change: transform, opacity;
-			backface-visibility: hidden;
-			-webkit-backface-visibility: hidden;
-			transform: translateZ(0);
-			-webkit-transform: translateZ(0);
-		}
-		
-		.mobile-hide-banner {
-			transform: translateY(-100%) translateZ(0) !important;
-			opacity: 0 !important;
-			pointer-events: none !important;
-			/* 快速消失 */
-			transition: transform 0.3s ease-in, opacity 0.2s ease-in !important;
-		}
-		
-		/* 主内容区域过渡动画 - 硬件加速优化 */
-		.absolute.w-full.z-30 {
-			transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-			will-change: top;
-			/* 硬件加速优化 - 减少卡顿 */
-			transform: translateZ(0);
-			-webkit-transform: translateZ(0);
-			backface-visibility: hidden;
-			-webkit-backface-visibility: hidden;
-		}
-		
-		/* 当banner被隐藏时，主内容区域移到顶部 */
-		.mobile-hide-banner + .absolute.w-full.z-30 {
-			top: 5.5rem !important;
-			min-height: calc(100vh - 5.5rem) !important;
-			/* 内容区域快速上移 - 更快的过渡 */
-			transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s !important;
-		}
+/* 当移动端banner被隐藏时，调整主内容区域位置 */
+@media (max-width: 767px) {
+	/* Banner过渡动画 - 改进的分阶段动画 */
+	.enable-banner #banner-wrapper {
+		transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
+		transform-origin: top center;
+		/* 硬件加速优化 */
+		will-change: transform, opacity;
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+	}
+	
+	.mobile-hide-banner {
+		transform: translateY(-100%) translateZ(0);
+		opacity: 0;
+		pointer-events: none;
+		/* 快速消失 */
+		transition: transform 0.3s ease-in, opacity 0.2s ease-in;
+	}
+	
+	/* 主内容区域过渡动画 - 硬件加速优化 */
+	.enable-banner .absolute.w-full.z-30 {
+		transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+		will-change: top;
+		/* 硬件加速优化 - 减少卡顿 */
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+	
+	/* 当banner被隐藏时，主内容区域移到顶部 */
+	.enable-banner .mobile-hide-banner + .absolute.w-full.z-30 {
+		top: 5.5rem;
+		min-height: calc(100vh - 5.5rem);
+		/* 内容区域快速上移 - 更快的过渡 */
+		transition: top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
 	}
 }
 </style>
