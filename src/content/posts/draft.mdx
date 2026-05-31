@@ -6,6 +6,9 @@ category: Examples
 draft: true
 ---
 
+import { Image } from 'astro:assets';
+import testImage from './draft.assets/test-image.jpg';
+
 # This Article is a Draft
 
 This article is currently in a draft state and is not published. Therefore, it will not be visible to the general audience. The content is still a work in progress and may require further editing and review.
@@ -30,15 +33,14 @@ draft: false
 
 ---
 
-
 # 图片并排显示解决方案
 
-注意要相对public文件夹写路径，斜杠正反都可以
+使用 MDX 的 `<Image />` 组件，图片会被自动优化为 webp 格式。
 
 <figure style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-  <img src="/Images/test-image.jpg" alt="图一" style="width:45%; min-width:240px;">
-  <img src="/Images/test-image.jpg" alt="图二" style="width:45%; min-width:240px;"> 
+  <Image src={testImage} alt="图一" style="width:45%; min-width:240px;" />
+  <Image src={testImage} alt="图二" style="width:45%; min-width:240px;" />
   <figcaption style="width:100%; text-align:center; margin-top:0.5rem;">
-    这里写居中的文字
+    使用 Image 组件的并排图片（自动优化为 webp）
   </figcaption>
 </figure>
