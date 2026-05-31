@@ -58,7 +58,7 @@ The blog supports `.mdx` files which allow you to use Astro's `<Image />` compon
 **When to use `.mdx`:**
 - Side-by-side images
 - Custom HTML layouts with images
-- When you need automatic webp optimization for all images
+- When you need automatic WebP optimization for all images
 
 **Example `.mdx` file:**
 ```mdx
@@ -71,9 +71,9 @@ import { Image } from 'astro:assets';
 import photo1 from './post.assets/photo1.jpg';
 import photo2 from './post.assets/photo2.jpg';
 
-<figure style="display:flex; gap:1rem;">
-  <Image src={photo1} alt="Photo 1" style="width:45%;" />
-  <Image src={photo2} alt="Photo 2" style="width:45%;" />
+<figure style={{display: 'flex', gap: '1rem'}}>
+  <Image src={photo1} alt="Photo 1" style={{width: '45%'}} />
+  <Image src={photo2} alt="Photo 2" style={{width: '45%'}} />
 </figure>
 ```
 

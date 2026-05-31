@@ -102,7 +102,7 @@ For complex layouts requiring optimized images (e.g., side-by-side images), use 
 
 Standard Markdown `![]()` syntax works well for single images, but HTML `<img>` tags in `.md` files are not optimized. MDX allows you to:
 
-- Use Astro's `<Image />` component for automatic webp conversion
+- Use Astro's `<Image />` component for automatic WebP conversion
 - Create complex layouts with optimized images
 - Keep all images in your post directory (no need for `public/`)
 
@@ -117,9 +117,9 @@ import { Image } from 'astro:assets';
 import photo1 from './post.assets/photo1.jpg';
 import photo2 from './post.assets/photo2.jpg';
 
-<figure style="display:flex; gap:1rem;">
-  <Image src={photo1} alt="Photo 1" style="width:45%;" />
-  <Image src={photo2} alt="Photo 2" style="width:45%;" />
+<figure style={{display: 'flex', gap: '1rem'}}>
+  <Image src={photo1} alt="Photo 1" style={{width: '45%'}} />
+  <Image src={photo2} alt="Photo 2" style={{width: '45%'}} />
 </figure>
 ```
 

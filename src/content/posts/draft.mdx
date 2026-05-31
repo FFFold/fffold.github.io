@@ -35,12 +35,12 @@ draft: false
 
 # 图片并排显示解决方案
 
-使用 MDX 的 `<Image />` 组件，图片会被自动优化为 webp 格式。
+使用 MDX 的 `<Image />` 组件，图片会被自动优化为 WebP 格式。
 
-<figure style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-  <Image src={testImage} alt="图一" style="width:45%; min-width:240px;" />
-  <Image src={testImage} alt="图二" style="width:45%; min-width:240px;" />
-  <figcaption style="width:100%; text-align:center; margin-top:0.5rem;">
-    使用 Image 组件的并排图片（自动优化为 webp）
+<figure style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
+  <Image src={testImage} alt="图一" style={{width: '45%', minWidth: '240px'}} />
+  <Image src={testImage} alt="图二" style={{width: '45%', minWidth: '240px'}} />
+  <figcaption style={{width: '100%', textAlign: 'center', marginTop: '0.5rem'}}>
+    使用 Image 组件的并排图片（自动优化为 WebP）
   </figcaption>
 </figure>
