@@ -181,7 +181,7 @@ const bannerOffset =
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
 
-.enable-banner.is-home #banner-wrapper {
+.enable-banner.lg\:is-home #banner-wrapper {
 	height: var(--banner-height-home);
 	transform: translateY(var(--banner-height-extend));
 }
@@ -189,7 +189,7 @@ const bannerOffset =
 	height: var(--banner-height-home);
 }
 
-.enable-banner.is-home #banner {
+.enable-banner.lg\:is-home #banner {
 	height: var(--banner-height-home);
 	transform: translateY(0);
 }
@@ -197,7 +197,7 @@ const bannerOffset =
 	height: var(--banner-height-home);
 	transform: translateY(var(--bannerOffset));
 }
-.enable-banner.is-home #main-grid {
+.enable-banner.lg\:is-home #main-grid {
 	transform: translateY(var(--banner-height-extend));
 }
 .enable-banner #top-row {
@@ -205,7 +205,7 @@ const bannerOffset =
 	transition-property: all;
 	transition-duration: 300ms;
 }
-.enable-banner.is-home #sidebar-sticky {
+.enable-banner.lg\:is-home #sidebar-sticky {
 	top: calc(1rem - var(--banner-height-extend));
 }
 .navbar-hidden {
