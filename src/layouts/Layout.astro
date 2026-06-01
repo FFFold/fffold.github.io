@@ -37,7 +37,13 @@ interface Props {
 	setOGTypeArticle?: boolean;
 }
 
-let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
+let {
+	title,
+	banner: rawBanner,
+	description,
+	lang,
+	setOGTypeArticle,
+} = Astro.props;
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 // Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
@@ -47,13 +53,13 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
-if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner =
-		typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
-}
 
-// TODO don't use post cover as banner for now
-banner = typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
+const siteBanner =
+	typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
+const ogImage =
+	rawBanner && typeof rawBanner === "string" && rawBanner.trim() !== ""
+		? rawBanner
+		: siteBanner;
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -104,10 +110,12 @@ const bannerOffset =
         <meta property="og:type" content="website" />
         )}
 
+		{ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site).href}>}
 		<meta name="twitter:card" content="summary_large_image">
 		<meta property="twitter:url" content={Astro.url}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
+		{ogImage && <meta name="twitter:image" content={new URL(ogImage, Astro.site).href}>}
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
