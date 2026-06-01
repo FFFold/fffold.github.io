@@ -594,6 +594,9 @@ const setup = () => {
 	})
 	window.swup.hooks.on('content:replace', initCustomScrollbar)
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+		// prevent native scrollbar from appearing during transition which causes layout shift
+		document.documentElement.style.overflow = 'hidden'
+
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
 		if (pathsEqual(visit.to.url, url('/'))) {
@@ -623,6 +626,9 @@ const setup = () => {
 		if (heightExtend) {
 			heightExtend.classList.add('hidden')
 		}
+
+		// restore overflow after OverlayScrollbars re-initialized in content:replace
+		document.documentElement.style.overflow = ''
 
 		// Load KaTeX CSS if the page contains math elements
 		loadKatexCssIfNeeded()
