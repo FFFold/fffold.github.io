@@ -4,7 +4,7 @@ import path from "node:path";
 import { Icon } from "astro-icon/components";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
-import { getDir } from "../utils/url-utils";
+import { getPostRelativeDir } from "../utils/url-utils";
 import ImageWrapper from "./misc/ImageWrapper.astro";
 import PostMetadata from "./PostMeta.astro";
 
@@ -91,7 +91,7 @@ const { remarkPluginFrontmatter } = await render(entry);
                   class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl">
             </Icon>
         </div>
-        <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
+        <ImageWrapper src={image} basePath={path.join("content/posts/", getPostRelativeDir(entry.id))} alt="Cover Image of the Post"
                   class="w-full h-full" loading="eager">
         </ImageWrapper>
     </a>}
