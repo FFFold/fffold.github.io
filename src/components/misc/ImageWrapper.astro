@@ -1,9 +1,10 @@
 ---
 import path from "node:path";
+import type { ImageMetadata } from "astro";
 
 interface Props {
 	id?: string;
-	src: string | string[];
+	src: string | string[] | ImageMetadata;
 	class?: string;
 	alt?: string;
 	position?: string;
@@ -32,23 +33,33 @@ const {
 	sizes,
 } = Astro.props;
 const className = Astro.props.class;
-const src = Array.isArray(Astro.props.src)
-	? Astro.props.src[0] || ""
-	: Astro.props.src;
+const rawSrc = Astro.props.src;
+const isImageMetadata =
+	typeof rawSrc === "object" &&
+	rawSrc !== null &&
+	!Array.isArray(rawSrc) &&
+	"format" in rawSrc;
+const src = isImageMetadata
+	? ""
+	: Array.isArray(rawSrc)
+		? rawSrc[0] || ""
+		: rawSrc;
 
-const isLocal = !(
-	src.startsWith("/") ||
-	src.startsWith("http") ||
-	src.startsWith("https") ||
-	src.startsWith("data:")
-);
+const isLocal =
+	src !== "" &&
+	!(
+		src.startsWith("/") ||
+		src.startsWith("http") ||
+		src.startsWith("https") ||
+		src.startsWith("data:")
+	);
 const isPublic = src.startsWith("/");
 
-// TODO temporary workaround for images dynamic import
-// https://github.com/withastro/astro/issues/3373
 // biome-ignore lint/suspicious/noImplicitAnyLet: <check later>
 let img;
-if (isLocal) {
+if (isImageMetadata) {
+	img = rawSrc;
+} else if (isLocal) {
 	const files = import.meta.glob<ImageMetadata>("../../**", {
 		import: "default",
 	});
@@ -71,6 +82,6 @@ const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>
     <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
-    {isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} loading={loading} decoding={decoding} fetchpriority={fetchpriority} widths={widths} sizes={sizes}/>}
-    {!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle} loading={loading} decoding={decoding} fetchpriority={fetchpriority}/>}
+    {(isLocal || isImageMetadata) && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} loading={loading} decoding={decoding} fetchpriority={fetchpriority} widths={widths} sizes={sizes}/>}
+    {!isLocal && !isImageMetadata && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle} loading={loading} decoding={decoding} fetchpriority={fetchpriority}/>}
 </div>

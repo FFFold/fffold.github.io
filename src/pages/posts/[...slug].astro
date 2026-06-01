@@ -38,6 +38,15 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
+const postImageSrc = entry.data.image
+	? typeof entry.data.image === "object"
+		? entry.data.image.src
+		: entry.data.image
+	: "";
+const shareImageUrl = postImageSrc
+	? new URL(postImageSrc, Astro.site).href
+	: "";
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
@@ -72,7 +81,7 @@ const giscusConfig = {
 	crossorigin: "anonymous",
 };
 ---
-<MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
+<MainGridLayout banner={postImageSrc} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
     <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
         <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
@@ -123,9 +132,9 @@ const giscusConfig = {
             </div>
 
             <!-- always show cover as long as it has one -->
-
             {entry.data.image &&
-                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getPostRelativeDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
+
+                <ImageWrapper id="post-cover" src={postImageSrc} basePath={path.join("content/posts/", getPostRelativeDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
             }
 
 
@@ -145,7 +154,7 @@ const giscusConfig = {
 
   tags={entry.data.tags}
 
-  image={entry.data.image ? new URL(entry.data.image, Astro.site).href : ''}
+  image={shareImageUrl}
 
 ></SocialShare>
 

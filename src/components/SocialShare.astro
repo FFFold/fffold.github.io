@@ -272,7 +272,13 @@ const sharePlatforms = [
 
 		// Web Share API 支持
 		if ("share" in navigator) {
+			const existing = shareButtonsContainer.querySelector("[data-native-share]") as HTMLButtonElement | null;
+			if (existing) {
+				shareButtonsContainer.removeChild(existing);
+			}
+
 			const nativeShareBtn = document.createElement("button");
+			nativeShareBtn.dataset.nativeShare = "";
 			nativeShareBtn.className =
 				"share-btn group flex items-center gap-2 px-4 py-2 rounded-lg text-white bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0";
 			nativeShareBtn.innerHTML = `
@@ -304,6 +310,16 @@ const sharePlatforms = [
 		document.addEventListener("DOMContentLoaded", initShareButtons);
 	} else {
 		initShareButtons();
+	}
+
+	const setupSwupHooks = () => {
+		window.swup.hooks.on("page:view", initShareButtons);
+	};
+
+	if (window.swup) {
+		setupSwupHooks();
+	} else {
+		document.addEventListener("swup:enable", setupSwupHooks);
 	}
 </script>
 
