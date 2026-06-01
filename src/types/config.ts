@@ -1,0 +1,138 @@
+import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
+
+export type SiteConfig = {
+	title: string;
+	subtitle: string;
+
+	lang:
+		| "en"
+		| "zh_CN"
+		| "zh_TW"
+		| "ja"
+		| "ko"
+		| "es"
+		| "th"
+		| "vi"
+		| "tr"
+		| "id";
+
+	themeColor: {
+		hue: number;
+		fixed: boolean;
+		version?: number;
+	};
+
+	// 壁纸模式配置
+	wallpaperMode: {
+		defaultMode: "banner" | "fullscreen" | "none"; // 默认壁纸模式：banner=顶部横幅，fullscreen=全屏壁纸，none=无壁纸
+	};
+
+	banner: {
+		enable: boolean;
+		src:
+			| string
+			| string[]
+			| {
+					desktop?: string | string[];
+					mobile?: string | string[];
+			  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
+		position?: "top" | "center" | "bottom";
+		carousel?: {
+			enable: boolean; // 是否启用轮播
+			interval: number; // 轮播间隔时间（秒）
+		};
+		imageApi?: {
+			enable: boolean; // 是否启用图片API
+			url: string; // API地址，返回每行一个图片链接的文本
+		};
+		credit: {
+			enable: boolean;
+			text: string;
+			url?: string;
+		};
+	};
+	toc: {
+		enable: boolean;
+		depth: 1 | 2 | 3;
+	};
+
+	favicon: Favicon[];
+};
+
+export type Favicon = {
+	src: string;
+	theme?: "light" | "dark";
+	sizes?: string;
+};
+
+export enum LinkPreset {
+	Home = 0,
+	Archive = 1,
+	About = 2,
+	Friends = 3,
+}
+
+export type NavBarLink = {
+	name: string;
+	url: string;
+	external?: boolean;
+};
+
+export type NavBarConfig = {
+	links: (NavBarLink | LinkPreset)[];
+};
+
+export type ProfileConfig = {
+	avatar?: string;
+	name: string;
+	bio?: string;
+	links: {
+		name: string;
+		url: string;
+		icon: string;
+	}[];
+};
+
+export type LicenseConfig = {
+	enable: boolean;
+	name: string;
+	url: string;
+};
+
+export type LIGHT_DARK_MODE =
+	| typeof LIGHT_MODE
+	| typeof DARK_MODE
+	| typeof AUTO_MODE;
+
+export type BlogPostData = {
+	body: string;
+	title: string;
+	published: Date;
+	description: string;
+	tags: string[];
+	draft?: boolean;
+	image?: string;
+	category?: string;
+	prevTitle?: string;
+	prevSlug?: string;
+	nextTitle?: string;
+	nextSlug?: string;
+};
+
+export type ExpressiveCodeConfig = {
+	theme: string;
+};
+
+export type AnnouncementConfig = {
+	title?: string;
+	content: string;
+	icon?: string;
+	type?: "info" | "warning" | "success" | "error";
+	closable?: boolean;
+	link?: {
+		enable: boolean;
+		text: string;
+		url: string;
+		external?: boolean;
+	};
+};

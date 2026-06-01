@@ -1,0 +1,46 @@
+.scrollbar-base.os-scrollbar {
+    @apply transition-all;
+    pointer-events: unset;
+
+    &.os-scrollbar-horizontal {
+        padding: 0.25rem 0.5rem;
+        height: 1rem;
+        .os-scrollbar-track .os-scrollbar-handle {
+            border-radius: 9999px;
+            height: 0.25rem;
+        }
+        &:hover .os-scrollbar-track .os-scrollbar-handle {
+            height: 0.5rem;
+        }
+    }
+
+    &.os-scrollbar-vertical {
+        padding: 0.25rem;
+        width: 1rem;
+        .os-scrollbar-track .os-scrollbar-handle {
+            border-radius: 9999px;
+            width: 0.25rem;
+        }
+        &:hover .os-scrollbar-track .os-scrollbar-handle {
+            width: 0.5rem;
+        }
+    }
+}
+
+.os-scrollbar {
+    &.scrollbar-auto {
+        --os-handle-bg: var(--scrollbar-bg);
+        --os-handle-bg-hover: var(--scrollbar-bg-hover);
+        --os-handle-bg-active: var(--scrollbar-bg-active);
+    }
+    &.scrollbar-dark {
+        --os-handle-bg: var(--scrollbar-bg-dark);
+        --os-handle-bg-hover: var(--scrollbar-bg-hover-dark);
+        --os-handle-bg-active: var(--scrollbar-bg-active-dark);
+    }
+    &.scrollbar-light {
+        --os-handle-bg: var(--scrollbar-bg-light);
+        --os-handle-bg-hover: var(--scrollbar-bg-hover-light);
+        --os-handle-bg-active: var(--scrollbar-bg-active-light);
+    }
+}

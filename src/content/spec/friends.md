@@ -1,0 +1,1 @@
+<div style="text-align:center; opacity:0.6;">海内存知己，天涯若比邻。</div>

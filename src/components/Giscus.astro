@@ -1,0 +1,23 @@
+---
+const { data } = Astro.props;
+---
+
+<div class="giscus-comments">
+  <script
+    src="https://giscus.app/client.js"
+    data-repo={data.repo}
+    data-repo-id={data.repoId}
+    data-category={data.category}
+    data-category-id={data.categoryId}
+    data-mapping={data.mapping}
+    data-strict={data.strict}
+    data-reactions-enabled={data.reactionsEnabled}
+    data-emit-metadata={data.emitMetadata}
+    data-input-position={data.inputPosition}
+    data-theme={data.theme}
+    data-lang={data.lang}
+    data-loading={data.loading}
+    crossorigin={data.crossorigin}
+    async
+  ></script>
+</div>
