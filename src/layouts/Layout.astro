@@ -640,6 +640,9 @@ const setup = () => {
 				heightExtend.classList.add('hidden')
 			}
 
+			// backup restoration in case page:view didn't fire
+			document.documentElement.style.overflow = ''
+
             // Just make the transition looks better
             const toc = document.getElementById('toc-wrapper');
             if (toc) {
