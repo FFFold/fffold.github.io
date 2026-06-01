@@ -7,6 +7,7 @@ import "../styles/main.css";
 import "../styles/markdown.css";
 import "../styles/transition.css";
 import "../styles/scrollbar.css";
+import "overlayscrollbars/overlayscrollbars.css";
 import "../styles/photoswipe.css";
 import "photoswipe/style.css";
 import "../styles/expressive-code.css";
@@ -89,9 +90,7 @@ const bannerOffset =
 ---
 
 <!DOCTYPE html>
-<html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]"
-	  data-overlayscrollbars-initialize
->
+<html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
 	<head>
 
 		<title>{pageTitle}</title>
@@ -173,9 +172,7 @@ const bannerOffset =
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
 	</head>
-	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
-		  data-overlayscrollbars-initialize
-	>
+	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}>
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
 
@@ -277,12 +274,8 @@ const bannerOffset =
 </style>
 
 <script>
-import 'overlayscrollbars/overlayscrollbars.css';
 import {
 	OverlayScrollbars,
-	// ScrollbarsHidingPlugin,
-	// SizeObserverPlugin,
-	// ClickScrollPlugin
 } from 'overlayscrollbars';
 import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
@@ -601,8 +594,10 @@ const setup = () => {
 		}
 	})
 	window.swup.hooks.on('content:replace', initCustomScrollbar)
+	let savedScrollbarOverflow = '';
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
 		// prevent native scrollbar from appearing during transition which causes layout shift
+		savedScrollbarOverflow = document.documentElement.style.overflow
 		document.documentElement.style.overflow = 'hidden'
 
 		// change banner height immediately when a link is clicked
@@ -636,7 +631,7 @@ const setup = () => {
 		}
 
 		// restore overflow after OverlayScrollbars re-initialized in content:replace
-		document.documentElement.style.overflow = ''
+		document.documentElement.style.overflow = savedScrollbarOverflow
 
 		// Load KaTeX CSS if the page contains math elements
 		loadKatexCssIfNeeded()
@@ -649,7 +644,7 @@ const setup = () => {
 			}
 
 			// backup restoration in case page:view didn't fire
-			document.documentElement.style.overflow = ''
+			document.documentElement.style.overflow = savedScrollbarOverflow
 
             // Just make the transition looks better
             const toc = document.getElementById('toc-wrapper');
