@@ -56,9 +56,13 @@ try {
                 <Content />
             </Markdown>
 
-            <h1 class="text-2xl font-bold mt-8 mb-4">更新日历</h1>
+            <h1 class="text-2xl font-bold mt-8 mb-4 text-neutral-900 dark:text-neutral-100">更新日历</h1>
             <div class="w-full overflow-x-auto overflow-y-hidden">
-                <CalendarHeatmap commitData={commitData} client:load />
+                {Object.keys(commitData).length > 0 ? (
+                    <CalendarHeatmap commitData={commitData} client:load />
+                ) : (
+                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交数据，GitHub API 正在计算中...</p>
+                )}
             </div>
         </div>
     </div>

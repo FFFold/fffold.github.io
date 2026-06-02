@@ -11,12 +11,16 @@ interface TooltipParams {
 let calendarEl: HTMLDivElement;
 let chart: ECharts | null = null;
 let resizeObserver: ResizeObserver | null = null;
+let themeObserver: MutationObserver | null = null;
 
 onMount(async () => {
 	if (!calendarEl || Object.keys(commitData).length === 0) return;
 
 	const echarts = await import("echarts");
-	chart = echarts.init(calendarEl);
+	chart = echarts.init(calendarEl, null, { renderer: "canvas" });
+
+	const isDark = document.documentElement.classList.contains("dark");
+	const textColor = isDark ? "#9ca3af" : "#3C4858";
 
 	const end = new Date();
 	const start = new Date();
@@ -30,9 +34,10 @@ onMount(async () => {
 	const option = {
 		tooltip: {
 			padding: 10,
-			backgroundColor: "#555",
-			borderColor: "#777",
+			backgroundColor: isDark ? "#374151" : "#555",
+			borderColor: isDark ? "#4b5563" : "#777",
 			borderWidth: 1,
+			textStyle: { color: isDark ? "#e5e7eb" : "#fff" },
 			formatter: (params: TooltipParams) => {
 				const [date, count] = params.value;
 				return `<div style="font-size: 14px;">${date}：${count} 次提交</div>`;
@@ -45,7 +50,9 @@ onMount(async () => {
 			calculable: false,
 			inRange: {
 				symbol: "rect",
-				color: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
+				color: isDark
+					? ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
+					: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
 			},
 			itemWidth: 12,
 			itemHeight: 12,
@@ -64,19 +71,19 @@ onMount(async () => {
 				cellSize: [13, 13],
 				splitLine: { show: false },
 				itemStyle: {
-					borderColor: "#fff",
+					borderColor: isDark ? "#1a1a1a" : "#fff",
 					borderWidth: 2,
 				},
 				yearLabel: { show: false },
 				monthLabel: {
 					nameMap: "cn",
 					fontSize: 11,
-					color: "#3C4858",
+					color: textColor,
 				},
 				dayLabel: {
 					nameMap: "cn",
 					fontSize: 11,
-					color: "#3C4858",
+					color: textColor,
 				},
 			},
 		],
@@ -92,6 +99,32 @@ onMount(async () => {
 
 	chart.setOption(option);
 
+	// 监听主题变化
+	themeObserver = new MutationObserver(() => {
+		const newIsDark = document.documentElement.classList.contains("dark");
+		const newTextColor = newIsDark ? "#9ca3af" : "#3C4858";
+		chart?.setOption({
+			tooltip: {
+				backgroundColor: newIsDark ? "#374151" : "#555",
+				borderColor: newIsDark ? "#4b5563" : "#777",
+				textStyle: { color: newIsDark ? "#e5e7eb" : "#fff" },
+			},
+			visualMap: {
+				inRange: {
+					color: newIsDark
+						? ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
+						: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
+				},
+			},
+			calendar: [{
+				itemStyle: { borderColor: newIsDark ? "#1a1a1a" : "#fff" },
+				monthLabel: { color: newTextColor },
+				dayLabel: { color: newTextColor },
+			}],
+		});
+	});
+	themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
 	resizeObserver = new ResizeObserver(() => {
 		chart?.resize();
 	});
@@ -100,6 +133,7 @@ onMount(async () => {
 
 onDestroy(() => {
 	resizeObserver?.disconnect();
+	themeObserver?.disconnect();
 	chart?.dispose();
 });
 </script>
