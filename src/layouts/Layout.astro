@@ -157,9 +157,20 @@ const bannerOffset =
 			document.documentElement.style.setProperty('--hue', hue);
 
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
-			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
-			offset = offset - offset % 4;
-			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+			const updateBannerHeight = () => {
+				let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
+				offset = offset - offset % 4;
+				document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+			};
+			updateBannerHeight();
+
+			// Edge session restore / cold start may load the page in a hidden tab
+			// with innerHeight=0, causing wrong --banner-height-extend.
+			// Recalculate when the page becomes visible.
+			window.addEventListener('visibilitychange', () => {
+				if (!document.hidden) updateBannerHeight();
+			});
+			window.addEventListener('pageshow', updateBannerHeight);
 		</script>
 		<style define:vars={{
 			configHue,
@@ -189,7 +200,7 @@ const bannerOffset =
 
 .enable-banner.lg\:is-home #banner-wrapper {
 	height: var(--banner-height-home);
-	transform: translateY(var(--banner-height-extend));
+	transform: translateY(var(--banner-height-extend, 30vh));
 }
 .enable-banner #banner-wrapper {
 	height: var(--banner-height-home);
@@ -204,7 +215,7 @@ const bannerOffset =
 	transform: translateY(var(--bannerOffset));
 }
 .enable-banner.lg\:is-home #main-grid {
-	transform: translateY(var(--banner-height-extend));
+	transform: translateY(var(--banner-height-extend, 30vh));
 }
 .enable-banner #top-row {
 	height: calc(var(--banner-height-home) - 4.5rem);
@@ -212,7 +223,7 @@ const bannerOffset =
 	transition-duration: 300ms;
 }
 .enable-banner.lg\:is-home #sidebar-sticky {
-	top: calc(1rem - var(--banner-height-extend));
+	top: calc(1rem - var(--banner-height-extend, 30vh));
 }
 .navbar-hidden {
 	opacity: 0;
