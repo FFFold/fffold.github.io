@@ -17,6 +17,7 @@ let calendarEl: HTMLDivElement;
 let chart: ECharts | null = null;
 let resizeObserver: ResizeObserver | null = null;
 let themeObserver: MutationObserver | null = null;
+let isDark = false;
 
 onMount(async () => {
 	if (!calendarEl || Object.keys(commitData).length === 0) return;
@@ -24,7 +25,7 @@ onMount(async () => {
 	const echarts = await import("echarts");
 	chart = echarts.init(calendarEl, null, { renderer: "canvas" });
 
-	const isDark = document.documentElement.classList.contains("dark");
+	isDark = document.documentElement.classList.contains("dark");
 	const textColor = isDark ? "#9ca3af" : "#3C4858";
 
 	const seriesData = Object.entries(commitData).map(([date, count]) => [
@@ -99,23 +100,23 @@ onMount(async () => {
 
 	// 监听主题变化
 	themeObserver = new MutationObserver(() => {
-		const newIsDark = document.documentElement.classList.contains("dark");
-		const newTextColor = newIsDark ? "#9ca3af" : "#3C4858";
+		isDark = document.documentElement.classList.contains("dark");
+		const newTextColor = isDark ? "#9ca3af" : "#3C4858";
 		chart?.setOption({
 			tooltip: {
-				backgroundColor: newIsDark ? "#374151" : "#555",
-				borderColor: newIsDark ? "#4b5563" : "#777",
-				textStyle: { color: newIsDark ? "#e5e7eb" : "#fff" },
+				backgroundColor: isDark ? "#374151" : "#555",
+				borderColor: isDark ? "#4b5563" : "#777",
+				textStyle: { color: isDark ? "#e5e7eb" : "#fff" },
 			},
 			visualMap: {
 				inRange: {
-					color: newIsDark
+					color: isDark
 						? ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
 						: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
 				},
 			},
 			calendar: [{
-				itemStyle: { borderColor: newIsDark ? "#1a1a1a" : "#fff" },
+				itemStyle: { borderColor: isDark ? "#1a1a1a" : "#fff" },
 				monthLabel: { color: newTextColor },
 				dayLabel: { color: newTextColor },
 			}],
@@ -140,56 +141,63 @@ const legendColors = {
 	light: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
 	dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
 };
-
-let isDark = false;
-if (typeof document !== "undefined") {
-	isDark = document.documentElement.classList.contains("dark");
-}
 </script>
 
 <div class="calendar-card">
-	<div class="calendar-header">
-		<div class="calendar-stats">
-			<div class="stat-item">
-				<span class="stat-value">{totalCommits}</span>
-				<span class="stat-label">次提交</span>
-			</div>
-			<div class="stat-item">
-				<span class="stat-value">{activeDays}</span>
-				<span class="stat-label">天活跃</span>
-			</div>
-			<div class="stat-item">
-				<span class="stat-value">{currentStreak}</span>
-				<span class="stat-label">天连续</span>
+	<div class="calendar-inner">
+		<div class="calendar-header">
+			<div class="calendar-stats">
+				<div class="stat-item">
+					<span class="stat-value">{totalCommits}</span>
+					<span class="stat-label">次提交</span>
+				</div>
+				<div class="stat-item">
+					<span class="stat-value">{activeDays}</span>
+					<span class="stat-label">天活跃</span>
+				</div>
+				<div class="stat-item">
+					<span class="stat-value">{currentStreak}</span>
+					<span class="stat-label">天连续</span>
+				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div bind:this={calendarEl} class="calendar-chart"></div>
-	
-	<div class="calendar-footer">
-		<div class="legend">
-			<span class="legend-label">少</span>
-			{#each (isDark ? legendColors.dark : legendColors.light) as color}
-				<div class="legend-item" style="background-color: {color}"></div>
-			{/each}
-			<span class="legend-label">多</span>
+		
+		<div bind:this={calendarEl} class="calendar-chart"></div>
+		
+		<div class="calendar-footer">
+			<div class="legend">
+				<span class="legend-label">少</span>
+				{#each (isDark ? legendColors.dark : legendColors.light) as color}
+					<div class="legend-item" style="background-color: {color}"></div>
+				{/each}
+				<span class="legend-label">多</span>
+			</div>
 		</div>
 	</div>
 </div>
 
 <style>
 	.calendar-card {
-		background: var(--card-bg, #fff);
-		border: 1px solid var(--line-divider, rgba(0, 0, 0, 0.08));
-		border-radius: 12px;
-		padding: 20px;
-		margin-top: 16px;
+		display: flex;
+		width: 100%;
+		border-radius: var(--radius-large, 1rem);
+		overflow: hidden;
+		position: relative;
+		min-height: 8rem;
+		margin-top: 1rem;
 	}
 	
-	:root.dark .calendar-card {
+	.calendar-card > .calendar-inner {
+		background: var(--card-bg, #fff);
+		z-index: 10;
+		padding: 1.5rem 2rem;
+		position: relative;
+		width: 100%;
+		border-radius: var(--radius-large, 1rem);
+	}
+	
+	:root.dark .calendar-card > .calendar-inner {
 		background: var(--card-bg, #1a1a1a);
-		border-color: var(--line-divider, rgba(255, 255, 255, 0.08));
 	}
 	
 	.calendar-header {

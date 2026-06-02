@@ -65,23 +65,24 @@ for (let i = 0; i < 365; i++) {
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
-
-            <h1 class="text-2xl font-bold mt-8 mb-4 text-neutral-900 dark:text-neutral-100">更新日历</h1>
-            <div class="w-full overflow-x-auto overflow-y-hidden">
-                {Object.keys(commitData).length > 0 ? (
-                    <CalendarHeatmap 
-                        commitData={commitData} 
-                        calendarStart={calendarStart} 
-                        calendarEnd={calendarEnd} 
-                        totalCommits={totalCommits}
-                        activeDays={activeDays}
-                        currentStreak={currentStreak}
-                        client:load 
-                    />
-                ) : (
-                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交记录</p>
-                )}
-            </div>
         </div>
     </div>
+    
+    {Object.keys(commitData).length > 0 ? (
+        <CalendarHeatmap 
+            commitData={commitData} 
+            calendarStart={calendarStart} 
+            calendarEnd={calendarEnd} 
+            totalCommits={totalCommits}
+            activeDays={activeDays}
+            currentStreak={currentStreak}
+            client:load 
+        />
+    ) : (
+        <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 mt-4">
+            <div class="card-base z-10 px-9 py-6 relative w-full">
+                <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交记录</p>
+            </div>
+        </div>
+    )}
 </MainGridLayout>
