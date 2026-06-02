@@ -34,5 +34,3 @@ yarn.lock
 .reference/
 github-actions-key
 github-actions-key.pub
-
-AGENTS.md
