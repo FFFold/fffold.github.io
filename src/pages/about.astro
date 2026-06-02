@@ -40,6 +40,24 @@ try {
 } catch (error) {
 	console.error("Failed to read git log:", error);
 }
+
+// 计算统计数据
+const totalCommits = Object.values(commitData).reduce((sum, count) => sum + count, 0);
+const activeDays = Object.keys(commitData).length;
+
+// 计算当前连续天数（streak）
+let currentStreak = 0;
+const today = new Date();
+for (let i = 0; i < 365; i++) {
+	const date = new Date(today);
+	date.setDate(date.getDate() - i);
+	const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+	if (commitData[key]) {
+		currentStreak++;
+	} else {
+		break;
+	}
+}
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
@@ -51,7 +69,15 @@ try {
             <h1 class="text-2xl font-bold mt-8 mb-4 text-neutral-900 dark:text-neutral-100">更新日历</h1>
             <div class="w-full overflow-x-auto overflow-y-hidden">
                 {Object.keys(commitData).length > 0 ? (
-                    <CalendarHeatmap commitData={commitData} calendarStart={calendarStart} calendarEnd={calendarEnd} client:load />
+                    <CalendarHeatmap 
+                        commitData={commitData} 
+                        calendarStart={calendarStart} 
+                        calendarEnd={calendarEnd} 
+                        totalCommits={totalCommits}
+                        activeDays={activeDays}
+                        currentStreak={currentStreak}
+                        client:load 
+                    />
                 ) : (
                     <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交记录</p>
                 )}
