@@ -1,6 +1,6 @@
 # 🍥FFFold 博客
 
-基于 [Fuwari](https://fuwari.vercel.app) 模板构建的静态博客项目，模板基于 [Astro](https://astro.build) 和 [Tailwind CSS](https://tailwindcss.com) 。使用iFlow-CLI协助开发。
+基于 [Fuwari](https://fuwari.vercel.app) 模板构建的静态博客项目，模板基于 [Astro](https://astro.build) 和 [Tailwind CSS](https://tailwindcss.com) 。
 
 [**🖥️ 站点地址**](https://fffold.github.io)
 
