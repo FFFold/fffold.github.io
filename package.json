@@ -38,6 +38,7 @@
     "astro": "6.4.2",
     "astro-expressive-code": "^0.42.0",
     "astro-icon": "^1.1.5",
+    "echarts": "^6.1.0",
     "hastscript": "^9.0.1",
     "katex": "^0.16.45",
     "markdown-it": "^14.1.1",
