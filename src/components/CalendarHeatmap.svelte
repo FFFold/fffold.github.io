@@ -18,11 +18,13 @@ let chart: ECharts | null = null;
 let resizeObserver: ResizeObserver | null = null;
 let themeObserver: MutationObserver | null = null;
 let isDark = false;
+let destroyed = false;
 
 onMount(async () => {
 	if (!calendarEl || Object.keys(commitData).length === 0) return;
 
 	const echarts = await import("echarts");
+	if (destroyed) return;
 	chart = echarts.init(calendarEl, null, { renderer: "canvas" });
 
 	isDark = document.documentElement.classList.contains("dark");
@@ -32,6 +34,12 @@ onMount(async () => {
 		date,
 		count,
 	]);
+
+	const rawMax =
+		Object.values(commitData).length > 0
+			? Math.max(...Object.values(commitData))
+			: 0;
+	const maxCommitCount = Math.max(5, rawMax);
 
 	const option = {
 		tooltip: {
@@ -48,7 +56,7 @@ onMount(async () => {
 		visualMap: {
 			show: false,
 			min: 0,
-			max: 5,
+			max: maxCommitCount,
 			calculable: false,
 			inRange: {
 				symbol: "rect",
@@ -115,14 +123,19 @@ onMount(async () => {
 						: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
 				},
 			},
-			calendar: [{
-				itemStyle: { borderColor: isDark ? "#1a1a1a" : "#fff" },
-				monthLabel: { color: newTextColor },
-				dayLabel: { color: newTextColor },
-			}],
+			calendar: [
+				{
+					itemStyle: { borderColor: isDark ? "#1a1a1a" : "#fff" },
+					monthLabel: { color: newTextColor },
+					dayLabel: { color: newTextColor },
+				},
+			],
 		});
 	});
-	themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+	themeObserver.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
 
 	resizeObserver = new ResizeObserver(() => {
 		chart?.resize();
@@ -131,6 +144,7 @@ onMount(async () => {
 });
 
 onDestroy(() => {
+	destroyed = true;
 	resizeObserver?.disconnect();
 	themeObserver?.disconnect();
 	chart?.dispose();
@@ -139,7 +153,7 @@ onDestroy(() => {
 // 颜色图例
 const legendColors = {
 	light: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
-	dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
+	dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
 };
 </script>
 
