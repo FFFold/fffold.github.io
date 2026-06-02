@@ -1,7 +1,9 @@
 ---
 
 import { getEntry, render } from "astro:content";
+import CalendarHeatmap from "@components/CalendarHeatmap.svelte";
 import Markdown from "@components/misc/Markdown.astro";
+import { execSync } from "child_process";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -13,6 +15,64 @@ if (!aboutPost) {
 }
 
 const { Content } = await render(aboutPost);
+
+// 计算日历范围（构建时）
+const now = new Date();
+const calendarEnd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+const startDate = new Date(now);
+startDate.setFullYear(startDate.getFullYear() - 1);
+const calendarStart = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}-${String(startDate.getDate()).padStart(2, "0")}`;
+
+// 从 git log 获取提交数据
+let commitData: Record<string, number> = {};
+
+try {
+	const log = execSync(
+		'git log --all --format="%ad" --date=format:"%Y-%m-%d" --since="1 year ago"',
+		{ encoding: "utf-8" },
+	).trim();
+
+	if (log) {
+		log.split("\n").forEach((date) => {
+			commitData[date] = (commitData[date] || 0) + 1;
+		});
+	}
+} catch (error) {
+	console.error("Failed to read git log:", error);
+}
+
+// 计算统计数据
+const totalCommits = Object.values(commitData).reduce(
+	(sum, count) => sum + count,
+	0,
+);
+const activeDays = Object.keys(commitData).length;
+
+// 计算当前连续天数（streak）
+let currentStreak = 0;
+const today = new Date();
+const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+const commitDates = Object.keys(commitData).sort().reverse();
+if (commitDates.length > 0) {
+	const latestDate = commitDates[0];
+	const diffDays = Math.floor(
+		(new Date(todayKey).getTime() - new Date(latestDate).getTime()) / 86400000,
+	);
+	if (diffDays <= 1) {
+		const streakStart = new Date(latestDate);
+		for (let i = 0; i < 365; i++) {
+			const date = new Date(streakStart);
+			date.setDate(date.getDate() - i);
+			const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+			if (commitData[key]) {
+				currentStreak++;
+			} else {
+				break;
+			}
+		}
+	}
+}
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
@@ -22,4 +82,22 @@ const { Content } = await render(aboutPost);
             </Markdown>
         </div>
     </div>
+    
+    {Object.keys(commitData).length > 0 ? (
+        <CalendarHeatmap 
+            commitData={commitData} 
+            calendarStart={calendarStart} 
+            calendarEnd={calendarEnd} 
+            totalCommits={totalCommits}
+            activeDays={activeDays}
+            currentStreak={currentStreak}
+            client:load 
+        />
+    ) : (
+        <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 mt-4">
+            <div class="card-base z-10 px-9 py-6 relative w-full">
+                <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交记录</p>
+            </div>
+        </div>
+    )}
 </MainGridLayout>

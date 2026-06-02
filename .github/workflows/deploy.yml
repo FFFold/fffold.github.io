@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # 新增：配置 SSH 密钥（必须在 withastro/action 之前）
       - name: Setup SSH for private dependencies
