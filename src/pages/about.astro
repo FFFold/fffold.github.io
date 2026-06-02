@@ -36,7 +36,7 @@ try {
 		},
 	);
 
-	if (response.ok && response.status === 200) {
+	if (response.status === 200) {
 		const weeklyData = await response.json();
 
 		if (Array.isArray(weeklyData)) {
