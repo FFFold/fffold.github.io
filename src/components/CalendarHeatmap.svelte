@@ -35,11 +35,9 @@ onMount(async () => {
 		count,
 	]);
 
-	const rawMax =
-		Object.values(commitData).length > 0
-			? Math.max(...Object.values(commitData))
-			: 0;
-	const maxCommitCount = Math.max(5, rawMax);
+	const values = Object.values(commitData).sort((a, b) => a - b);
+	const p90 = values.length > 0 ? values[Math.floor(values.length * 0.9)] : 0;
+	const maxCommitCount = Math.max(5, p90);
 
 	const option = {
 		tooltip: {
@@ -78,7 +76,8 @@ onMount(async () => {
 				cellSize: [13, 13],
 				splitLine: { show: false },
 				itemStyle: {
-					borderColor: isDark ? "#1a1a1a" : "#fff",
+					color: isDark ? "#161b22" : "#ebedf0",
+					borderColor: isDark ? "#161b22" : "#fff",
 					borderWidth: 2,
 				},
 				yearLabel: { show: false },
@@ -125,7 +124,10 @@ onMount(async () => {
 			},
 			calendar: [
 				{
-					itemStyle: { borderColor: isDark ? "#1a1a1a" : "#fff" },
+					itemStyle: {
+						color: isDark ? "#161b22" : "#ebedf0",
+						borderColor: isDark ? "#161b22" : "#fff",
+					},
 					monthLabel: { color: newTextColor },
 					dayLabel: { color: newTextColor },
 				},
@@ -252,7 +254,7 @@ const legendColors = {
 	}
 	
 	.calendar-footer {
-		margin-top: 12px;
+		margin-top: 4px;
 		display: flex;
 		justify-content: flex-end;
 	}
