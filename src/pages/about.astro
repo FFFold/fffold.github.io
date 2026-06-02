@@ -28,7 +28,7 @@ let commitData: Record<string, number> = {};
 
 try {
 	const log = execSync(
-		'git log --format="%ad" --date=format:"%Y-%m-%d" --since="1 year ago"',
+		'git log --all --format="%ad" --date=format:"%Y-%m-%d" --since="1 year ago"',
 		{ encoding: "utf-8" }
 	).trim();
 
