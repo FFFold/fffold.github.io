@@ -19,6 +19,14 @@ const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 const REPO = "FFFold/fffold.github.io";
 
 let commitData: Record<string, number> = {};
+let calendarStatus: "ok" | "pending" | "error" = "ok";
+
+// 计算日历范围（构建时）
+const now = new Date();
+const calendarEnd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+const startDate = new Date(now);
+startDate.setFullYear(startDate.getFullYear() - 1);
+const calendarStart = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}-${String(startDate.getDate()).padStart(2, "0")}`;
 
 try {
 	const response = await fetch(
@@ -28,15 +36,15 @@ try {
 		},
 	);
 
-	if (response.status === 200) {
+	if (response.ok && response.status === 200) {
 		const weeklyData = await response.json();
 
 		if (Array.isArray(weeklyData)) {
 			weeklyData.forEach((week: { week: number; days: number[] }) => {
-				const startDate = new Date(week.week * 1000);
+				const weekStart = new Date(week.week * 1000);
 				week.days.forEach((count, i) => {
 					if (count > 0) {
-						const date = new Date(startDate);
+						const date = new Date(weekStart);
 						date.setDate(date.getDate() + i);
 						const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 						commitData[key] = count;
@@ -44,9 +52,16 @@ try {
 				});
 			});
 		}
+	} else if (response.status === 202) {
+		console.info("[about] GitHub commit stats are being generated (202 Accepted).");
+		calendarStatus = "pending";
+	} else {
+		console.error(`[about] Failed to load GitHub commit stats: ${response.status} ${response.statusText}`);
+		calendarStatus = "error";
 	}
 } catch (error) {
 	console.error("Failed to fetch GitHub commit data:", error);
+	calendarStatus = "error";
 }
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
@@ -58,10 +73,14 @@ try {
 
             <h1 class="text-2xl font-bold mt-8 mb-4 text-neutral-900 dark:text-neutral-100">更新日历</h1>
             <div class="w-full overflow-x-auto overflow-y-hidden">
-                {Object.keys(commitData).length > 0 ? (
-                    <CalendarHeatmap commitData={commitData} client:load />
+                {calendarStatus === "ok" && Object.keys(commitData).length > 0 ? (
+                    <CalendarHeatmap commitData={commitData} calendarStart={calendarStart} calendarEnd={calendarEnd} client:load />
+                ) : calendarStatus === "pending" ? (
+                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">GitHub 正在统计提交数据，请稍后再试...</p>
+                ) : calendarStatus === "error" ? (
+                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">无法获取提交数据，请稍后再试</p>
                 ) : (
-                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交数据，GitHub API 正在计算中...</p>
+                    <p class="text-neutral-600 dark:text-neutral-300 text-sm">暂无提交记录</p>
                 )}
             </div>
         </div>

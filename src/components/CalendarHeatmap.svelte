@@ -3,6 +3,8 @@ import type { ECharts } from "echarts";
 import { onDestroy, onMount } from "svelte";
 
 export let commitData: Record<string, number>;
+export let calendarStart: string;
+export let calendarEnd: string;
 
 interface TooltipParams {
 	value: [string, number];
@@ -21,10 +23,6 @@ onMount(async () => {
 
 	const isDark = document.documentElement.classList.contains("dark");
 	const textColor = isDark ? "#9ca3af" : "#3C4858";
-
-	const end = new Date();
-	const start = new Date();
-	start.setFullYear(start.getFullYear() - 1);
 
 	const seriesData = Object.entries(commitData).map(([date, count]) => [
 		date,
@@ -64,10 +62,7 @@ onMount(async () => {
 			{
 				top: 30,
 				left: "center",
-				range: [
-					`${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`,
-					`${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, "0")}-${String(end.getDate()).padStart(2, "0")}`,
-				],
+				range: [calendarStart, calendarEnd],
 				cellSize: [13, 13],
 				splitLine: { show: false },
 				itemStyle: {
