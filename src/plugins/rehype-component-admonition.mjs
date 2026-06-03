@@ -19,7 +19,10 @@ export function AdmonitionComponent(properties, children, type) {
 		);
 
 	let label = null;
-	if (properties?.["has-directive-label"]) {
+	// Use `in` operator instead of truthiness check — hastscript may convert
+	// boolean `true` to `""` (empty string) for custom attributes in MDX mode,
+	// and `""` is falsy even though the property exists.
+	if (properties && "has-directive-label" in properties) {
 		label = children[0]; // The first child is the label
 		// biome-ignore lint/style/noParameterAssign: <check later>
 		children = children.slice(1);
