@@ -10,6 +10,14 @@ pinned: true
 lang: 'zh-CN'
 ---
 
+import { Image } from 'astro:assets';
+import imgMotrixTracker from './6b2873496b12d0795d5057ac2ad8c2ba.png';
+import imgMotrixTrackerApply from './4539263dc303303b268705ec514bb8dc.png';
+import imgDandanRes1 from './staticSHCfbDioioi5F1xlyT4cATR2nbe.png';
+import imgDandanRes2 from './staticVvcVb5C7JouFrMx2Cjuc5bj0nGe.png';
+import imgDandanDanmaku1 from './staticVdWIb5LMGobj9qxlDUQcUJDJnX7.png';
+import imgDandanDanmaku2 from './staticAOyzbZzJ1o4w9YxVZTIcIAHJn3d.png';
+
 
 # 新番观看快速入门
 
@@ -65,9 +73,9 @@ lang: 'zh-CN'
 
 | 名称         | 平台           | 特点                                                    | 网址                                                       |
 | :----------- | :------------- | :------------------------------------------------------ | :--------------------------------------------------------- |
-| 稀饭动漫     | 网页端+手机APP | 资源更新较及时、质量较高</br>有弹幕系统                      | https://稀饭动漫.com/<br />https://xifan.moe/ |
+| 稀饭动漫     | 网页端+手机APP | 资源更新较及时、质量较高<br />有弹幕系统                      | https://稀饭动漫.com/<br />https://xifan.moe/ |
 | AGE动漫      | 网页端+手机APP | 资源更新较及时                                          | http://agefans.com/                                        |
-| omofun       | 网页端+手机APP | 资源更新及时、质量较高</br>手机端有弹幕系统且弹幕数量多      | https://omofun.in/                                         |
+| omofun       | 网页端+手机APP | 资源更新及时、质量较高<br />手机端有弹幕系统且弹幕数量多      | https://omofun.in/                                         |
 | LIBVIO       | 网页端+手机APP | 资源质量较高                                            | https://www.libvio.app/                                    |
 | アニメ新番組 | 网页端         | 资源更新及时、**目前暂停新用户注册**                    | https://bangumi.online/                                    |
 | 哔哩哔哩     | 网页端+手机APP | 绝大部分国内不存在正版代理的动画都可以在B站找到用户盗传 | https://bilibili.com/                                      |
@@ -104,9 +112,10 @@ BT 网站下载后本地播放是最推荐的的观看方法。其具有以下�
 
 1. 下载安装好以后，在设置>进阶设置中勾选 **每天自动更新Tracker服务器** ，然后在 **Tracker服务器** 下拉栏中勾选所有选项，点击右侧 **更新按钮** 等待更新完成。最后 **保存并应用**
    
-    ![6b2873496b12d0795d5057ac2ad8c2ba.png](6b2873496b12d0795d5057ac2ad8c2ba.png)
-    
-    ![4539263dc303303b268705ec514bb8dc.png](4539263dc303303b268705ec514bb8dc.png)
+    <figure style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
+      <Image src={imgMotrixTracker} alt="Motrix Tracker设置" style={{width: '48%', minWidth: '240px'}} />
+      <Image src={imgMotrixTrackerApply} alt="Motrix 保存并应用" style={{width: '48%', minWidth: '240px'}} />
+    </figure>
     
 2. 单击左侧 + 号新建下载任务
    
@@ -129,7 +138,7 @@ play 等软件进行管理，该软件将在 2.4.4 节进行介绍
 | 网站名称       | 墙内/外 | 特点                                                 | 网址                                                       |
 | :------------- | :------ | :--------------------------------------------------- | :--------------------------------------------------------- |
 | 動漫花園       | 外      | 目前最大的中文动画BT站                               | https://www.dmhy.org/                                      |
-| Nyaa           | 外      | 全球最大的动画BT站</br>以生肉资源为主                     | https://nyaa.si/                                           |
+| Nyaa           | 外      | 全球最大的动画BT站<br />以生肉资源为主                     | https://nyaa.si/                                           |
 | 蜜柑计划       | 均有    | 按字幕组、季度、更新时间分门别类整理了资源，界面友好 | （外）https://mikanani.me/<br />（内）https://mikanime.tv/ |
 | ACG.RIP        | 外      |                                                      | https://acg.rip/                                           |
 | 萌番组         | 外      |                                                      | https://bangumi.moe/                                       |
@@ -149,25 +158,27 @@ BT 网站下载的番剧绝大多数为`.MP4`或`.MKV`格式，它们可以在�
 
 ### 2.4.4.1 弹弹 play 介绍
 
-**弹弹 play** 作为一款*全功能“本地视频 + 弹幕”播放器*，功能多样、丰富，涵盖了从资源搜集、资源下载到本地播放、弹幕互动的全过程，堪称动画追番一站式解决方案。
+**弹弹 play** 作为一款*全功能"本地视频 + 弹幕"播放器*，功能多样、丰富，涵盖了从资源搜集、资源下载到本地播放、弹幕互动的全过程，堪称动画追番一站式解决方案。
 
 :::tip[外部链接]
-[弹弹play - 全功能“本地视频+弹幕”播放器](https://www.dandanplay.com/)
+[弹弹play - 全功能"本地视频+弹幕"播放器](https://www.dandanplay.com/)
 :::
 
 其中最实用的当属 **资源管理** 和**弹幕互动** 两个功能。
 
 - 如下图，弹弹 play可自动将同一文件夹下杂乱无章的视频文件按照番剧归类，再将番剧按照季度、播放时间等进行分类，降低了资源管理难度
 
-![](staticSHCfbDioioi5F1xlyT4cATR2nbe.png)
-
-![](staticVvcVb5C7JouFrMx2Cjuc5bj0nGe.png)
+<figure style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
+  <Image src={imgDandanRes1} alt="弹弹play资源管理1" style={{width: '48%', minWidth: '240px'}} />
+  <Image src={imgDandanRes2} alt="弹弹play资源管理2" style={{width: '48%', minWidth: '240px'}} />
+</figure>
 
 - 弹弹 play的招牌功能是独立的弹幕生态和全网弹幕爬取，如下图，可以集合哔哩哔哩、巴哈姆特等多个平台的弹幕，加上较为完善的弹幕个性化、弹幕屏蔽功能，极大丰富了追番体验
 
-![](staticVdWIb5LMGobj9qxlDUQcUJDJnX7.png)
-
-![](staticAOyzbZzJ1o4w9YxVZTIcIAHJn3d.png)
+<figure style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
+  <Image src={imgDandanDanmaku1} alt="弹弹play弹幕功能1" style={{width: '48%', minWidth: '240px'}} />
+  <Image src={imgDandanDanmaku2} alt="弹弹play弹幕功能2" style={{width: '48%', minWidth: '240px'}} />
+</figure>
 
 # 3. 征集
 
