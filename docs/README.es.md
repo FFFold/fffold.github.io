@@ -19,8 +19,8 @@ Un tema estático para blogs construido con [Astro](https://astro.build).
 
 ## 👀 requiere
 
-- Node.js <= 22
-- pnpm <= 9
+- Node.js >= 22
+- pnpm >= 9
 
 ## 🚀 Cómo Usar 1
 
@@ -50,7 +50,7 @@ deno run -A npm:create-fuwari@latest
 ## 🚀 Cómo Usar 2
 
 1. [Genera un nuevo repositorio](https://github.com/saicaca/fuwari/generate) desde esta plantilla o haz un fork de este repositorio.
-2. Para editar tu blog localmente, clona tu repositorio, ejecuta `pnpm install` y `pnpm add sharp` para instalar las dependencias.
+2. Para editar tu blog localmente, clona tu repositorio, ejecuta `pnpm install` para instalar las dependencias.
    - Instala [pnpm](https://pnpm.io) `npm install -g pnpm` si aún no lo tienes.
 3. Edita el archivo de configuración `src/config.ts` para personalizar tu blog.
 4. Ejecuta `pnpm new-post <nombre-de-archivo>` para crear una nueva entrada y edítala en `src/content/posts/`.
@@ -76,7 +76,7 @@ Todos los comandos se ejecutan desde la raíz del proyecto, desde una terminal:
 
 | Comando                             | Acción                                            |
 |:------------------------------------|:--------------------------------------------------|
-| `pnpm install` y `pnpm add sharp`   | Instala las dependencias                          |
+| `pnpm install`                      | Instala las dependencias                          |
 | `pnpm dev`                          | Inicia el servidor de desarrollo local en `localhost:4321` |
 | `pnpm build`                        | Compila tu web para producción en `./dist/`     |
 | `pnpm preview`                      | Previsualiza la web localmente, antes del despliegue |

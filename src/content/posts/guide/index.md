@@ -30,11 +30,14 @@ draft: false
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `title`       | The title of the post.                                                                                                                                                                                      |
 | `published`   | The date the post was published.                                                                                                                                                                            |
+| `updated`     | The date the post was last updated.                                                                                                                                                                         |
 | `description` | A short description of the post. Displayed on index page.                                                                                                                                                   |
-| `image`       | The cover image path of the post.<br/>1. Start with `http://` or `https://`: Use web image<br/>2. Start with `/`: For image in `public` dir<br/>3. With none of the prefixes: Relative to the markdown file |
+| `image`       | The cover image of the post. Processed by Astro's image helper at build time.<br/>1. Start with `http://` or `https://`: Use web image<br/>2. Start with `/`: For image in `public` dir<br/>3. With none of the prefixes: Relative to the markdown file |
 | `tags`        | The tags of the post.                                                                                                                                                                                       |
 | `category`    | The category of the post.                                                                                                                                                                                   |
-| `draft`        | If this post is still a draft, which won't be displayed.                                                                                                                                                    |
+| `draft`       | If this post is still a draft, which won't be displayed.                                                                                                                                                    |
+| `lang`        | The language code of the post, only needed if different from site language in `config.ts`.                                                                                                                   |
+| `pinned`      | Whether to pin this post to the top.                                                                                                                                                                        |
 
 ## Where to Place the Post Files
 

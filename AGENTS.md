@@ -4,11 +4,11 @@
 
 - **Stack**: Astro 6.4 + Svelte 5 + Tailwind CSS 4 (Vite plugin, not PostCSS) + Stylus + MDX
 - **Package manager**: pnpm — enforced via `preinstall` hook + `.npmrc` `manage-package-manager-versions`
-- **Linter/formatter**: Biome 2.3 (not ESLint/Prettier)
+- **Linter/formatter**: Biome 2.4 (not ESLint/Prettier)
 - **Site config**: `src/config.ts` (title, nav, profile, banner, announcement, expressive-code theme)
 - **Content collections**: `src/content/posts/` (blog posts), `src/content/spec/` (about, friends) — Astro Content Layer API with `glob` loader
 - **Deploy**: GitHub Pages (`.github/workflows/deploy.yml`, `withastro/action@v3`, Node 22)
-- **Migrated from Astro 5**: `MIGRATION-ASTRO-V6.md` documents the process
+
 
 ## Commands
 

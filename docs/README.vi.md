@@ -47,7 +47,7 @@ image: ./cover.jpg
 tags: [Foo, Bar]
 category: Front-end
 draft: false
-lang: jp      # Chỉ đặt nếu ngôn ngữ của bài viết khác với ngôn ngữ của trang web trong `config.ts`
+lang: ja      # Chỉ đặt nếu ngôn ngữ của bài viết khác với ngôn ngữ của trang web trong `config.ts`
 ---
 ```
 
@@ -77,7 +77,7 @@ Tất cả các lệnh được chạy từ thư mục gốc của dự án, t�
 
 ## ✏️ Đóng góp
 
-Xem [Hướng dẫn đóng góp](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md) để biết thêm chi tiết về cách đóng góp cho dự án này.
+Xem [Hướng dẫn đóng góp](https://github.com/FFFold/fffold.github.io/blob/main/CONTRIBUTING.md) để biết thêm chi tiết về cách đóng góp cho dự án này.
 
 ## 📄 Giấy phép
 

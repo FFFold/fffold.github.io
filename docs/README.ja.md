@@ -19,8 +19,8 @@
 
 ## 👀 以下が必要
 
-- Node.js <= 22
-- pnpm <= 9
+- Node.js >= 22
+- pnpm >= 9
 
 ## 🚀 使用方法 1
 
@@ -50,7 +50,7 @@ deno run -A npm:create-fuwari@latest
 ## 🚀 使用方法 2
 
 1. [テンプレート](https://github.com/saicaca/fuwari/generate)から新しいリポジトリを作成するかCloneをします。
-2. ブログをローカルで編集するには、リポジトリをクローンした後、`pnpm install` と `pnpm add sharp` を実行して依存関係をインストールします。  
+2. ブログをローカルで編集するには、リポジトリをクローンした後、`pnpm install` を実行して依存関係をインストールします。
    - [pnpm](https://pnpm.io) がインストールされていない場合は `npm install -g pnpm` で導入可能です。
 3. `src/config.ts` ファイルを編集する事でブログを自分好みにカスタマイズ出来ます。
 4. `pnpm new-post <filename>` で新しい記事を作成し、`src/content/posts/`.フォルダ内で編集します。
@@ -76,7 +76,7 @@ draft: false
 
 | Command                             | Action                                      |
 |:------------------------------------|:--------------------------------------------|
-| `pnpm install` AND `pnpm add sharp` | 依存関係のインストール                                 |
+| `pnpm install`                      | 依存関係のインストール                                 |
 | `pnpm dev`                          | `localhost:4321` で開発用ローカルサーバーを起動            |
 | `pnpm build`                        | `./dist/` にビルド内容を出力                         |
 | `pnpm preview`                      | デプロイ前の内容をローカルでプレビュー                         |
