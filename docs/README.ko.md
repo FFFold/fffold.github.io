@@ -46,7 +46,7 @@ image: ./cover.jpg
 tags: [Foo, Bar]
 category: Front-end
 draft: false
-lang: jp      # 게시물의 언어가 `config.ts`의 사이트 언어와 다른 경우에만 설정합니다.
+lang: ja      # 게시물의 언어가 `config.ts`의 사이트 언어와 다른 경우에만 설정합니다.
 ---
 ```
 ## 🧩 마크다운 확장 구문
@@ -74,7 +74,7 @@ Astro의 기본 [GitHub Flavored Markdown](https://github.github.com/gfm/) 지�
 | `pnpm astro --help`                 | Astro CLI를 사용하여 도움 받기                     |
 
 ## ✏️ 기여
-이 프로젝트에 기여하는 방법에 대한 자세한 내용은 [기여 가이드](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md)를 확인하세요.
+이 프로젝트에 기여하는 방법에 대한 자세한 내용은 [기여 가이드](https://github.com/FFFold/fffold.github.io/blob/main/CONTRIBUTING.md)를 확인하세요.
 
 ## 📄 라이선스
 이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다.

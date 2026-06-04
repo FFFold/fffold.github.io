@@ -19,8 +19,8 @@
 
 ## 👀 要求
 
-- Node.js <= 22
-- pnpm <= 9
+- Node.js >= 22
+- pnpm >= 9
 
 ## 🚀 使用方法 1
 
@@ -50,7 +50,7 @@ deno run -A npm:create-fuwari@latest
 ## 🚀 使用方法 2
 
 1. 使用此模板[生成新仓库](https://github.com/saicaca/fuwari/generate)或 Fork 此仓库
-2. 进行本地开发，Clone 新的仓库，执行 `pnpm install` 和 `pnpm add sharp` 以安装依赖  
+2. 进行本地开发，Clone 新的仓库，执行 `pnpm install` 以安装依赖
    - 若未安装 [pnpm](https://pnpm.io)，执行 `npm install -g pnpm`
 3. 通过配置文件 `src/config.ts` 自定义博客
 4. 执行 `pnpm new-post <filename>` 创建新文章，并在 `src/content/posts/` 目录中编辑
@@ -67,7 +67,7 @@ image: ./cover.jpg
 tags: [Foo, Bar]
 category: Front-end
 draft: false
-lang: jp      # 仅当文章语言与 `config.ts` 中的网站语言不同时需要设置
+lang: ja      # 仅当文章语言与 `config.ts` 中的网站语言不同时需要设置
 ---
 ```
 
@@ -77,7 +77,7 @@ lang: jp      # 仅当文章语言与 `config.ts` 中的网站语言不同时需
 
 | Command                           | Action                            |
 |:----------------------------------|:----------------------------------|
-| `pnpm install` 并 `pnpm add sharp` | 安装依赖                              |
+| `pnpm install`                      | 安装依赖                              |
 | `pnpm dev`                        | 在 `localhost:4321` 启动本地开发服务器      |
 | `pnpm build`                      | 构建网站至 `./dist/`                   |
 | `pnpm preview`                    | 本地预览已构建的网站                        |

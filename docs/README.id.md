@@ -95,7 +95,7 @@ Semua perintah dijalankan dari root proyek, via terminal:
 
 ## ✏️ Kontribusi
 
-Lihat [Panduan Kontribusi](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md) untuk detail tentang cara berkontribusi ke proyek ini.
+Lihat [Panduan Kontribusi](https://github.com/FFFold/fffold.github.io/blob/main/CONTRIBUTING.md) untuk detail tentang cara berkontribusi ke proyek ini.
 
 ## 📄 Lisensi
 
