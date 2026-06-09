@@ -16,13 +16,6 @@ if (!aboutPost) {
 
 const { Content } = await render(aboutPost);
 
-// 计算日历范围（构建时）
-const now = new Date();
-const calendarEnd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-const startDate = new Date(now);
-startDate.setFullYear(startDate.getFullYear() - 1);
-const calendarStart = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}-${String(startDate.getDate()).padStart(2, "0")}`;
-
 // 从 git log 获取提交数据
 let commitData: Record<string, number> = {};
 
@@ -86,8 +79,6 @@ if (commitDates.length > 0) {
     {Object.keys(commitData).length > 0 ? (
         <CalendarHeatmap 
             commitData={commitData} 
-            calendarStart={calendarStart} 
-            calendarEnd={calendarEnd} 
             totalCommits={totalCommits}
             activeDays={activeDays}
             currentStreak={currentStreak}
