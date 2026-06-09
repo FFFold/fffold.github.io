@@ -3,8 +3,6 @@ import type { ECharts } from "echarts";
 import { onDestroy, onMount } from "svelte";
 
 export let commitData: Record<string, number>;
-export let calendarStart: string;
-export let calendarEnd: string;
 export let totalCommits: number;
 export let activeDays: number;
 export let currentStreak: number;
@@ -29,6 +27,16 @@ onMount(async () => {
 
 	isDark = document.documentElement.classList.contains("dark");
 	const textColor = isDark ? "#9ca3af" : "#3C4858";
+
+	const now = new Date();
+	const fmt = (d: Date) =>
+		`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+	const liveCalendarEnd = fmt(now);
+	const liveCalendarStart = (() => {
+		const d = new Date(now);
+		d.setFullYear(d.getFullYear() - 1);
+		return fmt(d);
+	})();
 
 	const seriesData = Object.entries(commitData).map(([date, count]) => [
 		date,
@@ -72,7 +80,7 @@ onMount(async () => {
 			{
 				top: 30,
 				left: "center",
-				range: [calendarStart, calendarEnd],
+				range: [liveCalendarStart, liveCalendarEnd],
 				cellSize: [13, 13],
 				splitLine: { show: false },
 				itemStyle: {
