@@ -43,6 +43,14 @@ const hasCover = image !== undefined && image !== null && image !== "";
 
 const coverWidth = "28%";
 
+// The cover is only ~244px wide on desktop and at most `100vw - 2rem` on
+// mobile, but without explicit responsive widths Astro's <Image> serves the
+// original (sometimes 8192px-wide) file. Chromium defers decoding of
+// offscreen images until they approach the viewport, so decoding those
+// originals on scroll causes the visible blank-card flash and jank.
+const coverWidths = [320, 480, 768, 1200, 1600];
+const coverSizes = "(max-width: 767px) calc(100vw - 2rem), 15.5rem";
+
 const { remarkPluginFrontmatter } = await render(entry);
 ---
 <div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
@@ -93,7 +101,7 @@ const { remarkPluginFrontmatter } = await render(entry);
             </Icon>
         </div>
         <ImageWrapper src={image} basePath={path.join("content/posts/", getPostRelativeDir(entry.id))} alt="Cover Image of the Post"
-                  class="w-full h-full" loading="eager">
+                  class="w-full h-full" loading="eager" decoding="sync" widths={coverWidths} sizes={coverSizes}>
         </ImageWrapper>
     </a>}
 

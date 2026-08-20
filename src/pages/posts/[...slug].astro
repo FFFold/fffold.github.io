@@ -1,7 +1,6 @@
 ---
 
 import { render } from "astro:content";
-import path from "node:path";
 import Giscus from "@components/Giscus.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
@@ -12,7 +11,6 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 
 import { getSortedPosts } from "@utils/content-utils";
 
-import { getPostRelativeDir } from "@utils/post-utils";
 import { getPostUrlById } from "@utils/url-utils";
 
 import { Icon } from "astro-icon/components";
@@ -46,6 +44,14 @@ const postImageSrc = entry.data.image
 const shareImageUrl = postImageSrc
 	? new URL(postImageSrc, Astro.site).href
 	: "";
+
+// The hero spans the full content column (~50rem on desktop). Requesting a
+// responsive srcset keeps the decode small, and Astro <Image> emits
+// width/height attributes so the layout space is reserved before the image
+// finishes loading.
+const postCoverWidths = [480, 800, 1200, 1600, 1920];
+const postCoverSizes =
+	"(max-width: 767px) calc(100vw - 3rem), (max-width: 1023px) calc(100vw - 6.5rem), 50rem";
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -134,7 +140,8 @@ const giscusConfig = {
             <!-- always show cover as long as it has one -->
             {entry.data.image &&
 
-                <ImageWrapper id="post-cover" src={postImageSrc} basePath={path.join("content/posts/", getPostRelativeDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
+                <ImageWrapper id="post-cover" src={entry.data.image} alt={entry.data.title} class="mb-8 rounded-xl banner-container onload-animation"
+                              loading="eager" fetchpriority="high" decoding="sync" widths={postCoverWidths} sizes={postCoverSizes}/>
             }
 
 
