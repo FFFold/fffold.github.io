@@ -40,6 +40,7 @@ enum I18nKey {
 	share = "share",
 	copyLink = "copyLink",
 	copied = "copied",
+	emptyArchive = "emptyArchive",
 }
 
 export default I18nKey;

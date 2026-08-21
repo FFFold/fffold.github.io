@@ -4,11 +4,17 @@
 
 - **Stack**: Astro 6.4 + Svelte 5 + Tailwind CSS 4 (Vite plugin, not PostCSS) + Stylus + MDX
 - **Package manager**: pnpm — enforced via `preinstall` hook + `.npmrc` `manage-package-manager-versions`
-- **Linter/formatter**: Biome 2.4 (not ESLint/Prettier)
+- **Linter/formatter**: Biome 2.5 (not ESLint/Prettier)
 - **Site config**: `src/config.ts` (title, nav, profile, banner, announcement, expressive-code theme)
 - **Content collections**: `src/content/posts/` (blog posts), `src/content/spec/` (about, friends) — Astro Content Layer API with `glob` loader
 - **Deploy**: GitHub Pages (`.github/workflows/deploy.yml`, `withastro/action@v3`, Node 22)
 
+## Branch workflow (IMPORTANT)
+
+- **All code/architecture development happens only on `dev`** (the current working branch). Real blog post content does **not** live on `dev`.
+- **`main` is content-only.** It holds the real posts (date-prefixed dirs like `260531/AstroV6Migration.mdx`) and is updated solely by periodic one-way merges from `dev`.
+- **Never write real post content to `dev`.** It intentionally keeps only framework/sample posts (`draft.mdx`, `markdown.md`, `expressive-code.md`, `guide/`, `video.md`, …) for testing features.
+- **Merging is strictly one-way `dev` → `main`.** Never merge `main` back into `dev`; content-only changes on `main` are never pulled down.
 
 ## Commands
 
@@ -21,7 +27,7 @@
 | Astro diagnostics | `pnpm check` |
 | Lint + auto-fix | `pnpm lint` (`biome check --write ./src`) |
 | Format only | `pnpm format` (`biome format --write ./src`) |
-| New post | `pnpm new-post <filename>` (creates in `src/content/posts/` root) |
+| New post | `pnpm new-post <path>` (e.g. `pnpm new-post 250826/PostTitle`; creates nested date dirs; frontmatter `title` = filename, fix it) |
 
 ## CI / workflows
 
@@ -38,7 +44,7 @@ CI uses `pnpm install --frozen-lockfile`. Both build and deploy jobs configure S
 ## Architecture
 
 - **Layouts**: `src/layouts/Layout.astro` (base), `MainGridLayout.astro` (grid with sidebar)
-- **Pages**: `src/pages/[...page].astro` (homepage/pagination), `src/pages/posts/[...slug].astro` (post routes)
+- **Pages**: `src/pages/[...page].astro` (homepage/pagination), `src/pages/posts/[...slug].astro` (post routes), plus static `about.astro`, `archive.astro`, `friends.astro` and generated `rss.xml.ts`, `robots.txt.ts`
 - **Components**: `src/components/` — Svelte 5 (`.svelte`) for interactive bits (search, light/dark toggle, archive), Astro (`.astro`) for static shells
 - **Plugins**: `src/plugins/` — custom remark/rehype for reading time, excerpts, admonitions, GitHub cards, directives, expressive-code extensions
 - **i18n**: `src/i18n/` — translation keys
@@ -58,12 +64,14 @@ CI uses `pnpm install --frozen-lockfile`. Both build and deploy jobs configure S
 
 ## Content authoring
 
+When creating or editing posts, load the repo skill `creating-blog-post` (`.agents/skills/creating-blog-post/`) — it covers frontmatter schema, Chinese content conventions, admonitions, image layouts, and verification. Note: real posts are authored on `main`, not `dev` (see Branch workflow).
+
 Posts use Astro content collections (`src/content.config.ts`):
 - Required: `title` (string), `published` (date)
 - Optional: `updated`, `draft`, `description`, `image`, `tags`, `category`, `lang`, `pinned`
 - Internal: `prevTitle`, `prevSlug`, `nextTitle`, `nextSlug` — auto-populated, do not set
 
-Post folder convention: date-prefixed subdirs like `250826/PostTitle.md`. `pnpm new-post` creates in root only; nested dirs require manual creation.
+Post folder convention: date-prefixed subdirs like `250826/PostTitle.md`. `pnpm new-post` handles nested paths (e.g. `pnpm new-post 250826/PostTitle`).
 
 ### MDX
 
@@ -75,6 +83,7 @@ Use `.mdx` when you need `astro:assets` `<Image />` for optimized WebP images or
 - Pagefind config (`pagefind.yml`) excludes KaTeX elements and `.search-panel` from indexing
 - Swup animation class is `transition-swup-` (not default `transition-`) — avoids Tailwind `transition-all` conflict
 - Expressive Code theme must be dark (`github-dark`) — only dark code backgrounds supported
+- Astro is configured with `trailingSlash: "always"` — internal links should include the trailing slash (e.g. `/about/`, not `/about`)
 - Vite suppresses dynamic/static import duplicate warning in `astro.config.mjs`
 - **OverlayScrollbars CSS must be in frontmatter, NOT in `<script>`** — CSS imports in `<script>` are dynamically injected by Vite in dev mode. Swup's `updateHead: true` removes them during navigation, causing native scrollbar. Static CSS (frontmatter imports) is preserved.
 - **Never use `data-overlayscrollbars-initialize`** — it auto-initializes on the element, conflicting with manual `initCustomScrollbar()` on `<body>`.
@@ -101,3 +110,8 @@ These need explicit type annotations before the check can be used in CI. Do not 
 
 - Conventional Commits format per `CONTRIBUTING.md`
 - PRs should be single-purpose; run `pnpm lint` and `pnpm check` before submitting
+- Follow the branch workflow above: open PRs against `dev` for code changes; `main` is updated only via `dev` → `main` merges
+
+## Docs
+
+- Root `README.md` (Chinese) is mirrored as translations in `docs/README.*.md` (es, id, ja, ko, th, vi, zh-CN) — keep them in sync when editing the README.

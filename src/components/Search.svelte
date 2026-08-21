@@ -49,7 +49,17 @@ const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
 	}
 };
 
+const closeSearchPanel = (): void => {
+	const panel = document.getElementById("search-panel");
+	panel?.classList.add("float-panel-closed");
+	result = [];
+	keywordDesktop = "";
+	keywordMobile = "";
+};
+
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
+	const requestSeq = ++latestRequestSeq;
+
 	if (!keyword) {
 		setPanelVisibility(false, isDesktop);
 		result = [];
@@ -77,15 +87,41 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 			console.error("Pagefind is not available in production environment.");
 		}
 
+		if (requestSeq !== latestRequestSeq) return;
+
 		result = searchResults;
 		setPanelVisibility(result.length > 0, isDesktop);
 	} catch (error) {
+		if (requestSeq !== latestRequestSeq) return;
 		console.error("Search error:", error);
 		result = [];
 		setPanelVisibility(false, isDesktop);
 	} finally {
 		isSearching = false;
 	}
+};
+
+// Debounce keystrokes and drop stale async results.
+let latestRequestSeq = 0;
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+const runSearch = (keyword: string, isDesktop: boolean): void => {
+	if (!keyword) {
+		clearTimeout(debounceTimer);
+		latestRequestSeq++;
+		setPanelVisibility(false, isDesktop);
+		result = [];
+		return;
+	}
+
+	if (!initialized) {
+		return;
+	}
+
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => {
+		void search(keyword, isDesktop);
+	}, 250);
 };
 
 const loadPagefindOnDemand = (): Promise<void> => {
@@ -153,6 +189,18 @@ onMount(() => {
 		if (keywordMobile) search(keywordMobile, false);
 	};
 
+	// Close the panel on any page navigation. Registered once — the Navbar
+	// (and thus this component) lives outside the Swup container, so the
+	// instance persists across navigations.
+	const setupSwupHooks = () => {
+		window.swup?.hooks.on("page:view", closeSearchPanel);
+	};
+	if (window.swup) {
+		setupSwupHooks();
+	} else {
+		document.addEventListener("swup:enable", setupSwupHooks);
+	}
+
 	if (import.meta.env.DEV) {
 		console.log(
 			"Pagefind is not available in development mode. Using mock data.",
@@ -168,16 +216,12 @@ onMount(() => {
 	}
 });
 
-$: if (initialized && keywordDesktop) {
-	(async () => {
-		await search(keywordDesktop, true);
-	})();
+$: if (initialized) {
+	runSearch(keywordDesktop, true);
 }
 
-$: if (initialized && keywordMobile) {
-	(async () => {
-		await search(keywordMobile, false);
-	})();
+$: if (initialized) {
+	runSearch(keywordMobile, false);
 }
 </script>
 
@@ -217,7 +261,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
 
     <!-- search results -->
     {#each result as item}
-        <a href={item.url}
+        <a href={item.url} on:click={closeSearchPanel}
            class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block
        rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
             <div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">

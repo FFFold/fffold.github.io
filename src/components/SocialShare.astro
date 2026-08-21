@@ -136,6 +136,15 @@ const sharePlatforms = [
 
 		if (!shareContainer || !shareButtonsContainer) return;
 
+		const escapeHtml = (value: string): string =>
+			value.replace(/[&<>"']/g, (ch) => ({
+				"&": "&amp;",
+				"<": "&lt;",
+				">": "&gt;",
+				'"': "&quot;",
+				"'": "&#39;",
+			})[ch] as string);
+
 		const url = shareContainer.dataset.shareUrl || window.location.href;
 		const title = shareContainer.dataset.shareTitle || document.title;
 		const text = shareContainer.dataset.shareText || "";
@@ -212,7 +221,7 @@ const sharePlatforms = [
 									<li>粘贴并发送</li>
 								</ol>
 								<div class="mt-4 p-3 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-400">
-									提示：${title.substring(0, 30)}...
+									提示：${escapeHtml(title.substring(0, 30))}...
 								</div>
 							</div>
 							<div class="mt-6 flex justify-end">

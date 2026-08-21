@@ -43,4 +43,5 @@ export const zh_TW: Translation = {
 	[Key.share]: "分享到",
 	[Key.copyLink]: "複製連結",
 	[Key.copied]: "已複製",
+	[Key.emptyArchive]: "暫無匹配的文章",
 };

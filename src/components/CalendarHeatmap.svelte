@@ -1,6 +1,22 @@
 <script lang="ts">
 import type { ECharts } from "echarts";
+import { HeatmapChart } from "echarts/charts";
+import {
+	CalendarComponent,
+	TooltipComponent,
+	VisualMapComponent,
+} from "echarts/components";
+import * as echarts from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
 import { onDestroy, onMount } from "svelte";
+
+echarts.use([
+	HeatmapChart,
+	CalendarComponent,
+	TooltipComponent,
+	VisualMapComponent,
+	CanvasRenderer,
+]);
 
 export let commitData: Record<string, number>;
 export let totalCommits: number;
@@ -21,7 +37,6 @@ let destroyed = false;
 onMount(async () => {
 	if (!calendarEl || Object.keys(commitData).length === 0) return;
 
-	const echarts = await import("echarts");
 	if (destroyed) return;
 	chart = echarts.init(calendarEl, null, { renderer: "canvas" });
 

@@ -43,4 +43,5 @@ export const tr: Translation = {
 	[Key.share]: "Paylaş",
 	[Key.copyLink]: "Bağlantıyı Kopyala",
 	[Key.copied]: "Kopyalandı",
+	[Key.emptyArchive]: "Eşleşen yazı bulunamadı",
 };
