@@ -6,7 +6,8 @@ import { z } from "astro/zod";
 // Note: `--isolatedDeclarations` cannot infer the type of an object literal
 // holding multiple `defineCollection()` results (TS9013). The explicit
 // annotation keeps `pnpm type-check` green; schema validation still runs at
-// runtime via zod.
+// runtime via zod. Trade-off: editor-time `entry.data` typing degrades to
+// `any` for content collections.
 // biome-ignore lint/suspicious/noExplicitAny: required by the isolatedDeclarations workaround above
 export const collections: Record<string, CollectionConfig<any, any>> = {
 	posts: defineCollection({
