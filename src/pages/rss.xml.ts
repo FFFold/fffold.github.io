@@ -1,12 +1,11 @@
+import { render } from "astro:content";
 import rss from "@astrojs/rss";
 import { getSortedPosts } from "@utils/content-utils";
 import { url } from "@utils/url-utils";
 import type { APIContext } from "astro";
-import MarkdownIt from "markdown-it";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import sanitizeHtml from "sanitize-html";
 import { siteConfig } from "@/config";
-
-const parser = new MarkdownIt();
 
 function stripInvalidXmlChars(str: string): string {
 	return str.replace(
@@ -16,27 +15,57 @@ function stripInvalidXmlChars(str: string): string {
 	);
 }
 
-export async function GET(context: APIContext) {
+const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
+	"img",
+	"iframe",
+	"video",
+	"source",
+]);
+const allowedAttributes = {
+	...sanitizeHtml.defaults.allowedAttributes,
+	img: ["src", "alt", "width", "height"],
+	iframe: ["src", "allowfullscreen", "loading"],
+	video: ["src", "poster", "controls"],
+	source: ["src", "type"],
+};
+
+interface RssItem {
+	title: string;
+	pubDate: Date;
+	description: string;
+	link: string;
+	content: string;
+}
+
+export async function GET(context: APIContext): Promise<Response> {
 	const blog = await getSortedPosts();
+	const container = await AstroContainer.create();
+
+	const items: RssItem[] = [];
+	for (const post of blog) {
+		// Render the compiled MDX/Markdown content (with all Astro remark/rehype
+		// plugins applied) instead of running markdown-it over the raw source,
+		// which leaks MDX imports and directive syntax into the feed.
+		const { Content } = await render(post);
+		const renderedHtml = await container.renderToString(Content);
+		const content = sanitizeHtml(stripInvalidXmlChars(renderedHtml), {
+			allowedTags,
+			allowedAttributes,
+		});
+		items.push({
+			title: post.data.title,
+			pubDate: post.data.published,
+			description: post.data.description || "",
+			link: url(`/posts/${post.id}/`),
+			content,
+		});
+	}
 
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
 		site: context.site ?? "https://fuwari.vercel.app",
-		items: blog.map((post) => {
-			const content =
-				typeof post.body === "string" ? post.body : String(post.body || "");
-			const cleanedContent = stripInvalidXmlChars(content);
-			return {
-				title: post.data.title,
-				pubDate: post.data.published,
-				description: post.data.description || "",
-				link: url(`/posts/${post.id}/`),
-				content: sanitizeHtml(parser.render(cleanedContent), {
-					allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-				}),
-			};
-		}),
-		customData: `<language>${siteConfig.lang}</language>`,
+		items,
+		customData: `<language>${siteConfig.lang.replace("_", "-")}</language>`,
 	});
 }

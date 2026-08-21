@@ -61,7 +61,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
     </div>
 </div>
 
-<script>
+<script is:inline data-swup-ignore-script>
 function switchTheme() {
     if (localStorage.theme === 'dark') {
         document.documentElement.classList.remove('dark');

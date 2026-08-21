@@ -28,6 +28,7 @@ import {
 } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
+import { firstBannerSource, resolveShareImageUrl } from "../utils/banner-utils";
 import { pathsEqual, url } from "../utils/url-utils";
 
 interface Props {
@@ -55,12 +56,15 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 
-const siteBanner =
-	typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
-const ogImage =
-	rawBanner && typeof rawBanner === "string" && rawBanner.trim() !== ""
-		? rawBanner
-		: siteBanner;
+const hasRawBanner =
+	rawBanner && typeof rawBanner === "string" && rawBanner.trim() !== "";
+const resolvedShareImage = hasRawBanner
+	? (await resolveShareImageUrl(rawBanner)) ||
+		new URL(rawBanner, Astro.site).href
+	: await resolveShareImageUrl(firstBannerSource());
+const ogImage = resolvedShareImage
+	? new URL(resolvedShareImage, Astro.site).href
+	: "";
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -109,12 +113,16 @@ const bannerOffset =
         <meta property="og:type" content="website" />
         )}
 
-		{ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site).href}>}
-		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:url" content={Astro.url}>
+		{ogImage && <meta property="og:image" content={ogImage}>}
+		{ogImage ? (
+        <meta name="twitter:card" content="summary_large_image" />
+        ) : (
+        <meta name="twitter:card" content="summary" />
+        )}
+		<meta name="twitter:url" content={Astro.url}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
-		{ogImage && <meta name="twitter:image" content={new URL(ogImage, Astro.site).href}>}
+		{ogImage && <meta name="twitter:image" content={ogImage}>}
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
@@ -127,7 +135,7 @@ const bannerOffset =
 		))}
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, themeVersion: siteConfig.themeColor.version}}>
+		<script is:inline data-swup-ignore-script define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, themeVersion: siteConfig.themeColor.version}}>
 			// Check theme version and clear cache if version changed
 			const savedVersion = localStorage.getItem('themeVersion');
 			if (savedVersion !== String(themeVersion)) {
@@ -573,6 +581,50 @@ function init() {
 
 /* Load settings when entering the site */
 init();
+
+/* Copy-to-clipboard for code blocks.
+   Document-level listener, registered once. Lives here (global module, runs
+   once) instead of per-post inline scripts so Swup navigations don't stack it. */
+document.addEventListener("click", async (e) => {
+	const target = e.target as Element | null;
+	if (target && target.classList.contains("copy-btn")) {
+		const preEle = target.closest("pre");
+		const codeEle = preEle?.querySelector("code");
+		const code = Array.from(
+			codeEle?.querySelectorAll(".code:not(summary *)") ?? [],
+		)
+			.map((el) => el.textContent)
+			.map((t) => (t === "\n" ? "" : t))
+			.join("\n");
+
+		try {
+			await navigator.clipboard.writeText(code);
+		} catch {
+			// Fallback for browsers/contexts without clipboard permissions
+			const textarea = document.createElement("textarea");
+			textarea.value = code;
+			textarea.style.position = "fixed";
+			textarea.style.opacity = "0";
+			document.body.appendChild(textarea);
+			textarea.select();
+			document.execCommand("copy");
+			document.body.removeChild(textarea);
+		}
+
+		const timeoutId = target.getAttribute("data-timeout-id");
+		if (timeoutId) {
+			clearTimeout(parseInt(timeoutId));
+		}
+
+		target.classList.add("success");
+
+		const newTimeoutId = setTimeout(() => {
+			target.classList.remove("success");
+		}, 1000);
+
+		target.setAttribute("data-timeout-id", newTimeoutId.toString());
+	}
+});
 
 const setup = () => {
 	// TODO: temp solution to change the height of the banner

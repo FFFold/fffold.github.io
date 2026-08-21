@@ -49,6 +49,14 @@ const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
 	}
 };
 
+const closeSearchPanel = (): void => {
+	const panel = document.getElementById("search-panel");
+	panel?.classList.add("float-panel-closed");
+	result = [];
+	keywordDesktop = "";
+	keywordMobile = "";
+};
+
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	if (!keyword) {
 		setPanelVisibility(false, isDesktop);
@@ -153,6 +161,18 @@ onMount(() => {
 		if (keywordMobile) search(keywordMobile, false);
 	};
 
+	// Close the panel on any page navigation. Registered once — the Navbar
+	// (and thus this component) lives outside the Swup container, so the
+	// instance persists across navigations.
+	const setupSwupHooks = () => {
+		window.swup?.hooks.on("page:view", closeSearchPanel);
+	};
+	if (window.swup) {
+		setupSwupHooks();
+	} else {
+		document.addEventListener("swup:enable", setupSwupHooks);
+	}
+
 	if (import.meta.env.DEV) {
 		console.log(
 			"Pagefind is not available in development mode. Using mock data.",
@@ -217,7 +237,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
 
     <!-- search results -->
     {#each result as item}
-        <a href={item.url}
+        <a href={item.url} on:click={closeSearchPanel}
            class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block
        rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
             <div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">
