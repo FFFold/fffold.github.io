@@ -58,7 +58,9 @@ export function GithubCardComponent(properties, children) {
 		`script#${cardUuid}-script`,
 		{ type: "text/javascript", defer: true },
 		`
-      fetch('https://api.github.com/repos/${repo}', { referrerPolicy: "no-referrer" }).then(response => response.json()).then(data => {
+      const repo = "${repo}";
+      const cardUuid = "${cardUuid}";
+      const renderCard = (data) => {
         document.getElementById('${cardUuid}-description').innerText = data.description?.replace(/:[a-zA-Z0-9_]+:/g, '') || "Description not set";
         document.getElementById('${cardUuid}-language').innerText = data.language;
         document.getElementById('${cardUuid}-forks').innerText = Intl.NumberFormat('en-us', { notation: "compact", maximumFractionDigits: 1 }).format(data.forks).replaceAll("\u202f", '');
@@ -69,11 +71,21 @@ export function GithubCardComponent(properties, children) {
         document.getElementById('${cardUuid}-license').innerText = data.license?.spdx_id || "no-license";
         document.getElementById('${cardUuid}-card').classList.remove("fetch-waiting");
         console.log("[GITHUB-CARD] Loaded card for ${repo} | ${cardUuid}.")
-      }).catch(err => {
-        const c = document.getElementById('${cardUuid}-card');
-        c?.classList.add("fetch-error");
-        console.warn("[GITHUB-CARD] (Error) Loading card for ${repo} | ${cardUuid}.")
-      })
+      };
+      // Cache per-repo responses so Swup navigation doesn't re-fetch the API.
+      const cache = (window.__ghCardCache || (window.__ghCardCache = {}));
+      if (cache[repo]) {
+        renderCard(cache[repo]);
+      } else {
+        fetch('https://api.github.com/repos/' + repo, { referrerPolicy: "no-referrer" }).then(response => response.json()).then(data => {
+          cache[repo] = data;
+          renderCard(data);
+        }).catch(err => {
+          const c = document.getElementById('${cardUuid}-card');
+          c?.classList.add("fetch-error");
+          console.warn("[GITHUB-CARD] (Error) Loading card for ${repo} | ${cardUuid}.")
+        })
+      }
     `,
 	);
 

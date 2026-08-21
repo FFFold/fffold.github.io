@@ -11,6 +11,7 @@ import "overlayscrollbars/overlayscrollbars.css";
 import "../styles/photoswipe.css";
 import "photoswipe/style.css";
 import "../styles/expressive-code.css";
+import "katex/dist/katex.min.css";
 import "../styles/variables.styl";
 import "../styles/markdown-extend.styl";
 
@@ -28,6 +29,7 @@ import {
 } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
+import { firstBannerSource, resolveShareImageUrl } from "../utils/banner-utils";
 import { pathsEqual, url } from "../utils/url-utils";
 
 interface Props {
@@ -55,12 +57,15 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 
-const siteBanner =
-	typeof siteConfig.banner.src === "string" ? siteConfig.banner.src : "";
-const ogImage =
-	rawBanner && typeof rawBanner === "string" && rawBanner.trim() !== ""
-		? rawBanner
-		: siteBanner;
+const hasRawBanner =
+	rawBanner && typeof rawBanner === "string" && rawBanner.trim() !== "";
+const resolvedShareImage = hasRawBanner
+	? (await resolveShareImageUrl(rawBanner)) ||
+		new URL(rawBanner, Astro.site).href
+	: await resolveShareImageUrl(firstBannerSource());
+const ogImage = resolvedShareImage
+	? new URL(resolvedShareImage, Astro.site).href
+	: "";
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -109,12 +114,16 @@ const bannerOffset =
         <meta property="og:type" content="website" />
         )}
 
-		{ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site).href}>}
-		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:url" content={Astro.url}>
+		{ogImage && <meta property="og:image" content={ogImage}>}
+		{ogImage ? (
+        <meta name="twitter:card" content="summary_large_image" />
+        ) : (
+        <meta name="twitter:card" content="summary" />
+        )}
+		<meta name="twitter:url" content={Astro.url}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
-		{ogImage && <meta name="twitter:image" content={new URL(ogImage, Astro.site).href}>}
+		{ogImage && <meta name="twitter:image" content={ogImage}>}
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
@@ -127,7 +136,7 @@ const bannerOffset =
 		))}
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, themeVersion: siteConfig.themeColor.version}}>
+		<script is:inline data-swup-ignore-script define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, themeVersion: siteConfig.themeColor.version}}>
 			// Check theme version and clear cache if version changed
 			const savedVersion = localStorage.getItem('themeVersion');
 			if (savedVersion !== String(themeVersion)) {
@@ -441,13 +450,18 @@ function showBanner() {
 	// 使用requestAnimationFrame优化DOM操作
 	requestAnimationFrame(() => {
 		// Handle desktop banner
-		const desktopBanner = document.getElementById('banner-desktop');
+		// (array form renders `banner-desktop-0`, object form `banner-desktop`)
+		const desktopBanner =
+			document.getElementById('banner-desktop') ??
+			document.getElementById('banner-desktop-0');
 		if (desktopBanner) {
 			desktopBanner.classList.remove('opacity-0', 'scale-105');
 		}
 
 		// Handle mobile banner
-		const mobileBanner = document.getElementById('banner-mobile');
+		const mobileBanner =
+			document.getElementById('banner-mobile') ??
+			document.getElementById('banner-mobile-0');
 		if (mobileBanner && !document.getElementById('banner-carousel')) {
 			mobileBanner.classList.remove('opacity-0', 'scale-105');
 		}
@@ -574,6 +588,73 @@ function init() {
 /* Load settings when entering the site */
 init();
 
+/* Define the <widget-layout> custom element once (multiple sidebar widgets
+   share it; defining it here avoids one inline copy per instance). */
+class WidgetLayout extends HTMLElement {
+	constructor() {
+		super();
+
+		if (this.dataset.isCollapsed !== "true") {
+			return;
+		}
+
+		const id = this.dataset.id;
+		const btn = this.querySelector(".expand-btn");
+		const wrapper = this.querySelector(`#${id}`);
+		btn?.addEventListener("click", () => {
+			wrapper?.classList.remove("collapsed");
+			btn?.classList.add("hidden");
+		});
+	}
+}
+if (!customElements.get("widget-layout")) {
+	customElements.define("widget-layout", WidgetLayout);
+}
+
+/* Copy-to-clipboard for code blocks.
+   Document-level listener, registered once. Lives here (global module, runs
+   once) instead of per-post inline scripts so Swup navigations don't stack it. */
+document.addEventListener("click", async (e) => {
+	const target = e.target as Element | null;
+	if (target && target.classList.contains("copy-btn")) {
+		const preEle = target.closest("pre");
+		const codeEle = preEle?.querySelector("code");
+		const code = Array.from(
+			codeEle?.querySelectorAll(".code:not(summary *)") ?? [],
+		)
+			.map((el) => el.textContent)
+			.map((t) => (t === "\n" ? "" : t))
+			.join("\n");
+
+		try {
+			await navigator.clipboard.writeText(code);
+		} catch {
+			// Fallback for browsers/contexts without clipboard permissions
+			const textarea = document.createElement("textarea");
+			textarea.value = code;
+			textarea.style.position = "fixed";
+			textarea.style.opacity = "0";
+			document.body.appendChild(textarea);
+			textarea.select();
+			document.execCommand("copy");
+			document.body.removeChild(textarea);
+		}
+
+		const timeoutId = target.getAttribute("data-timeout-id");
+		if (timeoutId) {
+			clearTimeout(parseInt(timeoutId));
+		}
+
+		target.classList.add("success");
+
+		const newTimeoutId = setTimeout(() => {
+			target.classList.remove("success");
+		}, 1000);
+
+		target.setAttribute("data-timeout-id", newTimeoutId.toString());
+	}
+});
+
 const setup = () => {
 	// TODO: temp solution to change the height of the banner
 /*
@@ -643,9 +724,6 @@ const setup = () => {
 
 		// restore overflow after OverlayScrollbars re-initialized in content:replace
 		document.documentElement.style.overflow = savedScrollbarOverflow
-
-		// Load KaTeX CSS if the page contains math elements
-		loadKatexCssIfNeeded()
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
@@ -670,18 +748,6 @@ if (window?.swup?.hooks) {
 } else {
 	document.addEventListener('swup:enable', setup)
 }
-
-// Load KaTeX CSS dynamically if page contains math elements
-function loadKatexCssIfNeeded() {
-	if (!window.__katexCssLoaded && document.querySelector('.katex, .katex-display')) {
-		window.__katexCssLoaded = true
-		const link = document.createElement('link')
-		link.rel = 'stylesheet'
-		link.href = url('/katex.min.css')
-		document.head.appendChild(link)
-	}
-}
-loadKatexCssIfNeeded()
 
 let backToTopBtn = document.getElementById('back-to-top-btn');
 let toc = document.getElementById('toc-wrapper');
@@ -743,15 +809,33 @@ window.onresize = () => {
 </script>
 
 <script>
-import PhotoSwipeLightbox from "photoswipe/lightbox"
+import type PhotoSwipeLightbox from "photoswipe/lightbox"
 
-let lightbox: PhotoSwipeLightbox
-let pswp = import("photoswipe")
+let lightbox: PhotoSwipeLightbox | null = null
+let photoswipeReady = false
 
-function createPhotoSwipe() {
-	lightbox = new PhotoSwipeLightbox({
+const hasGallery = () =>
+	!!document.querySelector(".custom-md img, #post-cover img")
+
+async function createPhotoSwipe() {
+	if (photoswipeReady) return
+	photoswipeReady = true
+
+	// Load PhotoSwipe on demand so its JS never ships on pages without a post
+	// gallery (homepage, archive, about, friends). Its CSS stays in the global
+	// bundle (frontmatter imports above).
+	const [{ default: Lightbox }, pswp] = await Promise.all([
+		import("photoswipe/lightbox"),
+		import("photoswipe"),
+	])
+
+	// content:replace may have run while the imports were in flight — bail out
+	// so a stale lightbox is not bound to the old DOM.
+	if (!photoswipeReady) return
+
+	lightbox = new Lightbox({
 		gallery: ".custom-md img, #post-cover img",
-		pswpModule: () => pswp,
+		pswpModule: () => Promise.resolve(pswp),
 		closeSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/></svg>',
 		zoomSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M340-540h-40q-17 0-28.5-11.5T260-580q0-17 11.5-28.5T300-620h40v-40q0-17 11.5-28.5T380-700q17 0 28.5 11.5T420-660v40h40q17 0 28.5 11.5T500-580q0 17-11.5 28.5T460-540h-40v40q0 17-11.5 28.5T380-460q-17 0-28.5-11.5T340-500v-40Zm40 220q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l224 224q11 11 11 28t-11 28q-11 11-28 11t-28-11L532-372q-30 24-69 38t-83 14Zm0-80q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>',
 		padding: { top: 20, bottom: 20, left: 20, right: 20 },
@@ -780,20 +864,25 @@ function createPhotoSwipe() {
 }
 
 const setup = () => {
-	if (!lightbox) {
-		createPhotoSwipe()
-	}
 	window.swup.hooks.on("page:view", () => {
-		createPhotoSwipe()
+		if (hasGallery()) {
+			void createPhotoSwipe()
+		}
 	})
 
 	window.swup.hooks.on(
 		"content:replace",
 		() => {
 			lightbox?.destroy?.()
+			lightbox = null
+			photoswipeReady = false
 		},
 		{ before: true },
 	)
+
+	if (hasGallery()) {
+		void createPhotoSwipe()
+	}
 }
 
 if (window.swup) {

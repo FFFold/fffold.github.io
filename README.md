@@ -77,9 +77,9 @@ lang: zh-CN      # 仅当文章语言与站点语言不同时设置
 
 除了 Astro 默认支持的 [GitHub Flavored Markdown](https://github.github.com/gfm/) 外，还包含以下额外的 Markdown 功能:
 
-- 提示框 (Admonitions) ([预览和使用方法](https://fffold.github.io/posts/markdown-extended/#admonitions))
-- GitHub 仓库卡片 ([预览和使用方法](https://fffold.github.io/posts/markdown-extended/#github-repository-cards))
-- 增强的代码块 ([预览](https://fffold.github.io/posts/expressive-code/) / [文档](https://expressive-code.com/))
+- 提示框 (Admonitions) ([预览和使用方法](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
+- GitHub 仓库卡片 ([预览和使用方法](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
+- 增强的代码块 ([预览](https://fuwari.vercel.app/posts/expressive-code/) / [文档](https://expressive-code.com/))
 - 数学公式 (KaTeX)
 - 图片库 (Photoswipe)
 

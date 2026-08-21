@@ -1,10 +1,8 @@
-import type { AstroIntegration } from "@swup/astro";
+import type Swup from "swup";
 
 declare global {
 	interface Window {
-		// type from '@swup/astro' is incorrect
-		swup: AstroIntegration;
-		__katexCssLoaded?: boolean;
+		swup: Swup;
 		pagefind: {
 			search: (query: string) => Promise<{
 				results: Array<{

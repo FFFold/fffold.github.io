@@ -22,11 +22,6 @@ export type SiteConfig = {
 		version?: number;
 	};
 
-	// 壁纸模式配置
-	wallpaperMode: {
-		defaultMode: "banner" | "fullscreen" | "none"; // 默认壁纸模式：banner=顶部横幅，fullscreen=全屏壁纸，none=无壁纸
-	};
-
 	banner: {
 		enable: boolean;
 		src:

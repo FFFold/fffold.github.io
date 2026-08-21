@@ -24,21 +24,6 @@ interface Props {
 	headings?: MarkdownHeading[];
 }
 
-// 类型守卫函数
-const isBannerSrcObject = (
-	src:
-		| string
-		| string[]
-		| { desktop?: string | string[]; mobile?: string | string[] },
-): src is { desktop?: string | string[]; mobile?: string | string[] } => {
-	return (
-		typeof src === "object" &&
-		src !== null &&
-		!Array.isArray(src) &&
-		("desktop" in src || "mobile" in src)
-	);
-};
-
 // 获取banner图片的辅助函数
 interface BannerImages {
 	desktop: string | string[];
@@ -98,9 +83,6 @@ const {
 } = Astro.props;
 const hasBannerCredit = siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
-
-// 检查是否为首页
-const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
 
 // 计算主内容区域位置
 const mainPanelTop = siteConfig.banner.enable
@@ -253,7 +235,7 @@ const mainPanelTop = siteConfig.banner.enable
     mx-auto gap-4 px-0 md:px-4"
         >
             <!-- Banner image credit -->
-            {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
+            {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener noreferrer" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
                                    "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
             >

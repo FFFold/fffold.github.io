@@ -15,6 +15,7 @@ const links = Astro.props.links;
             hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
         "
            target={link.external ? "_blank" : null}
+           rel={link.external ? "noopener noreferrer" : undefined}
         >
             <div class="transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
                 {link.name}

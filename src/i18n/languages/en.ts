@@ -43,4 +43,5 @@ export const en: Translation = {
 	[Key.share]: "Share to",
 	[Key.copyLink]: "Copy Link",
 	[Key.copied]: "Copied",
+	[Key.emptyArchive]: "No matching posts",
 };

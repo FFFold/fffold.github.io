@@ -30,6 +30,7 @@ interface Group {
 }
 
 let groups: Group[] = [];
+let loaded = false;
 
 function formatDate(date: Date) {
 	const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -82,10 +83,17 @@ onMount(async () => {
 	groupedPostsArray.sort((a, b) => b.year - a.year);
 
 	groups = groupedPostsArray;
+	loaded = true;
 });
 </script>
 
 <div class="card-base px-8 py-6">
+    {#if loaded && groups.length === 0}
+        <div class="py-10 text-center transition text-50">
+            {i18n(I18nKey.emptyArchive)}
+        </div>
+    {/if}
+
     {#each groups as group}
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">
