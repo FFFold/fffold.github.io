@@ -17,11 +17,6 @@ export const siteConfig: SiteConfig = {
 		version: 2, // Theme version for cache invalidation, increment when changing default hue
 	},
 
-	// 壁纸模式配置
-	wallpaperMode: {
-		defaultMode: "banner", // 默认壁纸模式：banner=顶部横幅，fullscreen=全屏壁纸，none=无壁纸
-	},
-
 	banner: {
 		enable: true,
 		// 支持多种格式：字符串、数组、或对象分别设置桌面端和移动端

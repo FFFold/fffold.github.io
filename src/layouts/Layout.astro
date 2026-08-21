@@ -798,12 +798,17 @@ async function createPhotoSwipe() {
 	if (photoswipeReady) return
 	photoswipeReady = true
 
-	// Load PhotoSwipe on demand so its JS/CSS never ships on pages without a
-	// post gallery (homepage, archive, about, friends).
+	// Load PhotoSwipe on demand so its JS never ships on pages without a post
+	// gallery (homepage, archive, about, friends). Its CSS stays in the global
+	// bundle (frontmatter imports above).
 	const [{ default: Lightbox }, pswp] = await Promise.all([
 		import("photoswipe/lightbox"),
 		import("photoswipe"),
 	])
+
+	// content:replace may have run while the imports were in flight — bail out
+	// so a stale lightbox is not bound to the old DOM.
+	if (!photoswipeReady) return
 
 	lightbox = new Lightbox({
 		gallery: ".custom-md img, #post-cover img",

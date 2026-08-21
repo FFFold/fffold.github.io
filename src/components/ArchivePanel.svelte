@@ -86,6 +86,12 @@ onMount(async () => {
 </script>
 
 <div class="card-base px-8 py-6">
+    {#if groups.length === 0}
+        <div class="py-10 text-center transition text-50">
+            {i18n(I18nKey.emptyArchive)}
+        </div>
+    {/if}
+
     {#each groups as group}
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">

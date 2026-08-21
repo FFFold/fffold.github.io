@@ -43,4 +43,5 @@ export const zh_CN: Translation = {
 	[Key.share]: "分享到",
 	[Key.copyLink]: "复制链接",
 	[Key.copied]: "已复制",
+	[Key.emptyArchive]: "暂无匹配的文章",
 };

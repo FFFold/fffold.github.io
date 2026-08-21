@@ -1,6 +1,6 @@
 import { render } from "astro:content";
-import rss from "@astrojs/rss";
 import mdxRenderer from "@astrojs/mdx/server.js";
+import rss from "@astrojs/rss";
 import { getSortedPosts } from "@utils/content-utils";
 import { url } from "@utils/url-utils";
 import type { APIContext } from "astro";

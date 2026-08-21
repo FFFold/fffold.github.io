@@ -43,4 +43,5 @@ export const th: Translation = {
 	[Key.share]: "แชร์ไปยัง",
 	[Key.copyLink]: "คัดลอกลิงก์",
 	[Key.copied]: "คัดลอกแล้ว",
+	[Key.emptyArchive]: "ไม่พบโพสต์ที่ตรงกัน",
 };

@@ -24,21 +24,6 @@ interface Props {
 	headings?: MarkdownHeading[];
 }
 
-// 类型守卫函数
-const isBannerSrcObject = (
-	src:
-		| string
-		| string[]
-		| { desktop?: string | string[]; mobile?: string | string[] },
-): src is { desktop?: string | string[]; mobile?: string | string[] } => {
-	return (
-		typeof src === "object" &&
-		src !== null &&
-		!Array.isArray(src) &&
-		("desktop" in src || "mobile" in src)
-	);
-};
-
 // 获取banner图片的辅助函数
 interface BannerImages {
 	desktop: string | string[];
@@ -98,9 +83,6 @@ const {
 } = Astro.props;
 const hasBannerCredit = siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
-
-// 检查是否为首页
-const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
 
 // 计算主内容区域位置
 const mainPanelTop = siteConfig.banner.enable
