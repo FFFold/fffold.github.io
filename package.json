@@ -9,7 +9,7 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "type-check": "astro sync && tsc --noEmit --isolatedDeclarations",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
