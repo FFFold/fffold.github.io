@@ -37,7 +37,16 @@ export async function resolveShareImageUrl(
 	if (!src) return "";
 	if (src.startsWith("/") || /^https?:\/\//.test(src)) return src;
 	const asset = bannerAssetRegistry[src];
-	if (!asset) return "";
+	if (!asset) {
+		if (import.meta.env.DEV) {
+			console.warn(
+				`[banner-utils] No banner asset registered for "${src}". ` +
+					"Keep `bannerAssetRegistry` in src/utils/banner-utils.ts in sync " +
+					"with `siteConfig.banner.src` so OG images don't silently go missing.",
+			);
+		}
+		return "";
+	}
 	const optimized = await getImage({ src: asset, format: "webp", width: 1200 });
 	return optimized.src;
 }

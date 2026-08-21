@@ -57,6 +57,10 @@ const closeSearchPanel = (): void => {
 	keywordMobile = "";
 };
 
+// Request sequence + debounce timer, declared before `search` uses them.
+let latestRequestSeq = 0;
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	const requestSeq = ++latestRequestSeq;
 
@@ -102,9 +106,6 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 };
 
 // Debounce keystrokes and drop stale async results.
-let latestRequestSeq = 0;
-let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-
 const runSearch = (keyword: string, isDesktop: boolean): void => {
 	if (!keyword) {
 		clearTimeout(debounceTimer);
