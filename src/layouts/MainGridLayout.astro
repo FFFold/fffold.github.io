@@ -105,7 +105,7 @@ const mainPanelTop = siteConfig.banner.enable
 	<div
 		id="banner-wrapper"
 		class="absolute z-10 w-full transition duration-700 overflow-hidden"
-		style={`top: -${BANNER_HEIGHT_EXTEND}vh`}
+		style={`top: calc(-1 * var(--banner-height-extend, ${BANNER_HEIGHT_EXTEND}vh))`}
 	>
 		{(Array.isArray(bannerImages.desktop) && bannerImages.desktop.length > 1) ||
 		(Array.isArray(bannerImages.mobile) && bannerImages.mobile.length > 1) ? (
