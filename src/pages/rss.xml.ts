@@ -1,5 +1,6 @@
 import { render } from "astro:content";
 import rss from "@astrojs/rss";
+import mdxRenderer from "@astrojs/mdx/server.js";
 import { getSortedPosts } from "@utils/content-utils";
 import { url } from "@utils/url-utils";
 import type { APIContext } from "astro";
@@ -39,7 +40,11 @@ interface RssItem {
 
 export async function GET(context: APIContext): Promise<Response> {
 	const blog = await getSortedPosts();
-	const container = await AstroContainer.create();
+	// `renderToString` needs the MDX renderer registered, otherwise MDX
+	// `Content` components fail with "NoMatchingRenderer".
+	const container = await AstroContainer.create({
+		renderers: [{ name: "astro:jsx", ssr: mdxRenderer }],
+	});
 
 	const items: RssItem[] = [];
 	for (const post of blog) {
