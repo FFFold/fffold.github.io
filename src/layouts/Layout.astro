@@ -588,6 +588,29 @@ function init() {
 /* Load settings when entering the site */
 init();
 
+/* Define the <widget-layout> custom element once (multiple sidebar widgets
+   share it; defining it here avoids one inline copy per instance). */
+class WidgetLayout extends HTMLElement {
+	constructor() {
+		super();
+
+		if (this.dataset.isCollapsed !== "true") {
+			return;
+		}
+
+		const id = this.dataset.id;
+		const btn = this.querySelector(".expand-btn");
+		const wrapper = this.querySelector(`#${id}`);
+		btn?.addEventListener("click", () => {
+			wrapper?.classList.remove("collapsed");
+			btn?.classList.add("hidden");
+		});
+	}
+}
+if (!customElements.get("widget-layout")) {
+	customElements.define("widget-layout", WidgetLayout);
+}
+
 /* Copy-to-clipboard for code blocks.
    Document-level listener, registered once. Lives here (global module, runs
    once) instead of per-post inline scripts so Swup navigations don't stack it. */

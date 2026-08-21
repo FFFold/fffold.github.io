@@ -35,26 +35,3 @@ const className = Astro.props.class;
         height: var(--collapsedHeight);
     }
 </style>
-
-<script is:inline data-swup-ignore-script>
-    class WidgetLayout extends HTMLElement {
-        constructor() {
-            super();
-
-            if (this.dataset.isCollapsed !== "true")
-                return;
-
-            const id = this.dataset.id;
-            const btn = this.querySelector('.expand-btn');
-            const wrapper = this.querySelector(`#${id}`);
-            btn?.addEventListener('click', () => {
-                wrapper?.classList.remove('collapsed');
-                btn?.classList.add('hidden');
-            });
-        }
-    }
-
-    if (!customElements.get("widget-layout")) {
-        customElements.define("widget-layout", WidgetLayout);
-    }
-</script>
