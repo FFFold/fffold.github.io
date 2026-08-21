@@ -11,6 +11,7 @@ import "overlayscrollbars/overlayscrollbars.css";
 import "../styles/photoswipe.css";
 import "photoswipe/style.css";
 import "../styles/expressive-code.css";
+import "katex/dist/katex.min.css";
 import "../styles/variables.styl";
 import "../styles/markdown-extend.styl";
 
@@ -449,13 +450,18 @@ function showBanner() {
 	// 使用requestAnimationFrame优化DOM操作
 	requestAnimationFrame(() => {
 		// Handle desktop banner
-		const desktopBanner = document.getElementById('banner-desktop');
+		// (array form renders `banner-desktop-0`, object form `banner-desktop`)
+		const desktopBanner =
+			document.getElementById('banner-desktop') ??
+			document.getElementById('banner-desktop-0');
 		if (desktopBanner) {
 			desktopBanner.classList.remove('opacity-0', 'scale-105');
 		}
 
 		// Handle mobile banner
-		const mobileBanner = document.getElementById('banner-mobile');
+		const mobileBanner =
+			document.getElementById('banner-mobile') ??
+			document.getElementById('banner-mobile-0');
 		if (mobileBanner && !document.getElementById('banner-carousel')) {
 			mobileBanner.classList.remove('opacity-0', 'scale-105');
 		}
@@ -695,9 +701,6 @@ const setup = () => {
 
 		// restore overflow after OverlayScrollbars re-initialized in content:replace
 		document.documentElement.style.overflow = savedScrollbarOverflow
-
-		// Load KaTeX CSS if the page contains math elements
-		loadKatexCssIfNeeded()
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
@@ -722,18 +725,6 @@ if (window?.swup?.hooks) {
 } else {
 	document.addEventListener('swup:enable', setup)
 }
-
-// Load KaTeX CSS dynamically if page contains math elements
-function loadKatexCssIfNeeded() {
-	if (!window.__katexCssLoaded && document.querySelector('.katex, .katex-display')) {
-		window.__katexCssLoaded = true
-		const link = document.createElement('link')
-		link.rel = 'stylesheet'
-		link.href = url('/katex.min.css')
-		document.head.appendChild(link)
-	}
-}
-loadKatexCssIfNeeded()
 
 let backToTopBtn = document.getElementById('back-to-top-btn');
 let toc = document.getElementById('toc-wrapper');
@@ -795,15 +786,28 @@ window.onresize = () => {
 </script>
 
 <script>
-import PhotoSwipeLightbox from "photoswipe/lightbox"
+import type PhotoSwipeLightbox from "photoswipe/lightbox"
 
-let lightbox: PhotoSwipeLightbox
-let pswp = import("photoswipe")
+let lightbox: PhotoSwipeLightbox | null = null
+let photoswipeReady = false
 
-function createPhotoSwipe() {
-	lightbox = new PhotoSwipeLightbox({
+const hasGallery = () =>
+	!!document.querySelector(".custom-md img, #post-cover img")
+
+async function createPhotoSwipe() {
+	if (photoswipeReady) return
+	photoswipeReady = true
+
+	// Load PhotoSwipe on demand so its JS/CSS never ships on pages without a
+	// post gallery (homepage, archive, about, friends).
+	const [{ default: Lightbox }, pswp] = await Promise.all([
+		import("photoswipe/lightbox"),
+		import("photoswipe"),
+	])
+
+	lightbox = new Lightbox({
 		gallery: ".custom-md img, #post-cover img",
-		pswpModule: () => pswp,
+		pswpModule: () => Promise.resolve(pswp),
 		closeSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/></svg>',
 		zoomSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M340-540h-40q-17 0-28.5-11.5T260-580q0-17 11.5-28.5T300-620h40v-40q0-17 11.5-28.5T380-700q17 0 28.5 11.5T420-660v40h40q17 0 28.5 11.5T500-580q0 17-11.5 28.5T460-540h-40v40q0 17-11.5 28.5T380-460q-17 0-28.5-11.5T340-500v-40Zm40 220q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l224 224q11 11 11 28t-11 28q-11 11-28 11t-28-11L532-372q-30 24-69 38t-83 14Zm0-80q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>',
 		padding: { top: 20, bottom: 20, left: 20, right: 20 },
@@ -832,20 +836,25 @@ function createPhotoSwipe() {
 }
 
 const setup = () => {
-	if (!lightbox) {
-		createPhotoSwipe()
-	}
 	window.swup.hooks.on("page:view", () => {
-		createPhotoSwipe()
+		if (hasGallery()) {
+			void createPhotoSwipe()
+		}
 	})
 
 	window.swup.hooks.on(
 		"content:replace",
 		() => {
 			lightbox?.destroy?.()
+			lightbox = null
+			photoswipeReady = false
 		},
 		{ before: true },
 	)
+
+	if (hasGallery()) {
+		void createPhotoSwipe()
+	}
 }
 
 if (window.swup) {

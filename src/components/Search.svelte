@@ -58,6 +58,8 @@ const closeSearchPanel = (): void => {
 };
 
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
+	const requestSeq = ++latestRequestSeq;
+
 	if (!keyword) {
 		setPanelVisibility(false, isDesktop);
 		result = [];
@@ -85,15 +87,41 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 			console.error("Pagefind is not available in production environment.");
 		}
 
+		if (requestSeq !== latestRequestSeq) return;
+
 		result = searchResults;
 		setPanelVisibility(result.length > 0, isDesktop);
 	} catch (error) {
+		if (requestSeq !== latestRequestSeq) return;
 		console.error("Search error:", error);
 		result = [];
 		setPanelVisibility(false, isDesktop);
 	} finally {
 		isSearching = false;
 	}
+};
+
+// Debounce keystrokes and drop stale async results.
+let latestRequestSeq = 0;
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+const runSearch = (keyword: string, isDesktop: boolean): void => {
+	if (!keyword) {
+		clearTimeout(debounceTimer);
+		latestRequestSeq++;
+		setPanelVisibility(false, isDesktop);
+		result = [];
+		return;
+	}
+
+	if (!initialized) {
+		return;
+	}
+
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => {
+		void search(keyword, isDesktop);
+	}, 250);
 };
 
 const loadPagefindOnDemand = (): Promise<void> => {
@@ -188,16 +216,12 @@ onMount(() => {
 	}
 });
 
-$: if (initialized && keywordDesktop) {
-	(async () => {
-		await search(keywordDesktop, true);
-	})();
+$: if (initialized) {
+	runSearch(keywordDesktop, true);
 }
 
-$: if (initialized && keywordMobile) {
-	(async () => {
-		await search(keywordMobile, false);
-	})();
+$: if (initialized) {
+	runSearch(keywordMobile, false);
 }
 </script>
 
