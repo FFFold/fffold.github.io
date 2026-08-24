@@ -245,24 +245,6 @@
         }
     }
 
-    .toc-hide,
-    .toc-not-ready {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    #toc-inner-wrapper {
-        mask-image: linear-gradient(to bottom, transparent 0%, black 2rem, black calc(100% - 2rem), transparent 100%);
-    }
-
-    .hide-scrollbar {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-
     .text-90 {
         color: rgb(0 0 0 / 0.9);
     }

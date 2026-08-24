@@ -43,3 +43,26 @@ export function getCategoryUrl(category: string | null): string {
 export function url(path: string): string {
 	return joinUrl("", import.meta.env.BASE_URL, path);
 }
+
+/**
+ * 判断规范化后的路径是否位于文章路由下。
+ * 同时兼容根路径部署和配置了 base path 的部署。
+ * 可传入完整 URL、绝对路径或 Astro.url.pathname。
+ */
+export function isPostsPath(path: string): boolean {
+	let pathname = path;
+	try {
+		pathname = new URL(path, "https://placeholder.invalid").pathname;
+	} catch {
+		// 如果传入的不是可解析的 URL/路径，保留原字符串继续判断。
+	}
+
+	const basePath = import.meta.env.BASE_URL || "/";
+	const normalizedBase = basePath !== "/" ? basePath.replace(/\/$/, "") : "";
+	let relative = pathname;
+	if (normalizedBase && pathname.startsWith(normalizedBase)) {
+		relative = pathname.slice(normalizedBase.length);
+	}
+
+	return /^\/posts(?:\/|$)/i.test(relative);
+}
