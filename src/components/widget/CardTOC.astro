@@ -11,7 +11,7 @@ import "@/styles/toc.css";
 import { siteConfig } from "../../config";
 import I18nKey from "../../i18n/i18nKey";
 import { i18n } from "../../i18n/translation";
-import { url } from "../../utils/url-utils";
+import { isPostsPath } from "../../utils/url-utils";
 import WidgetLayout from "./WidgetLayout.astro";
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 
 const { class: className, style, headings = [] } = Astro.props;
 
-const isPostsRoute = Astro.url.pathname.startsWith(url("/posts/"));
+const isPostsRoute = isPostsPath(Astro.url.pathname);
 const hasHeadings =
 	siteConfig.toc.enable && isPostsRoute && headings.length > 0;
 
@@ -132,7 +132,7 @@ let heading1Count = 1;
 		anchorNavTarget: HTMLElement | null = null;
 		headingIdxMap = new Map<string, number>();
 		headings: HTMLElement[] = [];
-		sections: HTMLElement[] = [];
+		observedHeadings: HTMLElement[] = [];
 		tocEntries: HTMLAnchorElement[] = [];
 		active: boolean[] = [];
 		activeIndicator: HTMLElement | null = null;
@@ -148,15 +148,13 @@ let heading1Count = 1;
 
 		markVisibleSection = (entries: IntersectionObserverEntry[]) => {
 			entries.forEach((entry) => {
-				const id = (entry.target as HTMLElement).children[0]?.getAttribute(
-					"id",
-				);
+				const id = (entry.target as HTMLElement).getAttribute("id");
 				const idx = id ? this.headingIdxMap.get(id) : undefined;
 				if (idx != undefined) this.active[idx] = entry.isIntersecting;
 
 				if (
 					entry.isIntersecting &&
-					this.anchorNavTarget == (entry.target as HTMLElement).firstChild
+					this.anchorNavTarget === (entry.target as HTMLElement)
 				)
 					this.anchorNavTarget = null;
 			});
@@ -239,12 +237,12 @@ let heading1Count = 1;
 		};
 
 		fallback = () => {
-			if (!this.sections.length) return;
+			for (let i = 0; i < this.headings.length; i++) {
+				const heading = this.headings[i];
+				if (!(heading instanceof HTMLElement)) continue;
 
-			for (let i = 0; i < this.sections.length; i++) {
-				const offsetTop = this.sections[i].getBoundingClientRect().top;
-				const offsetBottom =
-					this.sections[i].getBoundingClientRect().bottom;
+				const offsetTop = heading.getBoundingClientRect().top;
+				const offsetBottom = heading.getBoundingClientRect().bottom;
 
 				if (
 					this.isInRange(offsetTop, 0, window.innerHeight) ||
@@ -322,17 +320,16 @@ let heading1Count = 1;
 				return;
 			}
 
-			this.sections = new Array(this.tocEntries.length);
 			this.headings = new Array(this.tocEntries.length);
+			this.observedHeadings = [];
 			for (let i = 0; i < this.tocEntries.length; i++) {
 				const id = decodeURIComponent(
 					this.tocEntries[i].hash?.substring(1) || "",
 				);
 				const heading = document.getElementById(id);
-				const section = heading?.parentElement;
-				if (heading instanceof HTMLElement && section instanceof HTMLElement) {
+				if (heading instanceof HTMLElement) {
 					this.headings[i] = heading;
-					this.sections[i] = section;
+					this.observedHeadings.push(heading);
 					this.headingIdxMap.set(id, i);
 				}
 			}
@@ -342,7 +339,9 @@ let heading1Count = 1;
 				capture: true,
 			});
 
-			this.sections.forEach((section) => this.observer.observe(section));
+			this.observedHeadings.forEach((heading) =>
+				this.observer.observe(heading),
+			);
 
 			this.fallback();
 			this.update();
@@ -351,7 +350,9 @@ let heading1Count = 1;
 		disconnectedCallback() {
 			if (!this.initialized) return;
 
-			this.sections.forEach((section) => this.observer.unobserve(section));
+			this.observedHeadings.forEach((heading) =>
+				this.observer.unobserve(heading),
+			);
 			this.observer.disconnect();
 			this.removeEventListener("click", this.handleAnchorClick, {
 				capture: true,
