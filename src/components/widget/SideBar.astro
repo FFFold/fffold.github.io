@@ -15,7 +15,7 @@ interface Props {
 const { class: className, headings } = Astro.props;
 const isPostsRoute = isPostsPath(Astro.url.pathname);
 ---
-<div id="sidebar" class:list={[className, "w-full", "lg:h-full"]}>
+<div id="sidebar" class:list={[className, "w-full"]}>
     <div class="flex flex-col w-full gap-4 mb-4">
         <Profile></Profile>
     </div>
@@ -32,12 +32,6 @@ const isPostsRoute = isPostsPath(Astro.url.pathname);
 
 <script>
 	import { isPostsPath } from "../../utils/url-utils";
-
-	type Visit = {
-		to: {
-			url: string;
-		};
-	};
 
 	let swupHooked = false;
 
@@ -57,13 +51,9 @@ const isPostsRoute = isPostsPath(Astro.url.pathname);
 		if (swupHooked || !window.swup) return;
 		swupHooked = true;
 
-		window.swup.hooks.on("visit:start", (visit: Visit) => {
-			setSidebarSticky(!isPostsPath(visit.to.url));
-		});
-
-		window.swup.hooks.on("page:view", () => {
-			setTimeout(updateSidebarSticky, 0);
-		});
+		// 在 page:view 时同步切换，此时 Swup 已完成滚动复位，
+		// 避免在旧页面滚动位置移除 sticky 导致侧边栏瞬间上移。
+		window.swup.hooks.on("page:view", updateSidebarSticky);
 	}
 
 	if (window.swup) {
