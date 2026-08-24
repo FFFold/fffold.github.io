@@ -33,12 +33,6 @@ const isPostsRoute = isPostsPath(Astro.url.pathname);
 <script>
 	import { isPostsPath } from "../../utils/url-utils";
 
-	type Visit = {
-		to: {
-			url: string;
-		};
-	};
-
 	let swupHooked = false;
 
 	function setSidebarSticky(sticky: boolean) {
@@ -57,10 +51,8 @@ const isPostsRoute = isPostsPath(Astro.url.pathname);
 		if (swupHooked || !window.swup) return;
 		swupHooked = true;
 
-		window.swup.hooks.on("visit:start", (visit: Visit) => {
-			setSidebarSticky(!isPostsPath(visit.to.url));
-		});
-
+		// 在 page:view 时切换，此时 Swup 已完成滚动复位，
+		// 避免在旧页面滚动位置移除 sticky 导致侧边栏瞬间上移。
 		window.swup.hooks.on("page:view", () => {
 			setTimeout(updateSidebarSticky, 0);
 		});
