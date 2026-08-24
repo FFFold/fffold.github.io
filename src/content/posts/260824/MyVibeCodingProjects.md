@@ -1,6 +1,7 @@
 ---
 title: 我的Vibe Coding实践
 published: 2026-08-24
+updated: 2026-08-24
 description: '这段时间用 AI 辅助写的一些项目和Vibe Coding心得。'
 image: './assets/2026-08-24-11-11-17-image.png'
 tags: [编程, AI, 方法论]
@@ -17,7 +18,7 @@ Vibe Coding 真是好东西，以往需要巨大学习成本和学习时间的�
 
 ![N100 小主机](./assets/N100.jpg)
 
-开学的这段时间我提前进组在浙大做毕设，闲的时候也是非常闲，于是整天玩AI编程，逐渐养成了自己的工具习惯（首图展示的）。作为一个门外汉，自然选择的全是GUI界面的工具。就这样一路下来也做了不少小项目。
+开学的这段时间我提前进组在浙大做毕设，闲的时候也是非常闲，于是整天玩AI编程，逐渐养成了自己的工具习惯（首图展示的）。作为一个门外汉，自然选择的全是GUI界面的工具。就这样一路下来也做了不少小项目，还参与了好几个开源项目的贡献。
 
 下面展示部分成果，感兴趣的还请点点star，谢谢啦❤️
 
@@ -96,3 +97,11 @@ Vibe Coding 真是好东西，以往需要巨大学习成本和学习时间的�
 ::github{repo="FFFold/CAR-M-Literature-search"}
 
 和一个科研课题配套的文献检索流水线。用 PubMed 的 esearch/efetch 挖掘 CAR-DC、CAR-Mac、CAR-Mono、CAR-T、CAR-NK 五个主题的文献，合并去重后用 LLM 对每篇论文做分类（主主题、关联度、作用机制、疾病标签），最终输出 CSV 供下游分析。目前语料库有 1 万多篇记录，全部用 Python 标准库实现。可能是第一次将AI编程用于专业学习。
+
+### PubMed-SKILL
+
+::github{repo="FFFold/PubMed-SKILL"}
+
+给 AI Agent 用的文献检索 SKILL：通过 NCBI E-utilities API 搜索 PubMed 生物医学文献。
+
+之前导儿让写 CAR-M 相关的综述，做文献调研，统计各个领域文献的数量，而搜文献的环节太琐碎，干脆把它沉淀成通用的 SKILL。
