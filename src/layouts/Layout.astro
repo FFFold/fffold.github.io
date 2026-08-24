@@ -724,11 +724,6 @@ const setup = () => {
 			heightExtend.classList.remove('hidden')
 		}
 
-		// Hide the TOC while scrolling back to top
-		let toc = document.getElementById('toc-wrapper');
-		if (toc) {
-			toc.classList.add('toc-not-ready')
-		}
 	});
 	window.swup.hooks.on('page:view', () => {
 		// Banner visibility is now controlled by lg:is-home class via CSS
@@ -752,12 +747,6 @@ const setup = () => {
 
 			// backup restoration in case page:view didn't fire
 			document.documentElement.style.overflow = savedScrollbarOverflow
-
-            // Just make the transition looks better
-            const toc = document.getElementById('toc-wrapper');
-            if (toc) {
-                toc.classList.remove('toc-not-ready')
-            }
         }, 200)
 	});
 }
@@ -768,7 +757,6 @@ if (window?.swup?.hooks) {
 }
 
 let backToTopBtn = document.getElementById('back-to-top-btn');
-let toc = document.getElementById('toc-wrapper');
 let navbar = document.getElementById('navbar-wrapper')
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
@@ -778,14 +766,6 @@ function scrollFunction() {
 			backToTopBtn.classList.remove('hide')
 		} else {
 			backToTopBtn.classList.add('hide')
-		}
-	}
-
-	if (bannerEnabled && toc) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
-			toc.classList.remove('toc-hide')
-		} else {
-			toc.classList.add('toc-hide')
 		}
 	}
 
