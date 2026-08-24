@@ -3,6 +3,15 @@
 
 @theme {
     --font-sans: "Roboto", sans-serif, ui-sans-serif, system-ui, sans-serif;
+
+    /* Breakpoint at which the right-hand TOC column (--toc-width) has enough room to be usable.
+       Derived from the layout geometry, not a magic number:
+       breakpoint = --page-width + 2 × (min usable TOC width + 1rem gap)
+                  = 75rem + 2 × (5.25rem + 1rem) = 87.5rem = 1400px.
+       This is higher than Tailwind's `xl` (80rem: the TOC would collapse into a sliver) and lower
+       than `2xl` (96rem: too high, the TOC only appeared after zooming out on a 2560px/175% display).
+       Keep in sync with PAGE_WIDTH / TOC_MIN_WIDTH_REM in src/constants/constants.ts. */
+    --breakpoint-toc: 87.5rem;
 }
 
 @variant dark (&:where(.dark, .dark *));
