@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import { url } from "../../utils/url-utils";
 import Announcement from "./Announcement.astro";
 import CardTOC from "./CardTOC.astro";
 import Categories from "./Categories.astro";
@@ -12,15 +13,24 @@ interface Props {
 }
 
 const { class: className, headings } = Astro.props;
+const isPostsRoute = Astro.url.pathname.startsWith(url("/posts/"));
 ---
-<div id="sidebar" class:list={[className, "w-full"]}>
+<div id="sidebar" class:list={[className, "w-full", isPostsRoute && "lg:h-full"]}>
     <div class="flex flex-col w-full gap-4 mb-4">
         <Profile></Profile>
     </div>
-    <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
-        <Announcement class="onload-animation" style="animation-delay: 100ms"></Announcement>
-        <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
-        <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
-        <CardTOC headings={headings} class="onload-animation" style="animation-delay: 250ms"></CardTOC>
-    </div>
+    {isPostsRoute ? (
+        <div class="flex flex-col w-full gap-4 mb-4">
+            <Announcement class="onload-animation" style="animation-delay: 100ms"></Announcement>
+            <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
+            <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
+        </div>
+    ) : (
+        <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
+            <Announcement class="onload-animation" style="animation-delay: 100ms"></Announcement>
+            <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
+            <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
+        </div>
+    )}
+    <CardTOC headings={headings} class="onload-animation" style="animation-delay: 250ms"></CardTOC>
 </div>
