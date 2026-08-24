@@ -58,6 +58,7 @@ export function GithubCardComponent(properties, children) {
 		`script#${cardUuid}-script`,
 		{ type: "text/javascript", defer: true },
 		`
+      (() => {
       const repo = "${repo}";
       const cardUuid = "${cardUuid}";
       const renderCard = (data) => {
@@ -86,6 +87,7 @@ export function GithubCardComponent(properties, children) {
           console.warn("[GITHUB-CARD] (Error) Loading card for ${repo} | ${cardUuid}.")
         })
       }
+      })();
     `,
 	);
 
