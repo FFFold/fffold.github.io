@@ -27,9 +27,9 @@ Wrap Markdown images in a `:::grid` container:
 
 ````markdown
 :::grid
-![Image description](/Images/demos/image-grid-demo/landscape-1.webp)
+![Image description](./image-grid-demo.assets/landscape-1.webp)
 
-![Image description](/Images/demos/image-grid-demo/landscape-2.webp)
+![Image description](./image-grid-demo.assets/landscape-2.webp)
 :::
 ````
 
@@ -44,9 +44,9 @@ Wrap Markdown images in a `:::grid` container:
 Here is the result:
 
 :::grid
-![Minimal syntax result: first image](/Images/demos/image-grid-demo/landscape-1.webp)
+![Minimal syntax result: first image](./image-grid-demo.assets/landscape-1.webp)
 
-![Minimal syntax result: second image](/Images/demos/image-grid-demo/landscape-2.webp)
+![Minimal syntax result: second image](./image-grid-demo.assets/landscape-2.webp)
 :::
 
 ## Parameters
@@ -66,11 +66,11 @@ Write parameters in braces after the opening directive: `:::grid{parameter="valu
 - `fit`: use `cover` for a consistent tidy grid; use `contain` when every edge of the original image must remain visible.
 
 :::grid{columns="3" aspect="16/9" fit="cover"}
-![Parameter example: first landscape image](/Images/demos/image-grid-demo/landscape-1.webp "Landscape caption 1")
+![Parameter example: first landscape image](./image-grid-demo.assets/landscape-1.webp "Landscape caption 1")
 
-![Parameter example: second landscape image](/Images/demos/image-grid-demo/landscape-2.webp "Landscape caption 2")
+![Parameter example: second landscape image](./image-grid-demo.assets/landscape-2.webp "Landscape caption 2")
 
-![Parameter example: third landscape image](/Images/demos/image-grid-demo/landscape-3.webp "Landscape caption 3")
+![Parameter example: third landscape image](./image-grid-demo.assets/landscape-3.webp "Landscape caption 3")
 :::
 
 ## Step-by-Step: Adding a Gallery
@@ -97,11 +97,11 @@ If you omit all parameters, the grid uses three columns, `16/10` ratio, and `cov
 ````
 
 :::grid
-![Default configuration: square image one](/Images/demos/image-grid-demo/square-1.webp)
+![Default configuration: square image one](./image-grid-demo.assets/square-1.webp)
 
-![Default configuration: square image two](/Images/demos/image-grid-demo/square-2.webp)
+![Default configuration: square image two](./image-grid-demo.assets/square-2.webp)
 
-![Default configuration: square image three](/Images/demos/image-grid-demo/square-3.webp)
+![Default configuration: square image three](./image-grid-demo.assets/square-3.webp)
 :::
 
 ## Column Counts
@@ -121,11 +121,11 @@ Two columns give larger preview cards. With three images, the third image moves 
 ````
 
 :::grid{columns="2" aspect="1/1"}
-![Two-column square one](/Images/demos/image-grid-demo/square-1.webp "Square 1")
+![Two-column square one](./image-grid-demo.assets/square-1.webp "Square 1")
 
-![Two-column square two](/Images/demos/image-grid-demo/square-2.webp "Square 2")
+![Two-column square two](./image-grid-demo.assets/square-2.webp "Square 2")
 
-![Two-column square three](/Images/demos/image-grid-demo/square-3.webp "Square 3")
+![Two-column square three](./image-grid-demo.assets/square-3.webp "Square 3")
 :::
 
 ### Four Columns
@@ -145,13 +145,13 @@ Four columns are good for thumbnail sets. Desktop displays four in one row; tabl
 ````
 
 :::grid{columns="4" aspect="1/1"}
-![Four-column image one](/Images/demos/image-grid-demo/square-1.webp "Square 1")
+![Four-column image one](./image-grid-demo.assets/square-1.webp "Square 1")
 
-![Four-column image two](/Images/demos/image-grid-demo/square-2.webp "Square 2")
+![Four-column image two](./image-grid-demo.assets/square-2.webp "Square 2")
 
-![Four-column image three](/Images/demos/image-grid-demo/square-3.webp "Square 3")
+![Four-column image three](./image-grid-demo.assets/square-3.webp "Square 3")
 
-![Four-column image four](/Images/demos/image-grid-demo/landscape-1.webp "Landscape 1")
+![Four-column image four](./image-grid-demo.assets/landscape-1.webp "Landscape 1")
 :::
 
 ### Five Columns
@@ -173,15 +173,15 @@ Five columns verify a higher supported column count. With fewer images than colu
 ````
 
 :::grid{columns="5" aspect="1/1"}
-![Five-column image one](/Images/demos/image-grid-demo/square-1.webp "1")
+![Five-column image one](./image-grid-demo.assets/square-1.webp "1")
 
-![Five-column image two](/Images/demos/image-grid-demo/square-2.webp "2")
+![Five-column image two](./image-grid-demo.assets/square-2.webp "2")
 
-![Five-column image three](/Images/demos/image-grid-demo/square-3.webp "3")
+![Five-column image three](./image-grid-demo.assets/square-3.webp "3")
 
-![Five-column image four](/Images/demos/image-grid-demo/landscape-1.webp "4")
+![Five-column image four](./image-grid-demo.assets/landscape-1.webp "4")
 
-![Five-column image five](/Images/demos/image-grid-demo/landscape-2.webp "5")
+![Five-column image five](./image-grid-demo.assets/landscape-2.webp "5")
 :::
 
 ### Six Columns
@@ -205,17 +205,17 @@ Six columns are the current maximum. They work best for very dense thumbnail pre
 ````
 
 :::grid{columns="6" aspect="1/1"}
-![Six-column image one](/Images/demos/image-grid-demo/square-1.webp "1")
+![Six-column image one](./image-grid-demo.assets/square-1.webp "1")
 
-![Six-column image two](/Images/demos/image-grid-demo/square-2.webp "2")
+![Six-column image two](./image-grid-demo.assets/square-2.webp "2")
 
-![Six-column image three](/Images/demos/image-grid-demo/square-3.webp "3")
+![Six-column image three](./image-grid-demo.assets/square-3.webp "3")
 
-![Six-column image four](/Images/demos/image-grid-demo/landscape-1.webp "4")
+![Six-column image four](./image-grid-demo.assets/landscape-1.webp "4")
 
-![Six-column image five](/Images/demos/image-grid-demo/landscape-2.webp "5")
+![Six-column image five](./image-grid-demo.assets/landscape-2.webp "5")
 
-![Six-column image six](/Images/demos/image-grid-demo/landscape-3.webp "6")
+![Six-column image six](./image-grid-demo.assets/landscape-3.webp "6")
 :::
 
 ### Single Column
@@ -229,7 +229,7 @@ One column is suitable when an image needs a larger reading size. It stays one c
 ````
 
 :::grid{columns="1" aspect="16/9"}
-![Single-column test image](/Images/demos/image-grid-demo/landscape-1.webp)
+![Single-column test image](./image-grid-demo.assets/landscape-1.webp)
 :::
 
 ## Aspect Ratios
@@ -241,11 +241,11 @@ The `aspect` value controls the card shape, not the original file ratio.
 Best for landscapes, screenshots, and video frames.
 
 :::grid{columns="3" aspect="16/9"}
-![16:9 test image one](/Images/demos/image-grid-demo/landscape-1.webp "Landscape 1")
+![16:9 test image one](./image-grid-demo.assets/landscape-1.webp "Landscape 1")
 
-![16:9 test image two](/Images/demos/image-grid-demo/landscape-2.webp "Landscape 2")
+![16:9 test image two](./image-grid-demo.assets/landscape-2.webp "Landscape 2")
 
-![16:9 test image three](/Images/demos/image-grid-demo/landscape-3.webp "Landscape 3")
+![16:9 test image three](./image-grid-demo.assets/landscape-3.webp "Landscape 3")
 :::
 
 ### 3:4
@@ -253,11 +253,11 @@ Best for landscapes, screenshots, and video frames.
 Best for portraits, posters, and mobile screenshots.
 
 :::grid{columns="3" aspect="3/4"}
-![3:4 test image one](/Images/demos/image-grid-demo/portrait-1.webp "Portrait 1")
+![3:4 test image one](./image-grid-demo.assets/portrait-1.webp "Portrait 1")
 
-![3:4 test image two](/Images/demos/image-grid-demo/portrait-2.webp "Portrait 2")
+![3:4 test image two](./image-grid-demo.assets/portrait-2.webp "Portrait 2")
 
-![3:4 test image three](/Images/demos/image-grid-demo/portrait-3.webp "Portrait 3")
+![3:4 test image three](./image-grid-demo.assets/portrait-3.webp "Portrait 3")
 :::
 
 ### 1:1
@@ -265,11 +265,11 @@ Best for portraits, posters, and mobile screenshots.
 Best for square thumbnails and avatar-like images.
 
 :::grid{columns="3" aspect="1/1"}
-![1:1 test image one](/Images/demos/image-grid-demo/square-1.webp "Square 1")
+![1:1 test image one](./image-grid-demo.assets/square-1.webp "Square 1")
 
-![1:1 test image two](/Images/demos/image-grid-demo/square-2.webp "Square 2")
+![1:1 test image two](./image-grid-demo.assets/square-2.webp "Square 2")
 
-![1:1 test image three](/Images/demos/image-grid-demo/square-3.webp "Square 3")
+![1:1 test image three](./image-grid-demo.assets/square-3.webp "Square 3")
 :::
 
 ## Fit Modes
@@ -279,11 +279,11 @@ Best for square thumbnails and avatar-like images.
 `cover` is the default. Images are cropped from the center to fill the card, keeping the grid consistent. Use it when a uniform layout matters more than showing every edge.
 
 :::grid{columns="3" aspect="16/9" fit="cover"}
-![Cover portrait image one](/Images/demos/image-grid-demo/portrait-1.webp "Cover: center crop")
+![Cover portrait image one](./image-grid-demo.assets/portrait-1.webp "Cover: center crop")
 
-![Cover portrait image two](/Images/demos/image-grid-demo/portrait-2.webp "Cover: fill the card")
+![Cover portrait image two](./image-grid-demo.assets/portrait-2.webp "Cover: fill the card")
 
-![Cover portrait image three](/Images/demos/image-grid-demo/portrait-3.webp "Cover: consistent layout")
+![Cover portrait image three](./image-grid-demo.assets/portrait-3.webp "Cover: consistent layout")
 :::
 
 ### `contain`
@@ -291,11 +291,11 @@ Best for square thumbnails and avatar-like images.
 `contain` preserves the complete original. When the image ratio differs from the card ratio, the theme background remains visible. Use it for edge-critical content such as screenshots with important borders.
 
 :::grid{columns="3" aspect="16/9" fit="contain"}
-![Contain portrait image one](/Images/demos/image-grid-demo/portrait-1.webp "Contain: preserve the complete original")
+![Contain portrait image one](./image-grid-demo.assets/portrait-1.webp "Contain: preserve the complete original")
 
-![Contain portrait image two](/Images/demos/image-grid-demo/portrait-2.webp "Contain: empty space may appear")
+![Contain portrait image two](./image-grid-demo.assets/portrait-2.webp "Contain: empty space may appear")
 
-![Contain portrait image three](/Images/demos/image-grid-demo/portrait-3.webp "Contain: suitable for edge details")
+![Contain portrait image three](./image-grid-demo.assets/portrait-3.webp "Contain: suitable for edge details")
 :::
 
 ## Captions and Alt Text
@@ -310,11 +310,11 @@ The image alt text is the default caption. When an image has an optional title, 
 Long captions stay bottom-aligned with the other captions in the same row.
 
 :::grid{columns="3" aspect="1/1"}
-![This image has no title, so its alt text is the caption](/Images/demos/image-grid-demo/square-1.webp)
+![This image has no title, so its alt text is the caption](./image-grid-demo.assets/square-1.webp)
 
-![Second square image with accessible alt text](/Images/demos/image-grid-demo/square-2.webp "This title is displayed as the caption")
+![Second square image with accessible alt text](./image-grid-demo.assets/square-2.webp "This title is displayed as the caption")
 
-![Accessible description of a square image](/Images/demos/image-grid-demo/square-3.webp "This is a longer caption for checking that every caption remains aligned to the bottom of its card when it wraps")
+![Accessible description of a square image](./image-grid-demo.assets/square-3.webp "This is a longer caption for checking that every caption remains aligned to the bottom of its card when it wraps")
 :::
 
 ## Independent Lightbox Groups
@@ -322,19 +322,19 @@ Long captions stay bottom-aligned with the other captions in the same row.
 Each `:::grid` is a separate Fancybox group. Clicking an image in one grid only navigates through the images in that grid, not through the other grid.
 
 :::grid{columns="3" aspect="16/9"}
-![First group image one](/Images/demos/image-grid-demo/landscape-1.webp "Group A: Landscape 1")
+![First group image one](./image-grid-demo.assets/landscape-1.webp "Group A: Landscape 1")
 
-![First group image two](/Images/demos/image-grid-demo/landscape-2.webp "Group A: Landscape 2")
+![First group image two](./image-grid-demo.assets/landscape-2.webp "Group A: Landscape 2")
 
-![First group image three](/Images/demos/image-grid-demo/landscape-3.webp "Group A: Landscape 3")
+![First group image three](./image-grid-demo.assets/landscape-3.webp "Group A: Landscape 3")
 :::
 
 :::grid{columns="3" aspect="1/1"}
-![Second group image one](/Images/demos/image-grid-demo/square-1.webp "Group B: Square 1")
+![Second group image one](./image-grid-demo.assets/square-1.webp "Group B: Square 1")
 
-![Second group image two](/Images/demos/image-grid-demo/square-2.webp "Group B: Square 2")
+![Second group image two](./image-grid-demo.assets/square-2.webp "Group B: Square 2")
 
-![Second group image three](/Images/demos/image-grid-demo/square-3.webp "Group B: Square 3")
+![Second group image three](./image-grid-demo.assets/square-3.webp "Group B: Square 3")
 :::
 
 ## Relative Paths
@@ -365,7 +365,7 @@ Grid images can also use relative paths from the post directory, just like norma
 3. **Using an invalid `columns` value** — values outside `1`–`6` silently fall back to `3`.
 4. **Using `fit="contain"` when a uniform grid is required** — empty background space may appear; this is expected, not a bug.
 5. **Forgetting captions matter** — use meaningful alt text; it doubles as the caption and improves accessibility.
-6. **Using `/images/...` when the repo actually stores files under `/Images/...`** — paths are case-sensitive on Linux/GitHub Pages; check the actual `public/` directory case.
+6. **Using public `/Images/...` paths when images live next to the post** — prefer relative paths such as `./post.assets/...`; Astro resolves and optimizes them automatically. If you do use `public/`, keep the exact case (Linux is case-sensitive).
 
 ## Verification Checklist
 

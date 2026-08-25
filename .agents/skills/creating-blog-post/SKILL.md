@@ -201,7 +201,7 @@ Wrap adjacent Markdown images in a `:::grid` container to render a responsive ga
 - Parameters: `columns` (1–6, default `3`), `aspect` (positive ratio, default `16/10`), `fit` (`cover` or `contain`, default `cover`).
 - Each image must be its own paragraph, with a blank line between images.
 - Each `:::grid` becomes an independent Fancybox lightbox group; ordinary images outside grids are separate.
-- Public demo images live under `public/Images/...`, so URL examples use `/Images/...` (case-sensitive on Linux).
+- Demo images for the sample post live in `src/content/posts/image-grid-demo.assets/`, so examples use relative paths like `./image-grid-demo.assets/...`; Astro resolves and optimizes relative post assets automatically.
 - Usage examples: see `/posts/image-grid-demo/` (dev sample).
 
 ### Spoilers
