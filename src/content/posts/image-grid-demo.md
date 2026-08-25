@@ -337,6 +337,20 @@ Each `:::grid` is a separate Fancybox group. Clicking an image in one grid only 
 ![Second group image three](/Images/demos/image-grid-demo/square-3.webp "Group B: Square 3")
 :::
 
+## Relative Paths
+
+Grid images can also use relative paths from the post directory, just like normal Markdown images. Astro resolves and optimizes the thumbnail, and the Fancybox lightbox uses the resolved image URL.
+
+````markdown
+:::grid{columns="1" aspect="16/9"}
+![Relative path image](./image-grid-demo.assets/landscape-1.webp "Relative path image")
+:::
+````
+
+:::grid{columns="1" aspect="16/9"}
+![Relative path test image](./image-grid-demo.assets/landscape-1.webp "Relative path image")
+:::
+
 ## Responsive Behavior
 
 - Below `768px`, grids use at most two columns.

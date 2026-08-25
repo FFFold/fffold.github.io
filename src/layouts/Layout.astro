@@ -850,8 +850,21 @@ async function loadFancyboxL10n() {
 	}
 }
 
+function syncImageGridHrefs() {
+	document.querySelectorAll<HTMLImageElement>(".image-grid__link img").forEach((img) => {
+		const link = img.closest("a")
+		if (!link) return
+		const resolvedSrc = img.currentSrc || img.src
+		if (resolvedSrc && resolvedSrc !== link.href) {
+			link.href = resolvedSrc
+		}
+	})
+}
+
 async function initFancybox() {
 	if (!hasFancyboxImages() || boundSelectors.length > 0) return
+
+	syncImageGridHrefs()
 
 	const generation = ++fancyboxGeneration
 	const FancyboxModule = await loadFancybox()
@@ -911,7 +924,15 @@ async function initFancybox() {
 	})
 	boundSelectors.push(FANCYBOX_SELECTORS.albumImages)
 
-	FancyboxModule.bind(FANCYBOX_SELECTORS.imageGrids, baseConfig)
+	FancyboxModule.bind(FANCYBOX_SELECTORS.imageGrids, {
+		...baseConfig,
+		// Relative image paths are resolved by Astro on the <img> element, not on
+		// the grid <a> href. Use the rendered image URL for the lightbox source.
+		source: (el: any) => {
+			const img = el?.querySelector?.("img")
+			return img?.currentSrc || img?.src || el?.getAttribute?.("href")
+		},
+	})
 	boundSelectors.push(FANCYBOX_SELECTORS.imageGrids)
 }
 
