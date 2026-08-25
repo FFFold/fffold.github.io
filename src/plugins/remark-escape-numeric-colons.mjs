@@ -21,12 +21,14 @@ function escapeLine(line) {
 	while (index < line.length) {
 		const char = line[index];
 
-		// Skip inline code spans.
+		// Skip inline code spans, including multi-backtick fences.
 		if (char === "`") {
-			const close = line.indexOf("`", index + 1);
+			const fence = line.slice(index).match(/^`+/)?.[0] ?? "`";
+			const fenceLength = fence.length;
+			const close = line.indexOf("`".repeat(fenceLength), index + fenceLength);
 			if (close !== -1) {
-				result += line.slice(index, close + 1);
-				index = close + 1;
+				result += line.slice(index, close + fenceLength);
+				index = close + fenceLength;
 				continue;
 			}
 		}

@@ -84,7 +84,11 @@ export function ImageGridComponent(properties, children) {
 	if (images.length === 0) {
 		return h(
 			"div",
-			{ class: "hidden" },
+			{
+				class: "image-grid-error",
+				role: "alert",
+				"data-pagefind-ignore": "",
+			},
 			'Invalid image grid. (Use a block directive containing one or more Markdown images: ":::grid ... :::")',
 		);
 	}
