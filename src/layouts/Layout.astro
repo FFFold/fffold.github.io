@@ -9,6 +9,7 @@ import "../styles/transition.css";
 import "../styles/scrollbar.css";
 import "overlayscrollbars/overlayscrollbars.css";
 import "../styles/image-grid.css";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import "../styles/fancybox-custom.css";
 import "../styles/expressive-code.css";
 import "katex/dist/katex.min.css";
@@ -830,7 +831,6 @@ async function loadFancybox() {
 	if (!fancyboxLoading) {
 		fancyboxLoading = (async () => {
 			const mod = await import("@fancyapps/ui")
-			await import("@fancyapps/ui/dist/fancybox/fancybox.css")
 			Fancybox = mod.Fancybox
 			return Fancybox
 		})()
@@ -919,6 +919,7 @@ function cleanupFancybox() {
 	fancyboxGeneration++
 	if (!Fancybox) return
 
+	Fancybox.close?.()
 	for (const selector of boundSelectors) {
 		Fancybox.unbind(selector)
 	}

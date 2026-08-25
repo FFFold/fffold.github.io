@@ -8,10 +8,17 @@ const DEFAULT_ASPECT_RATIO = "16 / 10";
 const DEFAULT_FIT = "cover";
 
 function parseColumns(value) {
-	const columns = Number.parseInt(String(value ?? DEFAULT_COLUMNS), 10);
-	return Number.isInteger(columns) && columns >= 1 && columns <= 6
-		? columns
-		: DEFAULT_COLUMNS;
+	if (typeof value !== "string") {
+		return DEFAULT_COLUMNS;
+	}
+
+	const raw = value.trim();
+	if (!/^\d+$/.test(raw)) {
+		return DEFAULT_COLUMNS;
+	}
+
+	const columns = Number(raw);
+	return columns >= 1 && columns <= 6 ? columns : DEFAULT_COLUMNS;
 }
 
 function parseAspectRatio(value) {
