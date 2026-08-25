@@ -19,7 +19,7 @@
 - [x] RSS 订阅
 - [x] 代码高亮和行号显示
 - [x] 数学公式渲染 (KaTeX)
-- [x] 图片库功能 (Photoswipe)
+- [x] 图片库功能 (Fancybox)
 
 ## 🚀 快速开始
 
@@ -81,7 +81,7 @@ lang: zh-CN      # 仅当文章语言与站点语言不同时设置
 - GitHub 仓库卡片 ([预览和使用方法](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
 - 增强的代码块 ([预览](https://fuwari.vercel.app/posts/expressive-code/) / [文档](https://expressive-code.com/))
 - 数学公式 (KaTeX)
-- 图片库 (Photoswipe)
+- 图片库 (Fancybox)
 
 ## ⚡ 命令说明
 
@@ -110,7 +110,7 @@ lang: zh-CN      # 仅当文章语言与站点语言不同时设置
 - **KaTeX**: 数学公式渲染
 - **Swup**: 页面过渡动画
 - **Overlayscrollbars**: 自定义滚动条
-- **Photoswipe**: 图片库功能
+- **Fancybox**: 图片库功能
 - **Biome**: 代码格式化和检查
 - **Stylus**: CSS 预处理器
 

@@ -1,0 +1,82 @@
+/* --- 图片画廊网格 --- */
+.image-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--image-grid-columns), minmax(0, 1fr));
+	gap: 0.75rem;
+	margin: 1.5rem 0;
+}
+
+.image-grid__item {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	margin: 0;
+}
+
+.image-grid__link {
+	display: block;
+	aspect-ratio: var(--image-grid-aspect-ratio);
+	overflow: hidden;
+	border-radius: var(--radius-large);
+	background: var(--btn-regular-bg);
+	line-height: 0;
+}
+
+.image-grid__link:hover,
+.image-grid__link:active {
+	border-bottom: 0;
+	background: var(--btn-regular-bg);
+}
+
+.image-grid__link > img {
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	aspect-ratio: auto;
+	border-radius: 0 !important;
+	object-fit: var(--image-grid-fit) !important;
+	object-position: center;
+	transition: transform 180ms ease;
+}
+
+.image-grid__link:hover > img {
+	transform: scale(1.03);
+}
+
+.image-grid__caption {
+	margin-top: auto;
+	padding-top: 0.45rem;
+	color: var(--tw-prose-body);
+	font-size: 0.875rem;
+	line-height: 1.35;
+	text-align: center;
+}
+
+.image-grid-error {
+	margin: 1.5rem 0;
+	padding: 0.75rem 1rem;
+	border: 1px dashed var(--line-divider);
+	border-radius: var(--radius-large);
+	background: var(--btn-regular-bg);
+	color: var(--tw-prose-body);
+	font-size: 0.875rem;
+}
+
+@media (max-width: 767px) {
+	.image-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.image-grid[data-columns="1"] {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 480px) {
+	.image-grid {
+		grid-template-columns: 1fr;
+	}
+}

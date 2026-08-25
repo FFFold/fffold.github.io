@@ -1,0 +1,108 @@
+/* Fancybox v6 自定义样式 */
+.fancybox__container {
+	--fancybox-backdrop-bg: rgba(0, 0, 0, 0.9);
+	--f-thumb-width: 64px;
+	--f-thumb-height: 64px;
+	--f-thumb-border-radius: 4px;
+	--f-thumb-hover-border: 2px solid rgba(255, 255, 255, 0.5);
+	--f-thumb-selected-border: 2px solid #fff;
+	--f-toolbar-bg: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+	--f-toolbar-backdrop-filter: blur(4px);
+	--f-toolbar-color: #fff;
+	--f-toolbar-padding: 8px;
+	--f-caption-bg: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+	--f-caption-color: #fff;
+	--f-caption-padding: 1rem;
+	--f-caption-margin: 0 1rem 1rem 1rem;
+	--f-thumbs-bg: rgba(0, 0, 0, 0.7);
+}
+
+.f-caption {
+	border-radius: 8px;
+	font-size: 1rem;
+	text-align: center;
+	backdrop-filter: blur(4px);
+}
+
+.f-thumbs {
+	padding: 2px;
+	border-radius: 8px;
+	backdrop-filter: blur(4px);
+}
+
+.f-thumbs__slide button {
+	overflow: hidden;
+	background: var(--f-thumb-bg, transparent);
+	transition: opacity 0.3s ease, transform 0.15s ease;
+}
+
+.f-thumbs__slide button:hover {
+	transform: scale(1.05);
+}
+
+.f-button.is-arrow {
+	--f-button-svg-width: 24px;
+	--f-button-svg-height: 24px;
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 50%;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	transition: background 0.2s ease, transform 0.2s ease;
+	backdrop-filter: blur(4px);
+}
+
+.f-button.is-arrow:hover {
+	background: rgba(0, 0, 0, 0.7);
+	border-color: rgba(255, 255, 255, 0.3);
+	transform: scale(1.1);
+}
+
+.f-button {
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 50%;
+	transition: background 0.2s ease, transform 0.2s ease;
+	backdrop-filter: blur(4px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.f-button:hover {
+	background: rgba(0, 0, 0, 0.7);
+	transform: scale(1.1);
+	border-color: rgba(255, 255, 255, 0.3);
+}
+
+.f-button svg {
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.f-counter {
+	color: #fff;
+	font-size: 0.9rem;
+	padding: 0 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+	.fancybox__container {
+		--f-toolbar-padding: 4px;
+		--f-caption-padding: 0.5rem;
+		--f-caption-margin: 0 0.5rem 0.5rem 0.5rem;
+		--f-thumb-width: 48px;
+		--f-thumb-height: 48px;
+	}
+
+	.f-caption {
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.fancybox__container {
+		--f-thumb-width: 40px;
+		--f-thumb-height: 40px;
+		--f-caption-padding: 0.4rem;
+	}
+
+	.f-caption {
+		font-size: 0.8rem;
+	}
+}
