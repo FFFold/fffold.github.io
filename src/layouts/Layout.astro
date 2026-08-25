@@ -268,9 +268,9 @@ html.banner-extend-recalc #card-toc {
 		-webkit-backface-visibility: hidden;
 	}
 
-	/* 非首页：banner向上滑出隐藏 */
+	/* 非首页：banner原地淡出隐藏，避免上滑时与内容区域产生空隙 */
 	.enable-banner:not(.lg\:is-home) #banner-wrapper {
-		transform: translateY(-100%);
+		transform: translateY(var(--banner-height-extend, 30vh));
 		opacity: 0;
 		pointer-events: none;
 	}
@@ -287,9 +287,9 @@ html.banner-extend-recalc #card-toc {
 	}
 }
 
-/* 小屏手机 (320px - 480px) - 首页banner更高 */
+/* 小屏手机 (320px - 480px) - banner更高 */
 @media (max-width: 480px) {
-	.enable-banner.lg\:is-home #banner-wrapper {
+	.enable-banner #banner-wrapper {
 		height: 70vh !important;
 		min-height: 450px;
 		max-height: none;
