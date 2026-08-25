@@ -829,11 +829,16 @@ const hasFancyboxImages = () =>
 async function loadFancybox() {
 	if (Fancybox) return Fancybox
 	if (!fancyboxLoading) {
-		fancyboxLoading = (async () => {
-			const mod = await import("@fancyapps/ui")
-			Fancybox = mod.Fancybox
-			return Fancybox
-		})()
+		fancyboxLoading = import("@fancyapps/ui")
+			.then((mod) => {
+				Fancybox = mod.Fancybox
+				return Fancybox
+			})
+			.catch((error) => {
+				// Allow later retries after a transient chunk-load failure.
+				fancyboxLoading = null
+				throw error
+			})
 	}
 	return fancyboxLoading
 }
@@ -867,73 +872,77 @@ async function initFancybox() {
 	syncImageGridHrefs()
 
 	const generation = ++fancyboxGeneration
-	const FancyboxModule = await loadFancybox()
-	const l10n = await loadFancyboxL10n()
+	try {
+		const FancyboxModule = await loadFancybox()
+		const l10n = await loadFancyboxL10n()
 
-	// content:replace may have run while the imports were in flight — bail out
-	// so a stale Fancybox is not bound to the old DOM.
-	if (generation !== fancyboxGeneration || boundSelectors.length > 0) return
+		// content:replace may have run while the imports were in flight — bail out
+		// so a stale Fancybox is not bound to the old DOM.
+		if (generation !== fancyboxGeneration || boundSelectors.length > 0) return
 
-	const baseConfig = {
-		Carousel: {
-			infinite: true,
-			Lazyload: { preload: 3 },
-			Thumbs: { showOnStart: true },
-			Toolbar: {
-				display: {
-					left: ["counter"],
-					middle: [
-						"zoomIn",
-						"zoomOut",
-						"toggle1to1",
-						"rotateCCW",
-						"rotateCW",
-						"flipX",
-						"flipY",
-						"reset",
-					],
-					right: ["autoplay", "fullscreen", "thumbs", "close"],
+		const baseConfig = {
+			Carousel: {
+				infinite: true,
+				Lazyload: { preload: 3 },
+				Thumbs: { showOnStart: true },
+				Toolbar: {
+					display: {
+						left: ["counter"],
+						middle: [
+							"zoomIn",
+							"zoomOut",
+							"toggle1to1",
+							"rotateCCW",
+							"rotateCW",
+							"flipX",
+							"flipY",
+							"reset",
+						],
+						right: ["autoplay", "fullscreen", "thumbs", "close"],
+					},
+				},
+				Zoomable: {
+					Panzoom: { maxScale: 3, minScale: 1 },
 				},
 			},
-			Zoomable: {
-				Panzoom: { maxScale: 3, minScale: 1 },
+			dragToClose: true,
+			keyboard: {
+				Escape: "close",
+				Delete: "close",
+				Backspace: "close",
+				PageUp: "next",
+				PageDown: "prev",
+				ArrowUp: "next",
+				ArrowDown: "prev",
+				ArrowRight: "next",
+				ArrowLeft: "prev",
 			},
-		},
-		dragToClose: true,
-		keyboard: {
-			Escape: "close",
-			Delete: "close",
-			Backspace: "close",
-			PageUp: "next",
-			PageDown: "prev",
-			ArrowUp: "next",
-			ArrowDown: "prev",
-			ArrowRight: "next",
-			ArrowLeft: "prev",
-		},
-		...(l10n ? { l10n } : {}),
+			...(l10n ? { l10n } : {}),
+		}
+
+		FancyboxModule.bind(FANCYBOX_SELECTORS.albumImages, {
+			...baseConfig,
+			groupAll: true,
+			Carousel: {
+				...baseConfig.Carousel,
+				transition: "slide",
+			},
+		})
+		boundSelectors.push(FANCYBOX_SELECTORS.albumImages)
+
+		FancyboxModule.bind(FANCYBOX_SELECTORS.imageGrids, {
+			...baseConfig,
+			// Relative image paths are resolved by Astro on the <img> element, not on
+			// the grid <a> href. Use the rendered image URL for the lightbox source.
+			source: (el: any) => {
+				const img = el?.querySelector?.("img")
+				return img?.currentSrc || img?.src || el?.getAttribute?.("href")
+			},
+		})
+		boundSelectors.push(FANCYBOX_SELECTORS.imageGrids)
+	} catch (error) {
+		console.error("[Fancybox] Failed to initialize:", error)
 	}
-
-	FancyboxModule.bind(FANCYBOX_SELECTORS.albumImages, {
-		...baseConfig,
-		groupAll: true,
-		Carousel: {
-			...baseConfig.Carousel,
-			transition: "slide",
-		},
-	})
-	boundSelectors.push(FANCYBOX_SELECTORS.albumImages)
-
-	FancyboxModule.bind(FANCYBOX_SELECTORS.imageGrids, {
-		...baseConfig,
-		// Relative image paths are resolved by Astro on the <img> element, not on
-		// the grid <a> href. Use the rendered image URL for the lightbox source.
-		source: (el: any) => {
-			const img = el?.querySelector?.("img")
-			return img?.currentSrc || img?.src || el?.getAttribute?.("href")
-		},
-	})
-	boundSelectors.push(FANCYBOX_SELECTORS.imageGrids)
 }
 
 function cleanupFancybox() {
