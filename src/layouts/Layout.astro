@@ -257,7 +257,10 @@ html.banner-extend-recalc #card-toc {
 	transition: none !important;
 }
 
-/* 移动端banner动画 - 统一使用transition实现平滑过渡 */
+/* 移动端banner动画 - 统一使用transition实现平滑过渡
+   注意：不要在更外层添加全局或桌面端的 html.is-animating #banner-wrapper 抑制；
+   桌面端 #banner-wrapper 与 #main-grid 使用相同的 0.7s transform 过渡，会同步移动，
+   若在桌面端禁用过渡反而会造成跳变。 */
 @media (max-width: 767px) {
 	/* banner wrapper 基础过渡 */
 	.enable-banner #banner-wrapper {
@@ -268,9 +271,9 @@ html.banner-extend-recalc #card-toc {
 		-webkit-backface-visibility: hidden;
 	}
 
-	/* 非首页：banner向上滑出隐藏 */
+	/* 非首页：banner原地淡出隐藏，避免上滑时与内容区域产生空隙 */
 	.enable-banner:not(.lg\:is-home) #banner-wrapper {
-		transform: translateY(-100%);
+		transform: translateY(var(--banner-height-extend, 30vh));
 		opacity: 0;
 		pointer-events: none;
 	}
@@ -285,16 +288,11 @@ html.banner-extend-recalc #card-toc {
 		top: 5.5rem !important;
 		min-height: calc(100vh - 5.5rem) !important;
 	}
-
-	/* Swup动画期间：禁用过渡，避免冲突 */
-	html.is-animating #banner-wrapper {
-		transition: none !important;
-	}
 }
 
-/* 小屏手机 (320px - 480px) - 首页banner更高 */
+/* 小屏手机 (320px - 480px) - banner更高 */
 @media (max-width: 480px) {
-	.enable-banner.lg\:is-home #banner-wrapper {
+	.enable-banner #banner-wrapper {
 		height: 70vh !important;
 		min-height: 450px;
 		max-height: none;
