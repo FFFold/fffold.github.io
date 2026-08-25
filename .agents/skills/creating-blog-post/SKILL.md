@@ -186,6 +186,24 @@ Real example from posts:
 ::github{repo="owner/repo"}
 ```
 
+### Image Gallery Grid (`:::grid`)
+
+Wrap adjacent Markdown images in a `:::grid` container to render a responsive gallery with Fancybox lightbox:
+
+````markdown
+:::grid{columns="3" aspect="16/9" fit="cover"}
+![alt 1](./image-1.webp "Caption 1")
+
+![alt 2](./image-2.webp "Caption 2")
+:::
+````
+
+- Parameters: `columns` (1–6, default `3`), `aspect` (positive ratio, default `16/10`), `fit` (`cover` or `contain`, default `cover`).
+- Each image must be its own paragraph, with a blank line between images.
+- Each `:::grid` becomes an independent Fancybox lightbox group; ordinary images outside grids are separate.
+- Public demo images live under `public/Images/...`, so URL examples use `/Images/...` (case-sensitive on Linux).
+- Usage examples: see `/posts/image-grid-demo/` (dev sample).
+
 ### Spoilers
 
 Inline spoiler:
