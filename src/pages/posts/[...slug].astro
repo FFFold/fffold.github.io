@@ -1,17 +1,17 @@
 ---
 
 import { render } from "astro:content";
+import path from "node:path";
 import Giscus from "@components/Giscus.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
-import SocialShare from "@components/SocialShare.astro";
+import ShareCard from "@components/misc/ShareCard.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-
 import { getSortedPosts } from "@utils/content-utils";
-
 import { getPostUrlById } from "@utils/url-utils";
+import type { ImageMetadata } from "astro";
 
 import { Icon } from "astro-icon/components";
 
@@ -41,9 +41,34 @@ const postImageSrc = entry.data.image
 		? entry.data.image.src
 		: entry.data.image
 	: "";
-const shareImageUrl = postImageSrc
-	? new URL(postImageSrc, Astro.site).href
-	: "";
+
+// Resolve the configured profile avatar into a served URL for the poster canvas.
+let posterAvatarUrl = profileConfig.avatar || "";
+const avatarSource = posterAvatarUrl;
+const isAvatarLocal =
+	avatarSource !== "" &&
+	!(
+		avatarSource.startsWith("/") ||
+		avatarSource.startsWith("http") ||
+		avatarSource.startsWith("https") ||
+		avatarSource.startsWith("data:")
+	);
+if (isAvatarLocal) {
+	const avatarFiles = import.meta.glob<ImageMetadata>(
+		"../../**/*.{jpg,jpeg,png,gif,webp,avif,svg}",
+		{ import: "default" },
+	);
+	const normalizedAvatarPath = path
+		.normalize(path.join("../../", avatarSource))
+		.replace(/\\/g, "/");
+	const avatarFile =
+		avatarFiles[normalizedAvatarPath] ||
+		avatarFiles[`./${normalizedAvatarPath}`];
+	if (avatarFile) {
+		const avatarImg = await avatarFile();
+		posterAvatarUrl = avatarImg.src;
+	}
+}
 
 // The hero spans the full content column (~50rem on desktop). Requesting a
 // responsive srcset keeps the decode small, and Astro <Image> emits
@@ -149,21 +174,27 @@ const giscusConfig = {
                 <Content />
             </Markdown>
 
-            <!-- Social Share Buttons -->
+            <!-- Share Poster Card -->
 
-<SocialShare 
+<ShareCard
 
   title={entry.data.title}
 
-  url={new URL(getPostUrlById(entry.id), Astro.site).href}
+  author={profileConfig.name}
 
   description={entry.data.description}
 
-  tags={entry.data.tags}
+  pubDate={formatDateToYYYYMMDD(entry.data.published)}
 
-  image={shareImageUrl}
+  coverImage={postImageSrc || null}
 
-></SocialShare>
+  url={new URL(getPostUrlById(entry.id), Astro.site).href}
+
+  siteTitle={siteConfig.title}
+
+  avatar={posterAvatarUrl || null}
+
+></ShareCard>
 
 
 

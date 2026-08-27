@@ -44,5 +44,14 @@ export const zh_TW: Translation = {
 	[Key.share]: "分享到",
 	[Key.copyLink]: "複製連結",
 	[Key.copied]: "已複製",
+	[Key.copyLinkFailed]: "複製失敗，請重試",
 	[Key.emptyArchive]: "暫無匹配的文章",
+
+	[Key.shareArticle]: "分享",
+	[Key.generatingPoster]: "正在生成海報...",
+	[Key.posterFailed]: "生成失敗，請重試",
+	[Key.savePoster]: "儲存海報",
+	[Key.shareOnSocial]: "分享",
+	[Key.shareOnSocialDescription]: "如果這篇文章對你有幫助，歡迎分享給更多人！",
+	[Key.scanToRead]: "來源網站",
 };

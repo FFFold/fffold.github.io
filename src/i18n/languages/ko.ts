@@ -44,5 +44,15 @@ export const ko: Translation = {
 	[Key.share]: "공유하기",
 	[Key.copyLink]: "링크 복사",
 	[Key.copied]: "복사됨",
+	[Key.copyLinkFailed]: "링크 복사에 실패했습니다. 다시 시도해 주세요.",
 	[Key.emptyArchive]: "일치하는 게시글이 없습니다",
+
+	[Key.shareArticle]: "공유",
+	[Key.generatingPoster]: "포스터 생성 중...",
+	[Key.posterFailed]: "포스터 생성에 실패했습니다. 다시 시도해 주세요.",
+	[Key.savePoster]: "포스터 저장",
+	[Key.shareOnSocial]: "공유",
+	[Key.shareOnSocialDescription]:
+		"이 글이 도움이 되었다면 다른 사람들과 공유해 주세요!",
+	[Key.scanToRead]: "출처",
 };

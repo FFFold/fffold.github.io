@@ -44,5 +44,15 @@ export const en: Translation = {
 	[Key.share]: "Share to",
 	[Key.copyLink]: "Copy Link",
 	[Key.copied]: "Copied",
+	[Key.copyLinkFailed]: "Copy failed. Please try again.",
 	[Key.emptyArchive]: "No matching posts",
+
+	[Key.shareArticle]: "Share",
+	[Key.generatingPoster]: "Generating poster...",
+	[Key.posterFailed]: "Failed to generate poster. Please try again.",
+	[Key.savePoster]: "Save Poster",
+	[Key.shareOnSocial]: "Share",
+	[Key.shareOnSocialDescription]:
+		"If this article helped you, please share it with others!",
+	[Key.scanToRead]: "Source",
 };

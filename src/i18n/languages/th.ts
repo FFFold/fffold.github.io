@@ -44,5 +44,15 @@ export const th: Translation = {
 	[Key.share]: "แชร์ไปยัง",
 	[Key.copyLink]: "คัดลอกลิงก์",
 	[Key.copied]: "คัดลอกแล้ว",
+	[Key.copyLinkFailed]: "คัดลอกลิงก์ไม่สำเร็จ กรุณาลองอีกครั้ง",
 	[Key.emptyArchive]: "ไม่พบโพสต์ที่ตรงกัน",
+
+	[Key.shareArticle]: "แชร์",
+	[Key.generatingPoster]: "กำลังสร้างโปสเตอร์...",
+	[Key.posterFailed]: "สร้างโปสเตอร์ไม่สำเร็จ กรุณาลองอีกครั้ง",
+	[Key.savePoster]: "บันทึกโปสเตอร์",
+	[Key.shareOnSocial]: "แชร์",
+	[Key.shareOnSocialDescription]:
+		"หากบทความนี้เป็นประโยชน์ต่อคุณ แบ่งปันให้คนอื่นๆ ได้เลย!",
+	[Key.scanToRead]: "แหล่งที่มา",
 };
