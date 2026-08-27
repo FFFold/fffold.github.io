@@ -44,6 +44,7 @@ export const vi: Translation = {
 	[Key.share]: "Chia sẻ",
 	[Key.copyLink]: "Sao chép liên kết",
 	[Key.copied]: "Đã sao chép",
+	[Key.copyLinkFailed]: "Không thể sao chép liên kết. Vui lòng thử lại.",
 	[Key.emptyArchive]: "Không có bài viết phù hợp",
 
 	[Key.shareArticle]: "Chia sẻ",

@@ -44,6 +44,7 @@ export const ko: Translation = {
 	[Key.share]: "공유하기",
 	[Key.copyLink]: "링크 복사",
 	[Key.copied]: "복사됨",
+	[Key.copyLinkFailed]: "링크 복사에 실패했습니다. 다시 시도해 주세요.",
 	[Key.emptyArchive]: "일치하는 게시글이 없습니다",
 
 	[Key.shareArticle]: "공유",

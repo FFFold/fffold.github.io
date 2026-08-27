@@ -44,6 +44,7 @@ export const es: Translation = {
 	[Key.share]: "Compartir en",
 	[Key.copyLink]: "Copiar enlace",
 	[Key.copied]: "Copiado",
+	[Key.copyLinkFailed]: "No se pudo copiar el enlace. Inténtalo de nuevo.",
 	[Key.emptyArchive]: "No hay publicaciones que coincidan",
 
 	[Key.shareArticle]: "Compartir",

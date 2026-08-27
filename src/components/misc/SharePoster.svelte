@@ -50,12 +50,27 @@ let posterImage = $state<string | null>(null);
 let generating = $state(false);
 let errorMessage = $state<string | null>(null);
 let themeColor = $state("#558e88");
+let copyFailed = $state(false);
 let previouslyFocused: HTMLElement | null = null;
 let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 let lastIsDark = false;
+let posterGeneration = 0;
 
 function isDarkMode(): boolean {
 	return document.documentElement.classList.contains("dark");
+}
+
+function updateThemeColor(): void {
+	const temp = document.createElement("div");
+	temp.style.color = "var(--primary)";
+	temp.style.display = "none";
+	document.body.appendChild(temp);
+	const computedColor = getComputedStyle(temp).color;
+	document.body.removeChild(temp);
+
+	if (computedColor) {
+		themeColor = computedColor;
+	}
 }
 
 function getPosterColors() {
@@ -78,25 +93,17 @@ function getPosterColors() {
 }
 
 onMount(() => {
-	const temp = document.createElement("div");
-	temp.style.color = "var(--primary)";
-	temp.style.display = "none";
-	document.body.appendChild(temp);
-	const computedColor = getComputedStyle(temp).color;
-	document.body.removeChild(temp);
-
-	if (computedColor) {
-		themeColor = computedColor;
-	}
-
+	updateThemeColor();
 	lastIsDark = isDarkMode();
 
 	const observer = new MutationObserver(() => {
 		const currentIsDark = isDarkMode();
 		if (currentIsDark !== lastIsDark) {
 			lastIsDark = currentIsDark;
+			posterGeneration += 1;
 			posterImage = null;
 			errorMessage = null;
+			updateThemeColor();
 		}
 	});
 	observer.observe(document.documentElement, {
@@ -126,6 +133,7 @@ async function generatePoster() {
 
 	errorMessage = null;
 	generating = true;
+	const generation = ++posterGeneration;
 	const colors = getPosterColors();
 
 	try {
@@ -349,6 +357,9 @@ async function generatePoster() {
 		ctx.font = `700 ${20 * SCALE}px ${FONT_FAMILY}`;
 		ctx.fillText(siteTitle, textX, footerY + 60 * SCALE);
 
+		if (generation !== posterGeneration) {
+			return;
+		}
 		posterImage = canvas.toDataURL("image/png");
 	} catch (error) {
 		console.error("Failed to generate poster:", error);
@@ -383,6 +394,7 @@ let copied = $state(false);
 const COPY_FEEDBACK_DURATION = 2000;
 
 async function copyLink() {
+	copyFailed = false;
 	try {
 		if (!navigator.clipboard?.writeText) {
 			throw new Error("Clipboard API is not available");
@@ -398,6 +410,14 @@ async function copyLink() {
 		}, COPY_FEEDBACK_DURATION);
 	} catch (error) {
 		console.error("Failed to copy link:", error);
+		copied = false;
+		copyFailed = true;
+		if (copyTimeout) {
+			clearTimeout(copyTimeout);
+		}
+		copyTimeout = setTimeout(() => {
+			copyFailed = false;
+		}, COPY_FEEDBACK_DURATION);
 	}
 }
 
@@ -520,6 +540,13 @@ function portal(node: HTMLElement) {
 							height="20"
 						/>
 						<span>{i18n(I18nKey.copied)}</span>
+					{:else if copyFailed}
+						<Icon
+							icon="material-symbols:error"
+							width="20"
+							height="20"
+						/>
+						<span>{i18n(I18nKey.copyLinkFailed)}</span>
 					{:else}
 						<Icon
 							icon="material-symbols:link"

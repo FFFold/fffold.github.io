@@ -44,6 +44,7 @@ export const ja: Translation = {
 	[Key.share]: "共有",
 	[Key.copyLink]: "リンクをコピー",
 	[Key.copied]: "コピーしました",
+	[Key.copyLinkFailed]: "コピーに失敗しました。もう一度お試しください。",
 	[Key.emptyArchive]: "一致する記事がありません",
 
 	[Key.shareArticle]: "共有",

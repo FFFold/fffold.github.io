@@ -62,7 +62,9 @@ export function getLines(
 		if (ctx.measureText(currentLine + char).width < maxWidth) {
 			currentLine += char;
 		} else {
-			lines.push(currentLine);
+			if (currentLine) {
+				lines.push(currentLine);
+			}
 			currentLine = char;
 		}
 	}

@@ -41,6 +41,7 @@ enum I18nKey {
 	share = "share",
 	copyLink = "copyLink",
 	copied = "copied",
+	copyLinkFailed = "copyLinkFailed",
 	emptyArchive = "emptyArchive",
 
 	shareArticle = "shareArticle",

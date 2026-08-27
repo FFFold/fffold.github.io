@@ -44,6 +44,7 @@ export const id: Translation = {
 	[Key.share]: "Bagikan ke",
 	[Key.copyLink]: "Salin Tautan",
 	[Key.copied]: "Tersalin",
+	[Key.copyLinkFailed]: "Gagal menyalin tautan. Silakan coba lagi.",
 	[Key.emptyArchive]: "Tidak ada postingan yang cocok",
 
 	[Key.shareArticle]: "Bagikan",
