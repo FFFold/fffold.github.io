@@ -103,6 +103,15 @@ export function drawRoundedRect(
 export function parseDate(
 	dateStr: string,
 ): { day: string; month: string; year: string } | null {
+	const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr.trim());
+	if (dateOnly) {
+		return {
+			day: dateOnly[3],
+			month: dateOnly[2],
+			year: dateOnly[1],
+		};
+	}
+
 	try {
 		const d = new Date(dateStr);
 		if (Number.isNaN(d.getTime())) {

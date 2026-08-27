@@ -48,6 +48,7 @@ export const th: Translation = {
 
 	[Key.shareArticle]: "แชร์",
 	[Key.generatingPoster]: "กำลังสร้างโปสเตอร์...",
+	[Key.posterFailed]: "สร้างโปสเตอร์ไม่สำเร็จ กรุณาลองอีกครั้ง",
 	[Key.savePoster]: "บันทึกโปสเตอร์",
 	[Key.shareOnSocial]: "แชร์",
 	[Key.shareOnSocialDescription]:

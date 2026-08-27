@@ -48,7 +48,10 @@ const FONT_FAMILY = "'Roboto', sans-serif";
 let showModal = $state(false);
 let posterImage = $state<string | null>(null);
 let generating = $state(false);
+let errorMessage = $state<string | null>(null);
 let themeColor = $state("#558e88");
+let previouslyFocused: HTMLElement | null = null;
+let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 
 function isDarkMode(): boolean {
 	return document.documentElement.classList.contains("dark");
@@ -87,21 +90,34 @@ onMount(() => {
 
 	const observer = new MutationObserver(() => {
 		posterImage = null;
+		errorMessage = null;
 	});
 	observer.observe(document.documentElement, {
 		attributes: true,
 		attributeFilter: ["class"],
 	});
 
-	return () => observer.disconnect();
+	return () => {
+		observer.disconnect();
+		if (copyTimeout) {
+			clearTimeout(copyTimeout);
+		}
+	};
 });
 
 async function generatePoster() {
+	if (generating) {
+		return;
+	}
+	if (!showModal) {
+		previouslyFocused = document.activeElement as HTMLElement | null;
+	}
 	showModal = true;
 	if (posterImage) {
 		return;
 	}
 
+	errorMessage = null;
 	generating = true;
 	const colors = getPosterColors();
 
@@ -329,6 +345,7 @@ async function generatePoster() {
 		posterImage = canvas.toDataURL("image/png");
 	} catch (error) {
 		console.error("Failed to generate poster:", error);
+		errorMessage = i18n(I18nKey.posterFailed);
 	} finally {
 		generating = false;
 	}
@@ -343,8 +360,16 @@ function downloadPoster() {
 	}
 }
 
+function focusDialog(node: HTMLElement) {
+	node.focus();
+}
+
 function closeModal() {
 	showModal = false;
+	if (previouslyFocused) {
+		previouslyFocused.focus();
+		previouslyFocused = null;
+	}
 }
 
 let copied = $state(false);
@@ -358,7 +383,10 @@ async function copyLink() {
 
 		await navigator.clipboard.writeText(url);
 		copied = true;
-		setTimeout(() => {
+		if (copyTimeout) {
+			clearTimeout(copyTimeout);
+		}
+		copyTimeout = setTimeout(() => {
 			copied = false;
 		}, COPY_FEEDBACK_DURATION);
 	} catch (error) {
@@ -380,9 +408,10 @@ function portal(node: HTMLElement) {
 
 <button
 	type="button"
-	class="btn-regular px-6 py-3 rounded-lg inline-flex items-center gap-2"
+	class="btn-regular px-6 py-3 rounded-lg inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
 	onclick={generatePoster}
-	aria-label="Generate Share Poster"
+	disabled={generating}
+	aria-label={i18n(I18nKey.shareArticle)}
 >
 	<span>{i18n(I18nKey.shareArticle)}</span>
 </button>
@@ -393,25 +422,23 @@ function portal(node: HTMLElement) {
 		class="fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity"
 		style="background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);"
 		onclick={closeModal}
-		role="button"
-		tabindex="0"
-		onkeydown={(e) => {
-			if (e.key === "Enter" || e.key === " ") {
-				closeModal();
-			}
-		}}
 	>
 		<div
+			use:focusDialog
 			class="rounded-2xl max-w-sm w-full max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl transform transition-all"
 			style="background-color: var(--float-panel-bg);"
 			onclick={(e) => {
 				e.stopPropagation();
 			}}
 			onkeydown={(e) => {
-				e.stopPropagation();
+				if (e.key === "Escape") {
+					closeModal();
+				}
 			}}
 			role="dialog"
-			tabindex="0"
+			aria-modal="true"
+			aria-label={i18n(I18nKey.shareArticle)}
+			tabindex="-1"
 		>
 			<div
 				class="p-6 flex justify-center min-h-50 items-center"
@@ -420,10 +447,10 @@ function portal(node: HTMLElement) {
 				{#if posterImage}
 					<img
 						src={posterImage}
-						alt="Poster"
+						alt={i18n(I18nKey.shareArticle)}
 						class="max-w-full h-auto shadow-lg rounded-lg"
 					/>
-				{:else}
+				{:else if generating}
 					<div class="flex flex-col items-center gap-3">
 						<div
 							class="w-8 h-8 border-2 rounded-full animate-spin"
@@ -434,6 +461,31 @@ function portal(node: HTMLElement) {
 							style="color: var(--content-meta);"
 							>{i18n(I18nKey.generatingPoster)}</span
 						>
+					</div>
+				{:else if errorMessage}
+					<div class="flex flex-col items-center gap-3">
+						<span
+							class="text-sm"
+							style="color: var(--content-meta);"
+							>{errorMessage}</span
+						>
+						<button
+							type="button"
+							class="btn-regular px-4 py-2 rounded-lg"
+							onclick={generatePoster}
+						>
+							{i18n(I18nKey.shareArticle)}
+						</button>
+					</div>
+				{:else}
+					<div class="flex flex-col items-center gap-3">
+						<button
+							type="button"
+							class="btn-regular px-4 py-2 rounded-lg"
+							onclick={generatePoster}
+						>
+							{i18n(I18nKey.shareArticle)}
+						</button>
 					</div>
 				{/if}
 			</div>

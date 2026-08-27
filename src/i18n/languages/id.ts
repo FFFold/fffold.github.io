@@ -48,6 +48,7 @@ export const id: Translation = {
 
 	[Key.shareArticle]: "Bagikan",
 	[Key.generatingPoster]: "Membuat poster...",
+	[Key.posterFailed]: "Gagal membuat poster. Silakan coba lagi.",
 	[Key.savePoster]: "Simpan Poster",
 	[Key.shareOnSocial]: "Bagikan",
 	[Key.shareOnSocialDescription]:

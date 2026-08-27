@@ -48,6 +48,7 @@ export const vi: Translation = {
 
 	[Key.shareArticle]: "Chia sẻ",
 	[Key.generatingPoster]: "Đang tạo poster...",
+	[Key.posterFailed]: "Không thể tạo poster. Vui lòng thử lại.",
 	[Key.savePoster]: "Lưu Poster",
 	[Key.shareOnSocial]: "Chia sẻ",
 	[Key.shareOnSocialDescription]:

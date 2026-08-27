@@ -48,6 +48,7 @@ export const es: Translation = {
 
 	[Key.shareArticle]: "Compartir",
 	[Key.generatingPoster]: "Generando póster...",
+	[Key.posterFailed]: "No se pudo generar el póster. Inténtalo de nuevo.",
 	[Key.savePoster]: "Guardar póster",
 	[Key.shareOnSocial]: "Compartir",
 	[Key.shareOnSocialDescription]:

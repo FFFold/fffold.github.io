@@ -48,6 +48,7 @@ export const zh_TW: Translation = {
 
 	[Key.shareArticle]: "分享",
 	[Key.generatingPoster]: "正在生成海報...",
+	[Key.posterFailed]: "生成失敗，請重試",
 	[Key.savePoster]: "儲存海報",
 	[Key.shareOnSocial]: "分享",
 	[Key.shareOnSocialDescription]: "如果這篇文章對你有幫助，歡迎分享給更多人！",

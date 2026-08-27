@@ -45,6 +45,7 @@ enum I18nKey {
 
 	shareArticle = "shareArticle",
 	generatingPoster = "generatingPoster",
+	posterFailed = "posterFailed",
 	savePoster = "savePoster",
 	shareOnSocial = "shareOnSocial",
 	shareOnSocialDescription = "shareOnSocialDescription",
