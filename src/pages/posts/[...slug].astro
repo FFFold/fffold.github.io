@@ -41,9 +41,6 @@ const postImageSrc = entry.data.image
 		? entry.data.image.src
 		: entry.data.image
 	: "";
-const shareImageUrl = postImageSrc
-	? new URL(postImageSrc, Astro.site).href
-	: "";
 
 // Resolve the configured profile avatar into a served URL for the poster canvas.
 let posterAvatarUrl = profileConfig.avatar || "";
@@ -189,7 +186,7 @@ const giscusConfig = {
 
   pubDate={formatDateToYYYYMMDD(entry.data.published)}
 
-  coverImage={shareImageUrl || null}
+  coverImage={postImageSrc || null}
 
   url={new URL(getPostUrlById(entry.id), Astro.site).href}
 
