@@ -52,6 +52,7 @@ let errorMessage = $state<string | null>(null);
 let themeColor = $state("#558e88");
 let previouslyFocused: HTMLElement | null = null;
 let copyTimeout: ReturnType<typeof setTimeout> | undefined;
+let lastIsDark = false;
 
 function isDarkMode(): boolean {
 	return document.documentElement.classList.contains("dark");
@@ -88,9 +89,15 @@ onMount(() => {
 		themeColor = computedColor;
 	}
 
+	lastIsDark = isDarkMode();
+
 	const observer = new MutationObserver(() => {
-		posterImage = null;
-		errorMessage = null;
+		const currentIsDark = isDarkMode();
+		if (currentIsDark !== lastIsDark) {
+			lastIsDark = currentIsDark;
+			posterImage = null;
+			errorMessage = null;
+		}
 	});
 	observer.observe(document.documentElement, {
 		attributes: true,
