@@ -45,4 +45,11 @@ export const zh_CN: Translation = {
 	[Key.copyLink]: "复制链接",
 	[Key.copied]: "已复制",
 	[Key.emptyArchive]: "暂无匹配的文章",
+
+	[Key.shareArticle]: "分享",
+	[Key.generatingPoster]: "正在生成海报...",
+	[Key.savePoster]: "保存海报",
+	[Key.shareOnSocial]: "分享",
+	[Key.shareOnSocialDescription]: "如果这篇文章对你有帮助，欢迎分享给更多人！",
+	[Key.scanToRead]: "来源网站",
 };

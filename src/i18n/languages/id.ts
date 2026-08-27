@@ -45,4 +45,11 @@ export const id: Translation = {
 	[Key.copyLink]: "Salin Tautan",
 	[Key.copied]: "Tersalin",
 	[Key.emptyArchive]: "Tidak ada postingan yang cocok",
+
+	[Key.shareArticle]: "Bagikan",
+	[Key.generatingPoster]: "Membuat poster...",
+	[Key.savePoster]: "Simpan Poster",
+	[Key.shareOnSocial]: "Bagikan",
+	[Key.shareOnSocialDescription]: "Jika artikel ini membantu Anda, silakan bagikan kepada orang lain!",
+	[Key.scanToRead]: "Sumber",
 };

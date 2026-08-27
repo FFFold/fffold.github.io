@@ -45,4 +45,11 @@ export const vi: Translation = {
 	[Key.copyLink]: "Sao chép liên kết",
 	[Key.copied]: "Đã sao chép",
 	[Key.emptyArchive]: "Không có bài viết phù hợp",
+
+	[Key.shareArticle]: "Chia sẻ",
+	[Key.generatingPoster]: "Đang tạo poster...",
+	[Key.savePoster]: "Lưu Poster",
+	[Key.shareOnSocial]: "Chia sẻ",
+	[Key.shareOnSocialDescription]: "Nếu bài viết này hữu ích, hãy chia sẻ cho người khác!",
+	[Key.scanToRead]: "Nguồn",
 };

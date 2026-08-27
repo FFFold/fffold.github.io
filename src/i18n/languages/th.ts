@@ -45,4 +45,11 @@ export const th: Translation = {
 	[Key.copyLink]: "คัดลอกลิงก์",
 	[Key.copied]: "คัดลอกแล้ว",
 	[Key.emptyArchive]: "ไม่พบโพสต์ที่ตรงกัน",
+
+	[Key.shareArticle]: "แชร์",
+	[Key.generatingPoster]: "กำลังสร้างโปสเตอร์...",
+	[Key.savePoster]: "บันทึกโปสเตอร์",
+	[Key.shareOnSocial]: "แชร์",
+	[Key.shareOnSocialDescription]: "หากบทความนี้เป็นประโยชน์ต่อคุณ แบ่งปันให้คนอื่นๆ ได้เลย!",
+	[Key.scanToRead]: "แหล่งที่มา",
 };

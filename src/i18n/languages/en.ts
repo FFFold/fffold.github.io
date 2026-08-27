@@ -45,4 +45,11 @@ export const en: Translation = {
 	[Key.copyLink]: "Copy Link",
 	[Key.copied]: "Copied",
 	[Key.emptyArchive]: "No matching posts",
+
+	[Key.shareArticle]: "Share",
+	[Key.generatingPoster]: "Generating poster...",
+	[Key.savePoster]: "Save Poster",
+	[Key.shareOnSocial]: "Share",
+	[Key.shareOnSocialDescription]: "If this article helped you, please share it with others!",
+	[Key.scanToRead]: "Source",
 };

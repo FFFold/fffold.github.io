@@ -42,6 +42,13 @@ enum I18nKey {
 	copyLink = "copyLink",
 	copied = "copied",
 	emptyArchive = "emptyArchive",
+
+	shareArticle = "shareArticle",
+	generatingPoster = "generatingPoster",
+	savePoster = "savePoster",
+	shareOnSocial = "shareOnSocial",
+	shareOnSocialDescription = "shareOnSocialDescription",
+	scanToRead = "scanToRead",
 }
 
 export default I18nKey;

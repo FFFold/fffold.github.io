@@ -45,4 +45,11 @@ export const ja: Translation = {
 	[Key.copyLink]: "リンクをコピー",
 	[Key.copied]: "コピーしました",
 	[Key.emptyArchive]: "一致する記事がありません",
+
+	[Key.shareArticle]: "共有",
+	[Key.generatingPoster]: "ポスターを生成中...",
+	[Key.savePoster]: "ポスターを保存",
+	[Key.shareOnSocial]: "共有",
+	[Key.shareOnSocialDescription]: "この記事が役に立ったら、ぜひシェアしてください！",
+	[Key.scanToRead]: "出典元",
 };

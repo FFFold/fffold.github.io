@@ -45,4 +45,11 @@ export const es: Translation = {
 	[Key.copyLink]: "Copiar enlace",
 	[Key.copied]: "Copiado",
 	[Key.emptyArchive]: "No hay publicaciones que coincidan",
+
+	[Key.shareArticle]: "Compartir",
+	[Key.generatingPoster]: "Generando póster...",
+	[Key.savePoster]: "Guardar póster",
+	[Key.shareOnSocial]: "Compartir",
+	[Key.shareOnSocialDescription]: "Si este artículo te ha ayudado, ¡compártelo con más gente!",
+	[Key.scanToRead]: "Fuente",
 };

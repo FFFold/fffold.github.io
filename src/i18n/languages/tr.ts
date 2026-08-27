@@ -45,4 +45,11 @@ export const tr: Translation = {
 	[Key.copyLink]: "Bağlantıyı Kopyala",
 	[Key.copied]: "Kopyalandı",
 	[Key.emptyArchive]: "Eşleşen yazı bulunamadı",
+
+	[Key.shareArticle]: "Paylaş",
+	[Key.generatingPoster]: "Poster oluşturuluyor...",
+	[Key.savePoster]: "Posteri Kaydet",
+	[Key.shareOnSocial]: "Paylaş",
+	[Key.shareOnSocialDescription]: "Bu yazı işinize yaradıysa başkalarıyla paylaşın!",
+	[Key.scanToRead]: "Kaynak",
 };
