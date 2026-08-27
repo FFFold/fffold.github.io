@@ -50,6 +50,7 @@ export const tr: Translation = {
 	[Key.generatingPoster]: "Poster oluşturuluyor...",
 	[Key.savePoster]: "Posteri Kaydet",
 	[Key.shareOnSocial]: "Paylaş",
-	[Key.shareOnSocialDescription]: "Bu yazı işinize yaradıysa başkalarıyla paylaşın!",
+	[Key.shareOnSocialDescription]:
+		"Bu yazı işinize yaradıysa başkalarıyla paylaşın!",
 	[Key.scanToRead]: "Kaynak",
 };

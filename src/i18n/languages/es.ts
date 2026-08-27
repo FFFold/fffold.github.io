@@ -50,6 +50,7 @@ export const es: Translation = {
 	[Key.generatingPoster]: "Generando póster...",
 	[Key.savePoster]: "Guardar póster",
 	[Key.shareOnSocial]: "Compartir",
-	[Key.shareOnSocialDescription]: "Si este artículo te ha ayudado, ¡compártelo con más gente!",
+	[Key.shareOnSocialDescription]:
+		"Si este artículo te ha ayudado, ¡compártelo con más gente!",
 	[Key.scanToRead]: "Fuente",
 };

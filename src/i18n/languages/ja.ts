@@ -50,6 +50,7 @@ export const ja: Translation = {
 	[Key.generatingPoster]: "ポスターを生成中...",
 	[Key.savePoster]: "ポスターを保存",
 	[Key.shareOnSocial]: "共有",
-	[Key.shareOnSocialDescription]: "この記事が役に立ったら、ぜひシェアしてください！",
+	[Key.shareOnSocialDescription]:
+		"この記事が役に立ったら、ぜひシェアしてください！",
 	[Key.scanToRead]: "出典元",
 };

@@ -50,6 +50,7 @@ export const th: Translation = {
 	[Key.generatingPoster]: "กำลังสร้างโปสเตอร์...",
 	[Key.savePoster]: "บันทึกโปสเตอร์",
 	[Key.shareOnSocial]: "แชร์",
-	[Key.shareOnSocialDescription]: "หากบทความนี้เป็นประโยชน์ต่อคุณ แบ่งปันให้คนอื่นๆ ได้เลย!",
+	[Key.shareOnSocialDescription]:
+		"หากบทความนี้เป็นประโยชน์ต่อคุณ แบ่งปันให้คนอื่นๆ ได้เลย!",
 	[Key.scanToRead]: "แหล่งที่มา",
 };

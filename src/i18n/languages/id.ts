@@ -50,6 +50,7 @@ export const id: Translation = {
 	[Key.generatingPoster]: "Membuat poster...",
 	[Key.savePoster]: "Simpan Poster",
 	[Key.shareOnSocial]: "Bagikan",
-	[Key.shareOnSocialDescription]: "Jika artikel ini membantu Anda, silakan bagikan kepada orang lain!",
+	[Key.shareOnSocialDescription]:
+		"Jika artikel ini membantu Anda, silakan bagikan kepada orang lain!",
 	[Key.scanToRead]: "Sumber",
 };

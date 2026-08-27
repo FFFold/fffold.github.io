@@ -50,6 +50,7 @@ export const vi: Translation = {
 	[Key.generatingPoster]: "Đang tạo poster...",
 	[Key.savePoster]: "Lưu Poster",
 	[Key.shareOnSocial]: "Chia sẻ",
-	[Key.shareOnSocialDescription]: "Nếu bài viết này hữu ích, hãy chia sẻ cho người khác!",
+	[Key.shareOnSocialDescription]:
+		"Nếu bài viết này hữu ích, hãy chia sẻ cho người khác!",
 	[Key.scanToRead]: "Nguồn",
 };
