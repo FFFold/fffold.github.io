@@ -2,7 +2,7 @@
 
 生物医药相关专业在读学生
 
-本博客网站基于[Fuwari](https://github.com/saicaca/fuwari)构建。
+本博客网站基于[Fuwari](https://github.com/saicaca/fuwari)构建，参考了[Mizuki](https://github.com/matsuzaka-yuki/Mizuki)。
 
 ::github{repo="FFFold/fffold.github.io"}
 
