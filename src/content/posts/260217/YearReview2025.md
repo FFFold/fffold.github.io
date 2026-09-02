@@ -1,8 +1,9 @@
 ---
 title: 2025年终总结
 published: 2026-02-17T21:04:00+08:00
+updated: 2026-09-02
 description: ''
-image: './YearReview2025.assets/cover.jpg'
+image: './YearReview2025.assets/qzone-02.jpg'
 tags: [动画, 轻小说, 学业, 杂文]
 category: '见闻'
 draft: false
@@ -22,3 +23,23 @@ lang: 'zh-CN'
 2025年是我正式入党的一年，我对国内政治、国际政治的认识飞速加深，我的政治观点、政治立场越发清晰。我们的舆论场似乎已经彻底接受了经济下行的事实，同时"对账"、"斩杀线"的大讨论又向普通网民撕开了西方世界血淋淋的一角。舆论观点越发极端、舆论对抗愈发尖锐。疾风知劲草——当此乱世，我应当用辩证和批判的目光谨慎审视每一次舆论风暴，做好自己、提升自己，时刻开展自我批评，以免过度沉溺在蜜糖或毒药之中。
 
 2026年已经过去了两个月，可以预见的是，随着台湾问题的即将解决，东亚甚至世界的格局将迎来一次重塑，这些看似与我们的日常毫无关系的"宏大叙事"，会不会有一天劈头盖脸地砸到我的脸上？到那时，我们的日常生活还能再维持吗？还能维持多久？我没有二次元主角对抗世界的力量，我会和党站在一起，党会和我站在一起。新的一年，即将进入新环境，我会好好活下去。
+
+:::grid{columns="3" aspect="1/1" fit="cover"}
+![](./YearReview2025.assets/qzone-01.jpg)
+
+![](./YearReview2025.assets/qzone-02.jpg)
+
+![](./YearReview2025.assets/qzone-03.jpg)
+
+![](./YearReview2025.assets/qzone-04.jpg)
+
+![](./YearReview2025.assets/qzone-05.jpg)
+
+![](./YearReview2025.assets/qzone-06.jpg)
+
+![](./YearReview2025.assets/qzone-07.jpg)
+
+![](./YearReview2025.assets/qzone-08.jpg)
+
+![](./YearReview2025.assets/qzone-09.jpg)
+:::
