@@ -1,7 +1,7 @@
 ---
 title: 我的Vibe Coding实践
 published: 2026-08-24
-updated: 2026-08-24
+updated: 2026-09-21
 description: '这段时间用 AI 辅助写的一些项目和Vibe Coding心得。'
 image: './assets/2026-08-24-11-11-17-image.png'
 tags: [编程, AI, 方法论]
@@ -61,6 +61,14 @@ Vibe Coding 真是好东西，以往需要巨大学习成本和学习时间的�
 给 MaiBot 这个机器人框架做了一个 Bangumi 插件，接入了 Bangumi 的 API 和网页数据，让机器人能查询动画、游戏、书籍，看新番速览、每日放送，还能读单集吐槽和长评。这样群聊里聊动画的时候，机器人参与对话的时候显得不会那么ylg。
 
 ## 工具类
+
+### Pixiv-Collection-Archive
+
+::github{repo="FFFold/Pixiv-Collection-Archive"}
+
+一个自托管的 pixiv 收藏同步与备份服务。pixiv 官方喜欢 ban 账号，一旦账号被 ban ，作者的所有作品就失效了，因此运行一个备份功能是必要的。本项目用稀疏 rank 加位置快照来重建收藏顺序，在备份管线上做了建立索引+原图下载的两阶段解耦。同时，做了可用性非常高的前端 WebUI。
+
+这个项目应该是目前完成度最高的一个独立项目。
 
 ### yomigana-ebook
 
