@@ -41,9 +41,9 @@
     "astro-icon": "^1.2.0",
     "echarts": "^6.1.0",
     "hastscript": "^9.0.1",
-    "katex": "^0.16.47",
+    "katex": "^0.19.1",
     "mdast-util-to-string": "^4.0.0",
-    "overlayscrollbars": "^2.16.0",
+    "overlayscrollbars": "^2.17.0",
     "pagefind": "^1.5.2",
     "qrcode": "^1.5.4",
     "reading-time": "^1.5.0",
@@ -55,22 +55,22 @@
     "remark-github-admonitions-to-directives": "^2.1.0",
     "remark-math": "^6.0.0",
     "remark-sectionize": "^2.1.0",
-    "sanitize-html": "^2.17.7",
-    "sharp": "^0.34.5",
+    "sanitize-html": "^2.18.1",
+    "sharp": "^0.35.5",
     "stylus": "^0.64.0",
-    "svelte": "^5.56.9",
+    "svelte": "^5.57.2",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.2.0"
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.11",
-    "@biomejs/biome": "2.5.9",
+    "@biomejs/biome": "2.6.3",
     "@rollup/plugin-yaml": "^5.0.0",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
     "@types/qrcode": "^1.5.6",
-    "@types/sanitize-html": "^2.16.1"
+    "@types/sanitize-html": "^2.16.2"
   },
   "packageManager": "pnpm@9.14.4"
 }
